@@ -1,0 +1,3 @@
+
+class LexerSourceNotFoundException(Exception):
+	pass

@@ -1,0 +1,33 @@
+E:\Dev\compilador\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe.config
+E:\Dev\compilador\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe
+E:\Dev\compilador\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.pdb
+E:\Dev\compilador\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.dll
+E:\Dev\compilador\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.xml
+E:\Dev\compilador\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csprojResolveAssemblyReference.cache
+E:\Dev\compilador\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.MainForm.resources
+E:\Dev\compilador\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.Properties.Resources.resources
+E:\Dev\compilador\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csproj.GenerateResource.Cache
+E:\Dev\compilador\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.exe
+E:\Dev\compilador\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.pdb
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe.config
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.exe
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.pdb
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.pdb
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.dll
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.xml
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csprojResolveAssemblyReference.cache
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.MainForm.resources
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.Properties.Resources.resources
+C:\Users\Eduardo\Desktop\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csproj.GenerateResource.Cache
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe.config
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.exe
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.pdb
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.pdb
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.dll
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.xml
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csprojResolveAssemblyReference.cache
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.MainForm.resources
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.Properties.Resources.resources
+E:\DEV\dotnet_projects\Libre-IDE\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csproj.GenerateResource.Cache
