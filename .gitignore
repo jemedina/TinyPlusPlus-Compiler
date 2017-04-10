@@ -1,0 +1,3 @@
+#Skipping all bin files
+Libre\ IDE/bin/*
+Libre\ IDE/obj/*
