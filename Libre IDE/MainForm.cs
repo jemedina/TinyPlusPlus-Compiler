@@ -337,9 +337,9 @@ namespace Libre_IDE
             runLexico();
         }
 
-        async private void runLexico()
+        private void runLexico()
         {
-            Console.WriteLine("Calling python...");
+        /*    Console.WriteLine("Calling python...");
             string python = @"usr\python\pythonw.exe";
             ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(python);
             myProcessStartInfo.UseShellExecute = false;
@@ -372,9 +372,36 @@ namespace Libre_IDE
             
             lexerOutTextBox.Text = lexOut;
             lexerErrTextBox.Text = lexErr;
+            */
 
+            CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
+            Process process = new Process();
+            CheckForIllegalCrossThreadCalls = false;
+            process.StartInfo.FileName = @"usr\python\pythonw.exe";
+            process.StartInfo.Arguments = "core/lexer/Lexer.py \"" + tabPage.getCodeEditor().getPath() + "\"";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.Start();
+            //* Read one element asynchronously
+            //* Read the other one synchronously
+            string output = process.StandardOutput.ReadToEnd();
+            //string erroutput = process.StandardError.ReadToEnd();
+            lexerOutTextBox.Text += output;
+
+            //lexerErrTextBox.Text += erroutput;
+            //Console.WriteLine(output);
+            process.WaitForExit();
+            process.Close();
         }
-
+        void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            //* Do your stuff with the output (write to console/log/StringBuilder)
+            
+                string line = outLine.Data;
+                Console.WriteLine(line);
+            
+        }
         private void codeTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             
