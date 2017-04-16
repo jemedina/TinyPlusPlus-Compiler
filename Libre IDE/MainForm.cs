@@ -382,8 +382,12 @@ namespace Libre_IDE
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
+
+
+            process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
             process.Start();
             //* Read one element asynchronously
+            process.BeginErrorReadLine();
             //* Read the other one synchronously
             string output = process.StandardOutput.ReadToEnd();
             //string erroutput = process.StandardError.ReadToEnd();
@@ -391,7 +395,6 @@ namespace Libre_IDE
 
             //lexerErrTextBox.Text += erroutput;
             //Console.WriteLine(output);
-            process.WaitForExit();
             process.Close();
         }
         void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
@@ -400,6 +403,10 @@ namespace Libre_IDE
             
                 string line = outLine.Data;
                 Console.WriteLine(line);
+                this.BeginInvoke(new MethodInvoker(() =>
+                {
+                    lexerErrTextBox.AppendText(outLine.Data ?? string.Empty);
+                }));
             
         }
         private void codeTabControl_SelectedIndexChanged(object sender, EventArgs e)
