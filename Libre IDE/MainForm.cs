@@ -18,8 +18,6 @@ namespace Libre_IDE
         private Point _imageLocation = new Point(13, 5);
         private Point _imgHitArea = new Point(13, 2);
         private const string BASE_PATH = "C:\\Users\\";
-        private String lexOut;
-        private String lexErr;
         public MainForm()
         {
             InitializeComponent();
@@ -339,41 +337,6 @@ namespace Libre_IDE
 
         private void runLexico()
         {
-        /*    Console.WriteLine("Calling python...");
-            string python = @"usr\python\pythonw.exe";
-            ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(python);
-            myProcessStartInfo.UseShellExecute = false;
-            CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
-            myProcessStartInfo.RedirectStandardOutput = true;
-            myProcessStartInfo.RedirectStandardError = true;
-            myProcessStartInfo.Arguments = "core/lexer/Lexer.py \"" + tabPage.getCodeEditor().getPath() +"\"";
-            Process proc = new Process();
-            proc.StartInfo = myProcessStartInfo;
-            proc.Start();
-            lexOut = "";
-            lexErr = "";
-            StreamReader myStreamReader = proc.StandardOutput;
-            StreamReader myStreamReaderError = proc.StandardError;
-
-            
-            while (!myStreamReader.EndOfStream)
-            {
-                lexOut += await myStreamReader.ReadLineAsync()+"\n";
-            }
-            
-            while (!myStreamReaderError.EndOfStream)
-            {
-                lexErr += await myStreamReaderError.ReadLineAsync()+"\n";
-            }
-            
-            proc.WaitForExit();
-            proc.Close();            
-            Console.WriteLine("Process done...");
-            
-            lexerOutTextBox.Text = lexOut;
-            lexerErrTextBox.Text = lexErr;
-            */
-
             CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
             Process process = new Process();
             CheckForIllegalCrossThreadCalls = false;
@@ -390,22 +353,17 @@ namespace Libre_IDE
             process.BeginErrorReadLine();
             //* Read the other one synchronously
             string output = process.StandardOutput.ReadToEnd();
-            //string erroutput = process.StandardError.ReadToEnd();
             lexerOutTextBox.Text += output;
 
-            //lexerErrTextBox.Text += erroutput;
-            //Console.WriteLine(output);
             process.Close();
         }
         void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
-            //* Do your stuff with the output (write to console/log/StringBuilder)
-            
                 string line = outLine.Data;
                 Console.WriteLine(line);
                 this.BeginInvoke(new MethodInvoker(() =>
                 {
-                    lexerErrTextBox.AppendText(outLine.Data ?? string.Empty);
+                    lexerErrTextBox.AppendText(outLine.Data+"\n" ?? string.Empty);
                 }));
             
         }
