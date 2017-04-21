@@ -1,48 +1,39 @@
+from os import sys
 class Node:
 	def __init__(self):
-		self.left = None
-		self.right = None
-		self.value = None
-	def __init__(self,val):
-		self.left = None
-		self.right = None
-		self.value = val
-	
-
-class Tree:
-	def __init__(self):
-		self.root = None
-	
-	def add(self,newValue):
-		if self.root == None:
-			self.root = Node(newValue)
+		self.name = None
+		self.sons = []
+	def __init__(self,name):
+		self.name = name
+		self.sons = []
+	def addChild(self,childNode):
+		self.sons.append(childNode)
+	def getChild(self,index):
+		if len(self.sons) > index:
+			return self.sons[index]
 		else:
-			parent = tmp = self.root
-			while tmp != None:
-				parent = tmp
-				if tmp.value > newValue:
-					tmp = tmp.left
-				else:
-					tmp = tmp.right
-			if parent.value > newValue:
-				parent.left = Node(newValue)
-			else:
-				parent.right = Node(newValue)
+			return None
 
-	def prefix(self,node):
-		if(node != None):
-			self.prefix(node.left)
-			self.prefix(node.right)
-			print(node.value)
+class TreeUtils:
+	@staticmethod
+	def cliDisplay(root,tabSpace="",hierarchy=0):
+		if(root != None):
+			tabSpace=(hierarchy*"  ")+"├"+("─"*(1))
+			print(tabSpace+root.name)
+			for son in root.sons:
+				TreeUtils.cliDisplay(son,tabSpace,hierarchy+1)
 
-	def displayPrefix(self):
-		self.prefix(self.root)
-
-
-t = Tree()
-t.add(5)
-t.add(2)
-t.add(6)
-t.add(0)
-t.add(1)
-t.displayPrefix()
+if __name__ == '__main__':
+#I'm lazy in this moment to make an professional unit tests.. better this:
+	if len(sys.argv) > 1 and sys.argv[1] == "-t":
+		print("##### Test for Tree.py #####")
+		root = Node("root")
+		root.addChild(Node("Son 0"))
+		root.addChild(Node("Son 1"))
+		root.addChild(Node("Son 2"))
+		son1 = root.getChild(1)
+		son1.addChild(Node("Grandchild 0"))
+		son1.addChild(Node("Grandchild 1"))
+		root.getChild(2).addChild(Node("Grandchild 0"))
+		son1.getChild(0).addChild(Node("Very child xd 0"))
+		TreeUtils.cliDisplay(root)
