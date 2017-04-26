@@ -5,7 +5,7 @@ class Token:
 		self.content = content
 
 	def __str__(self):
-		return "{"+self.identifier+":"+self.content+"}"
+		return "{"+self.type+":"+self.content+"}"
 
 class TokensHelper:
 
@@ -23,18 +23,52 @@ class TokensHelper:
 	def loadTokens(self):
 		for tokenText in self.tokensFile:
 			if tokenText.find(":") > 0:
-				identifier = tokenText[0:tokenText.find(":")]
-				content = tokenText[tokenText.find(":")+1:len(tokenText)-1]
+				identifier = tokenText[0:tokenText.find(":")].strip()
+				content = tokenText[tokenText.find(":")+1:len(tokenText)-1].strip()
 				self.tokens.append(Token(identifier,content))
 
-	def match(self,tokenType):
-		if tokenType == self.getCurrentToken().type:
-			return getToken()
+	def match(self,testChar,byType=False):
+		if byType == True:
+			if testChar == self.getCurrentToken().type:
+				return self.getToken()
+			else:
+				self.error()
+				return None
 		else:
-			return None
+			#print(self.index,self.getCurrentToken(),testChar)
+			if testChar == self.getCurrentToken().content:
+				return self.getToken()
+			else:
+				self.error()
+				return None
+	def cliDisplayTokens(self):
+		for t in self.tokens:
+			print(t)
+	def error(self):
+		print("Syntax error near: "+self.getCurrentToken().content)
+		
 	def getToken(self):
 		self.index += 1
-		return self.tokens[self.index]
+		if self.index < len(self.tokens):
+			return self.tokens[self.index]
+		else:
+			return None
 
 	def getCurrentToken(self):
 		return self.tokens[self.index]
+		
+class TokenConstants:
+	CHAR_SP = "CARACTER_ESPECIAL"
+	ID = "IDENTIFICADOR"
+	INT = "ENTERO"
+	COMP = "COMPARACION"
+	PLUS = "MAS"
+	LESS = "MENOS"
+	NUM = "NUMERO"
+	OP_BOOL = "OP_BOOLEANO"
+	ASSIGN = "ASIGNACION"
+	SLASH = "SLASH"
+	DECREMENT = "DECREMENTO"
+	INCREMENT = "INCREMENTO"
+	FLOAT = "DECIMAL"
+	BOOLEAN = "BOLEANO"

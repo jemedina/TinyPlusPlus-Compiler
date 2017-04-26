@@ -1,13 +1,11 @@
 from os import sys
 class Node:
-	def __init__(self):
-		self.name = None
-		self.sons = []
-	def __init__(self,name):
+	def __init__(self,name=None):
 		self.name = name
 		self.sons = []
 	def addChild(self,childNode):
-		self.sons.append(childNode)
+		if childNode != None:
+			self.sons.append(childNode)
 	def getChild(self,index):
 		if len(self.sons) > index:
 			return self.sons[index]
