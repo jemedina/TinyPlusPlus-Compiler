@@ -2,7 +2,7 @@ from Tree import *
 from TokensHelper import *
 ################### ENDPOINTS
 tipo = ["int","float","boolean"]
-
+sentencia = ["if","while","do","cin","cout","{"]
 #############################
 
 
@@ -31,9 +31,57 @@ def lista_declaracion():
 		return tmp
 	else:
 		return None
-
+#lista-sentencias → sentencia lista-sentencias | sentencia | vació
+#lista-sentencias → { sentencia }
+#sentencia → selección | iteración | repetición | sent-cin |sent-out | bloque | asignación
 def lista_sentencias():
+	tmp = Node("lista-sentencias")
+	while tokensHelper.getCurrentToken().content in tipo or tokensHelper.getCurrentToken().type == TokenConstants.ID:
+		if tokensHelper.getCurrentToken().content == TokenConstants.IF:
+			tmp.addChild( seleccion() )
+		elif tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
+			tmp.addChild( iteracion() )
+		elif tokensHelper.getCurrentToken().content == TokenConstants.CIN:
+			tmp.addChild( sent_cin() )
+		elif tokensHelper.getCurrentToken().content == TokenConstants.COUT:
+			tmp.addChild( sent_cout() )
+		elif tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
+			tmp.addChild( bloque() )
+		elif tokensHelper.getCurrentToken().type == TokenConstants.ID:
+			tmp.addChild( asignacion() )
 
+	if len(tmp.sons) > 0:
+		return tmp
+	else:
+		return None
+
+def seleccion():
+	return None
+
+def iteracion():
+	return None
+
+#sent-cin → cin identificador ;
+def sent_cin():
+	new = Node("cin")
+	tokensHelper.match("cin")
+	new.addChild( Node(tokensHelper.getCurrentToken().content ) )
+	tokensHelper.match(TokenConstants.ID,True)
+	tokensHelper.match(";")	
+	return new
+	
+def sent_cout():	
+	new = Node("cout")
+	tokensHelper.match("cout")
+	new.addChild( Node(tokensHelper.getCurrentToken().content ) )
+	tokensHelper.match(TokenConstants.ID,True)
+	tokensHelper.match(";")	
+	return new
+
+def bloque():
+	return None
+
+def asignacion():
 	return None
 
 #declaración → tipo lista-variables
