@@ -36,7 +36,7 @@ def lista_declaracion():
 #sentencia → selección | iteración | repetición | sent-cin |sent-out | bloque | asignación
 def lista_sentencias():
 	tmp = Node("lista-sentencias")
-	while tokensHelper.getCurrentToken().content in tipo or tokensHelper.getCurrentToken().type == TokenConstants.ID:
+	while tokensHelper.getCurrentToken().content in sentencia or tokensHelper.getCurrentToken().type == TokenConstants.ID:
 		if tokensHelper.getCurrentToken().content == TokenConstants.IF:
 			tmp.addChild( seleccion() )
 		elif tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
@@ -69,7 +69,8 @@ def sent_cin():
 	tokensHelper.match(TokenConstants.ID,True)
 	tokensHelper.match(";")	
 	return new
-	
+
+#sent-cout → cout expresión ;
 def sent_cout():	
 	new = Node("cout")
 	tokensHelper.match("cout")
@@ -79,7 +80,10 @@ def sent_cout():
 	return new
 
 def bloque():
-	return None
+	tokensHelper.match("{")
+	new = lista_sentencias()
+	tokensHelper.match("}")
+	return new
 
 def asignacion():
 	return None
