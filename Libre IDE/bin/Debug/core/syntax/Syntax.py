@@ -44,6 +44,8 @@ def lista_sentencias():
 			tmp.addChild( seleccion() )
 		elif tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
 			tmp.addChild( iteracion() )
+		elif tokensHelper.getCurrentToken().content == TokenConstants.DO:
+			tmp.addChild( repeticion() )
 		elif tokensHelper.getCurrentToken().content == TokenConstants.CIN:
 			tmp.addChild( sent_cin() )
 		elif tokensHelper.getCurrentToken().content == TokenConstants.COUT:
@@ -142,8 +144,28 @@ def factor():
 
 	return new
 
+#iteración → while ( expresión ) bloque
 def iteracion():
-	return None
+	new = Node( TokenConstants.WHILE )
+	tokensHelper.match( TokenConstants.WHILE )
+	tokensHelper.match("(")
+	new.addChild( expresion() )
+	tokensHelper.match(")")
+	new.addChild( bloque() )
+	return new
+
+#repetición → do bloque until ( expresión ) ;
+def repeticion():
+	new = Node( TokenConstants.DO )
+	tokensHelper.match( TokenConstants.DO )
+	new.addChild( bloque() )
+	tokensHelper.match("until")
+	tokensHelper.match("(")
+	new.addChild( expresion() )
+	tokensHelper.match(")")
+	tokensHelper.match(";")
+	return new
+
 
 #sent-cin → cin identificador ;
 def sent_cin():
