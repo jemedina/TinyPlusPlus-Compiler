@@ -214,7 +214,5 @@ class Lexer:
 		self.outFile.close();
 lex = Lexer(sys.argv[1])
 lex.eval()
-for token in lex.tokens:
-	print(token)
 
 lex.close()
