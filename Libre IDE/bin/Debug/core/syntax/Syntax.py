@@ -93,12 +93,13 @@ def relacion():
 #expresión-simple → expresión-simple suma-op termino | termino
 #expresión-simple → termino { suma-op termino }
 def expresion_simple():
-	exp_simp = Node("expresion-simple")
-	exp_simp.addChild( termino() )
+	tmp = termino()
 	while( tokensHelper.getCurrentToken().content in _suma_op):
-		exp_simp.addChild( suma_op() )
-		exp_simp.addChild( termino() )
-	return exp_simp
+		new = suma_op()
+		new.addChild(tmp)
+		new.addChild( termino() )
+		tmp = new
+	return tmp
 
 def suma_op():
 	rel = tokensHelper.getCurrentToken().content
@@ -111,12 +112,13 @@ def suma_op():
 #termino → termino mult-op factor | factor
 #termino → factor { mult-op factor }
 def termino():
-	term = Node("termino")
-	term.addChild( factor() )
+	tmp = factor()
 	while ( tokensHelper.getCurrentToken().content in _mult_op):
-		term.addChild( mult_op() )
-		term.addChild( factor() )
-	return term
+		new = mult_op();
+		new.addChild(tmp)
+		new.addChild( factor() )
+		tmp = new
+	return tmp
 
 def mult_op():
 	rel = tokensHelper.getCurrentToken().content
@@ -190,9 +192,15 @@ def bloque():
 	new = lista_sentencias()
 	tokensHelper.match("}")
 	return new
-
+#asignación → identificador := expresión ;
 def asignacion():
-	return None
+	new = Node(":=")
+	new.addChild( Node(tokensHelper.getCurrentToken().content) )
+	tokensHelper.match(TokenConstants.ID,True)
+	tokensHelper.match(":=")
+	new.addChild( expresion() )
+	tokensHelper.match(";")	
+	return new
 
 #declaración → tipo lista-variables
 def declaracion():
@@ -213,7 +221,8 @@ def lista_variables(parent):
 
 
 if __name__ == "__main__":
-	if len(sys.argv) > 1:
+	if len(sys.argv) > 0:
+		sys.argv = ["Syntax.py","C:/Users/Eduardo/Dev/TinyPlusPlus-Compiler/Libre IDE/bin/Debug/core/syntax/goodBoy.lex"]
 
 		#Tests:
 		if sys.argv[1] == "-t":
