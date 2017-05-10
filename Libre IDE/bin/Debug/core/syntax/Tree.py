@@ -38,24 +38,3 @@ class TreeUtils:
 				TreeUtils.cliDisplay(root.sons[i],tabSpace,hierarchy+1,lastSon=(i==len(root.sons)-1))
 			if root.bro != None:
 				TreeUtils.cliDisplay(root.bro,tabSpace,hierarchy,isBrotherNode=True)
-if __name__ == '__main__':
-#I'm lazy in this moment to make an professional unit tests.. better this:
-	if len(sys.argv) > 1 and sys.argv[1] == "-t":
-		print("##### Test for Tree.py #####")
-		root = Node("main")
-		root.addChild(Node("int"))
-		root.getChild(0).addChild(Node("a"))
-		root.getChild(0).addChild(Node("b"))
-		root.getChild(0).addChild(Node("c"))
-		root.getChild(0).addBro(Node("float"))
-		root.getChild(0).bro.addChild(Node("x"))
-		root.addChild(Node("char"))
-		root.addChild(Node("char"))
-		rmp = Node("XXX")
-		rmp.addBro(Node("YYY"))
-		root.getChild(1).addBro(rmp)
-		root.addChild(Node("char"))
-		root.addChild(Node("char"))
-		
-		TreeUtils.cliDisplay(root)
-		
