@@ -26,35 +26,43 @@ def programa():
 
 #lista-declaración -> { declaración; }
 def lista_declaracion():
-	tmp = Node("lista-declaracion")
+	decl = None
 	while tokensHelper.getCurrentToken().content in _tipo:
-		tmp.addChild(declaracion())
+		if decl == None:
+			decl = declaracion()
+		else:
+			decl.appendBro( declaracion() )
 		tokensHelper.match(";")
-	if len(tmp.sons) > 0:
-		return tmp
+	
+	if decl != None and len(decl.sons) > 0:
+		return decl
 	else:
 		return None
 #lista-sentencias → sentencia lista-sentencias | sentencia | vació
 #lista-sentencias → { sentencia }
 #sentencia → selección | iteración | repetición | sent-cin |sent-out | bloque | asignación
 def lista_sentencias():
-	tmp = Node("lista-sentencias")
+	tmp = new = None
 	while tokensHelper.getCurrentToken().content in _sentencia or tokensHelper.getCurrentToken().type == TokenConstants.ID:
 		if tokensHelper.getCurrentToken().content == TokenConstants.IF:
-			tmp.addChild( seleccion() )
+			new = seleccion()
 		elif tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
-			tmp.addChild( iteracion() )
+			new = iteracion()
 		elif tokensHelper.getCurrentToken().content == TokenConstants.DO:
-			tmp.addChild( repeticion() )
+			new = repeticion()
 		elif tokensHelper.getCurrentToken().content == TokenConstants.CIN:
-			tmp.addChild( sent_cin() )
+			new = sent_cin()
 		elif tokensHelper.getCurrentToken().content == TokenConstants.COUT:
-			tmp.addChild( sent_cout() )
+			new = sent_cout()
 		elif tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
-			tmp.addChild( bloque() )
+			new = bloque()
 		elif tokensHelper.getCurrentToken().type == TokenConstants.ID:
-			tmp.addChild( asignacion() )
-
+			new = asignacion()
+		
+		if tmp == None:
+			tmp = new
+		else:
+			tmp.appendBro( new )
 	if len(tmp.sons) > 0:
 		return tmp
 	else:
@@ -78,10 +86,11 @@ def seleccion():
 	
 #expresión → expresión-simple relación expresión-simple | expresión-simple
 def expresion():
-	exp = Node("expresion")
-	exp.addChild( expresion_simple() )
+	exp = None
+	tmp = expresion_simple()
 	if( tokensHelper.getCurrentToken().content in _relacion ):
-		exp.addChild( relacion() )
+		exp = relacion()
+		exp.addChild(tmp)
 		exp.addChild( expresion_simple() )
 	return exp
 
