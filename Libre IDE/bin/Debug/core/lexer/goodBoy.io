@@ -5,12 +5,8 @@ main {
     while (     
         a < 10
         ) {
-        if (a == 2) then {
-            cout b;
-            cout x;
-        } else {
-            cin c;
-        }
+        x := 3+(2-1)*(5/3+(2*9))+1;
+        a := -5.5;
         cin a;
     } 
 }

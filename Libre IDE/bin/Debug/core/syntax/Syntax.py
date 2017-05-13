@@ -38,7 +38,7 @@ def lista_declaracion():
 		return decl
 	else:
 		return None
-#lista-sentencias → sentencia lista-sentencias | sentencia | vació
+
 #lista-sentencias → { sentencia }
 #sentencia → selección | iteración | repetición | sent-cin |sent-out | bloque | asignación
 def lista_sentencias():
@@ -67,6 +67,7 @@ def lista_sentencias():
 		return tmp
 	else:
 		return None
+		
 #selección → if ( expresión ) then bloque | if ( expresión ) then bloque else bloque
 def seleccion():
 	ifStmt = Node( TokenConstants.IF )
@@ -80,11 +81,10 @@ def seleccion():
 	if( tokensHelper.getCurrentToken().content == TokenConstants.ELSE ):
 		tokensHelper.match( TokenConstants.ELSE )
 		ifStmt.addChild( bloque() )
-	
-	
+		
 	return ifStmt
 	
-#expresión → expresión-simple relación expresión-simple | expresión-simple
+#expresión → expresión-simple { relación expresión-simple }
 def expresion():
 	exp = None
 	tmp = expresion_simple()
@@ -92,6 +92,8 @@ def expresion():
 		exp = relacion()
 		exp.addChild(tmp)
 		exp.addChild( expresion_simple() )
+	if exp == None:
+		exp = tmp
 	return exp
 
 def relacion():
@@ -99,26 +101,28 @@ def relacion():
 	tokensHelper.match(TokenConstants.RELATION,True)
 	return Node(rel)
 
-#expresión-simple → expresión-simple suma-op termino | termino
 #expresión-simple → termino { suma-op termino }
 def expresion_simple():
 	tmp = termino()
-	while( tokensHelper.getCurrentToken().content in _suma_op):
+	while( tokensHelper.getCurrentToken().content[0] in _suma_op):
 		new = suma_op()
 		new.addChild(tmp)
-		new.addChild( termino() )
+		term = termino()
+		#new.addChild( termino() )
+		if new.name == "-" and term.name[0] == "-":
+			term.name = term.name[1:]
+		new.addChild( term )
 		tmp = new
 	return tmp
 
 def suma_op():
-	rel = tokensHelper.getCurrentToken().content
+	rel = tokensHelper.getCurrentToken().content[0]
 	if(tokensHelper.getCurrentToken().type == TokenConstants.PLUS):
 		tokensHelper.match(TokenConstants.PLUS,True)
 	elif (tokensHelper.getCurrentToken().type == TokenConstants.LESS):
 		tokensHelper.match(TokenConstants.LESS,True)
 	return Node(rel)
 
-#termino → termino mult-op factor | factor
 #termino → factor { mult-op factor }
 def termino():
 	tmp = factor()
@@ -144,10 +148,21 @@ def factor():
 		tokensHelper.match("(")
 		new = expresion()
 		tokensHelper.match(")")
-	
 	elif tokensHelper.getCurrentToken().type == TokenConstants.INT:
-		new = Node(tokensHelper.getCurrentToken().content)
+		if tokensHelper.getCurrentToken().content[0] == "+":
+			valueWithoutPlus = tokensHelper.getCurrentToken().content[1:]
+		else:
+			valueWithoutPlus = tokensHelper.getCurrentToken().content
+		new = Node(valueWithoutPlus)
 		tokensHelper.match(TokenConstants.INT,True)
+	
+	elif tokensHelper.getCurrentToken().type == TokenConstants.FLOAT:
+		if tokensHelper.getCurrentToken().content[0] == "+":
+			valueWithoutPlus = tokensHelper.getCurrentToken().content[1:]
+		else:
+			valueWithoutPlus = tokensHelper.getCurrentToken().content
+		new = Node(valueWithoutPlus)
+		tokensHelper.match(TokenConstants.FLOAT,True)
 
 	elif tokensHelper.getCurrentToken().type == TokenConstants.ID:
 		new = Node(tokensHelper.getCurrentToken().content)
@@ -201,13 +216,15 @@ def bloque():
 	new = lista_sentencias()
 	tokensHelper.match("}")
 	return new
+
 #asignación → identificador := expresión ;
 def asignacion():
 	new = Node(":=")
 	new.addChild( Node(tokensHelper.getCurrentToken().content) )
 	tokensHelper.match(TokenConstants.ID,True)
 	tokensHelper.match(":=")
-	new.addChild( expresion() )
+	asignExp = expresion()
+	new.addChild( asignExp )
 	tokensHelper.match(";")	
 	return new
 

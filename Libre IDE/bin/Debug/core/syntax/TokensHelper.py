@@ -70,7 +70,7 @@ class TokenConstants:
 	SLASH = "SLASH"
 	DECREMENT = "DECREMENTO"
 	INCREMENT = "INCREMENTO"
-	FLOAT = "DECIMAL"
+	FLOAT = "FLOTANTE"
 	BOOLEAN = "BOLEANO"
 	IF = "if"
 	WHILE = "while"
