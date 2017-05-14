@@ -1,6 +1,8 @@
 from os import sys
-class Node:
+class Node(dict):
 	def __init__(self,name=None):
+		super().__init__()
+		self.__dict__=self
 		self.name = name
 		self.sons = []
 		self.bro = None

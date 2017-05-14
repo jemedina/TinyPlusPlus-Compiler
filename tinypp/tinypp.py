@@ -11,8 +11,8 @@ def lexic(file):
     lex.eval()
     lex.close()
 
-def sintactic(lexFile):
-    syntax= Syntax(lexFile)
+def sintactic(lexFile,outputType):
+    syntax= Syntax(lexFile,outputType)
     syntax.go()
     
 if __name__ == "__main__":
@@ -24,8 +24,11 @@ if __name__ == "__main__":
             
         #Check for Sintactic analysis
         elif sys.argv[1] == TAG_SINTAX and len(sys.argv) > 2:
-            sintactic(sys.argv[2])
-        else:
+            if len(sys.argv) > 3:
+                sintactic(sys.argv[2],sys.argv[3])
+            else:
+                sintactic(sys.argv[2],"json")
+        else:    
             error_cmd()
     else:
         error_cmd()

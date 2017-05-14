@@ -1,5 +1,7 @@
 from syntax.Tree import *
 from syntax.TokensHelper import *
+import json
+
 ################### ENDPOINTS
 _tipo = ["int","float","boolean"]
 _sentencia = ["if","while","do","cin","cout","{"]
@@ -22,8 +24,13 @@ class Syntax:
 		root.addChild( self.lista_sentencias() )
 		self.tokensHelper.match("}")
 		print("INFO: Syntax Compilation finished. Tree:")
-		TreeUtils.cliDisplay(root)
-
+		#TreeUtils.cliDisplay(root)
+		if self.outputType == "json":
+			print(json.dumps(root.__dict__, indent=4, sort_keys=False))
+		elif self.outputType == "tree":
+			TreeUtils.cliDisplay(root)
+		else:
+			print("Invalid argument: "+self.outputType)
 	#lista-declaración -> { declaración; }
 	def lista_declaracion(self):
 		decl = None
@@ -246,8 +253,8 @@ class Syntax:
 			self.tokensHelper.match(TokenConstants.ID,True)
 
 
-	def __init__(self,arg):
+	def __init__(self,arg,outputType="json"):
 		self.tokensHelper = TokensHelper(arg)
-		
+		self.outputType = outputType
 	def go(self):
 		self.programa()
