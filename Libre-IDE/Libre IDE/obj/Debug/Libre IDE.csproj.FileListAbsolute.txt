@@ -42,3 +42,14 @@ C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre IDE\bin\Debug\Libre IDE.exe
 C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre IDE\bin\Debug\Libre IDE.pdb
 C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre IDE\bin\Debug\ScintillaNET.dll
 C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre IDE\bin\Debug\ScintillaNET.xml
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe.config
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.exe
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.pdb
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.pdb
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.dll
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.xml
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csprojResolveAssemblyReference.cache
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.MainForm.resources
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.Properties.Resources.resources
+C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csproj.GenerateResource.Cache
