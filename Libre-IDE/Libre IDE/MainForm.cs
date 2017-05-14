@@ -340,9 +340,10 @@ namespace Libre_IDE
             CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
             Process process = new Process();
             CheckForIllegalCrossThreadCalls = false;
-            process.StartInfo.FileName = @"usr\python\pythonw.exe";
-            process.StartInfo.Arguments = "core/lexer/Lexer.py \"" + tabPage.getCodeEditor().getPath() + "\"";
+            process.StartInfo.FileName = @"cmd";
+            process.StartInfo.Arguments = "/c tinypp -l \"" + tabPage.getCodeEditor().getPath() + "\"";
             process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
 

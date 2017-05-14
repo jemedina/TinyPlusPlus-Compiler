@@ -1,5 +1,5 @@
-from Tree import *
-from TokensHelper import *
+from syntax.Tree import *
+from syntax.TokensHelper import *
 ################### ENDPOINTS
 _tipo = ["int","float","boolean"]
 _sentencia = ["if","while","do","cin","cout","{"]
@@ -10,251 +10,244 @@ _mult_op = ["*","/"]
 
 
 
+class Syntax:
+	#programa → main “{“ lista-declaración lista-sentencias “}”
+	def programa(self):
+		#self.tokensHelper.cliDisplayTokens()
+		firstToken = self.tokensHelper.getToken()	
+		self.tokensHelper.match("main")
+		root = Node(firstToken.content)
+		self.tokensHelper.match("{")
+		root.addChild( self.lista_declaracion() )
+		root.addChild( self.lista_sentencias() )
+		self.tokensHelper.match("}")
+		print("INFO: Syntax Compilation finished. Tree:")
+		TreeUtils.cliDisplay(root)
 
-#programa → main “{“ lista-declaración lista-sentencias “}”
-def programa():
-	#tokensHelper.cliDisplayTokens()
-	firstToken = tokensHelper.getToken()	
-	tokensHelper.match("main")
-	root = Node(firstToken.content)
-	tokensHelper.match("{")
-	root.addChild( lista_declaracion() )
-	root.addChild( lista_sentencias() )
-	tokensHelper.match("}")
-	print("INFO: Syntax Compilation finished. Tree:")
-	TreeUtils.cliDisplay(root)
-
-#lista-declaración -> { declaración; }
-def lista_declaracion():
-	decl = None
-	while tokensHelper.getCurrentToken().content in _tipo:
-		if decl == None:
-			decl = declaracion()
-		else:
-			decl.appendBro( declaracion() )
-		tokensHelper.match(";")
-	
-	if decl != None and len(decl.sons) > 0:
-		return decl
-	else:
-		return None
-
-#lista-sentencias → { sentencia }
-#sentencia → selección | iteración | repetición | sent-cin |sent-out | bloque | asignación
-def lista_sentencias():
-	tmp = new = None
-	while tokensHelper.getCurrentToken().content in _sentencia or tokensHelper.getCurrentToken().type == TokenConstants.ID:
-		if tokensHelper.getCurrentToken().content == TokenConstants.IF:
-			new = seleccion()
-		elif tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
-			new = iteracion()
-		elif tokensHelper.getCurrentToken().content == TokenConstants.DO:
-			new = repeticion()
-		elif tokensHelper.getCurrentToken().content == TokenConstants.CIN:
-			new = sent_cin()
-		elif tokensHelper.getCurrentToken().content == TokenConstants.COUT:
-			new = sent_cout()
-		elif tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
-			new = bloque()
-		elif tokensHelper.getCurrentToken().type == TokenConstants.ID:
-			new = asignacion()
+	#lista-declaración -> { declaración; }
+	def lista_declaracion(self):
+		decl = None
+		while self.tokensHelper.getCurrentToken().content in _tipo:
+			if decl == None:
+				decl = self.declaracion()
+			else:
+				decl.appendBro( self.declaracion() )
+			self.tokensHelper.match(";")
 		
-		if tmp == None:
+		if decl != None and len(decl.sons) > 0:
+			return decl
+		else:
+			return None
+
+	#lista-sentencias → { sentencia }
+	#sentencia → selección | iteración | repetición | sent-cin |sent-out | bloque | asignación
+	def lista_sentencias(self):
+		tmp = new = None
+		while self.tokensHelper.getCurrentToken().content in _sentencia or self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
+			if self.tokensHelper.getCurrentToken().content == TokenConstants.IF:
+				new = self.seleccion()
+			elif self.tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
+				new = self.iteracion()
+			elif self.tokensHelper.getCurrentToken().content == TokenConstants.DO:
+				new = self.repeticion()
+			elif self.tokensHelper.getCurrentToken().content == TokenConstants.CIN:
+				new = self.sent_cin()
+			elif self.tokensHelper.getCurrentToken().content == TokenConstants.COUT:
+				new = self.sent_cout()
+			elif self.tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
+				new = self.bloque()
+			elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
+				new = self.asignacion()
+			
+			if tmp == None:
+				tmp = new
+			else:
+				tmp.appendBro( new )
+		if tmp != None and len(tmp.sons) > 0:
+			return tmp
+		else:
+			return None
+			
+	#selección → if ( expresión ) then bloque | if ( expresión ) then bloque else bloque
+	def seleccion(self):
+		ifStmt = Node( TokenConstants.IF )
+		self.tokensHelper.match( TokenConstants.IF )
+		self.tokensHelper.match( "(" )
+		ifStmt.addChild ( self.expresion() )
+		self.tokensHelper.match( ")" )
+		self.tokensHelper.match( "then" )
+		ifStmt.addChild( self.bloque() )
+
+		if( self.tokensHelper.getCurrentToken().content == TokenConstants.ELSE ):
+			self.tokensHelper.match( TokenConstants.ELSE )
+			ifStmt.addChild( self.bloque() )
+			
+		return ifStmt
+		
+	#expresión → expresión-simple { relación expresión-simple }
+	def expresion(self):
+		exp = None
+		tmp = self.expresion_simple()
+		if( self.tokensHelper.getCurrentToken().content in _relacion ):
+			exp = self.relacion()
+			exp.addChild(tmp)
+			exp.addChild( self.expresion_simple() )
+		if exp == None:
+			exp = tmp
+		return exp
+
+	def relacion(self):
+		rel = self.tokensHelper.getCurrentToken().content
+		self.tokensHelper.match(TokenConstants.RELATION,True)
+		return Node(rel)
+
+	#expresión-simple → termino { suma-op termino }
+	def expresion_simple(self):
+		tmp = self.termino()
+		while( self.tokensHelper.getCurrentToken().content[0] in _suma_op):
+			new = self.suma_op()
+			new.addChild(tmp)
+			term = self.termino()
+			#new.addChild( termino() )
+			if new.name == "-" and term.name[0] == "-":
+				term.name = term.name[1:]
+			new.addChild( term )
 			tmp = new
-		else:
-			tmp.appendBro( new )
-	if len(tmp.sons) > 0:
 		return tmp
-	else:
-		return None
+
+	def suma_op(self):
+		rel = self.tokensHelper.getCurrentToken().content[0]
+		if(self.tokensHelper.getCurrentToken().type == TokenConstants.PLUS):
+			self.tokensHelper.match(TokenConstants.PLUS,True)
+		elif (self.tokensHelper.getCurrentToken().type == TokenConstants.LESS):
+			self.tokensHelper.match(TokenConstants.LESS,True)
+		return Node(rel)
+
+	#termino → factor { mult-op factor }
+	def termino(self):
+		tmp = self.factor()
+		while ( self.tokensHelper.getCurrentToken().content in _mult_op):
+			new = self.mult_op();
+			new.addChild(tmp)
+			new.addChild( self.factor() )
+			tmp = new
+		return tmp
+
+	def mult_op(self):
+		rel = self.tokensHelper.getCurrentToken().content
+		if(self.tokensHelper.getCurrentToken().content == TokenConstants.TIMES):
+			self.tokensHelper.match(TokenConstants.TIMES)
+		elif (self.tokensHelper.getCurrentToken().content == TokenConstants.DIV):
+			self.tokensHelper.match(TokenConstants.DIV)
+		return Node(rel)
+
+	#factor → ( expresión ) | numero | identificador
+	def factor(self):
+		new = None
+		if self.tokensHelper.getCurrentToken().content == "(":
+			self.tokensHelper.match("(")
+			new = self.expresion()
+			self.tokensHelper.match(")")
+		elif self.tokensHelper.getCurrentToken().type == TokenConstants.INT:
+			if self.tokensHelper.getCurrentToken().content[0] == "+":
+				valueWithoutPlus = self.tokensHelper.getCurrentToken().content[1:]
+			else:
+				valueWithoutPlus = self.tokensHelper.getCurrentToken().content
+			new = Node(valueWithoutPlus)
+			self.tokensHelper.match(TokenConstants.INT,True)
 		
-#selección → if ( expresión ) then bloque | if ( expresión ) then bloque else bloque
-def seleccion():
-	ifStmt = Node( TokenConstants.IF )
-	tokensHelper.match( TokenConstants.IF )
-	tokensHelper.match( "(" )
-	ifStmt.addChild ( expresion() )
-	tokensHelper.match( ")" )
-	tokensHelper.match( "then" )
-	ifStmt.addChild( bloque() )
+		elif self.tokensHelper.getCurrentToken().type == TokenConstants.FLOAT:
+			if self.tokensHelper.getCurrentToken().content[0] == "+":
+				valueWithoutPlus = self.tokensHelper.getCurrentToken().content[1:]
+			else:
+				valueWithoutPlus = self.tokensHelper.getCurrentToken().content
+			new = Node(valueWithoutPlus)
+			self.tokensHelper.match(TokenConstants.FLOAT,True)
 
-	if( tokensHelper.getCurrentToken().content == TokenConstants.ELSE ):
-		tokensHelper.match( TokenConstants.ELSE )
-		ifStmt.addChild( bloque() )
+		elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
+			new = Node(self.tokensHelper.getCurrentToken().content)
+			self.tokensHelper.match(TokenConstants.ID,True)
+
+		return new
+
+	#iteración → while ( expresión ) bloque
+	def iteracion(self):
+		new = Node( TokenConstants.WHILE )
+		self.tokensHelper.match( TokenConstants.WHILE )
+		self.tokensHelper.match("(")
+		new.addChild( self.expresion() )
+		self.tokensHelper.match(")")
+		new.addChild( self.bloque() )
+		return new
+
+	#repetición → do bloque until ( expresión ) ;
+	def repeticion(self):
+		new = Node( TokenConstants.DO )
+		self.tokensHelper.match( TokenConstants.DO )
+		new.addChild( self.bloque() )
+		self.tokensHelper.match("until")
+		self.tokensHelper.match("(")
+		new.addChild( self.expresion() )
+		self.tokensHelper.match(")")
+		self.tokensHelper.match(";")
+		return new
+
+
+	#sent-cin → cin identificador ;
+	def sent_cin(self):
+		new = Node("cin")
+		self.tokensHelper.match("cin")
+		new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
+		self.tokensHelper.match(TokenConstants.ID,True)
+		self.tokensHelper.match(";")	
+		return new
+
+	#sent-cout → cout expresión ;
+	def sent_cout(self):	
+		new = Node("cout")
+		self.tokensHelper.match("cout")
+		new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
+		self.tokensHelper.match(TokenConstants.ID,True)
+		self.tokensHelper.match(";")	
+		return new
+
+	def bloque(self):
+		self.tokensHelper.match("{")
+		new = self.lista_sentencias()
+		self.tokensHelper.match("}")
+		return new
+
+	#asignación → identificador := expresión ;
+	def asignacion(self):
+		new = Node(":=")
+		new.addChild( Node(self.tokensHelper.getCurrentToken().content) )
+		self.tokensHelper.match(TokenConstants.ID,True)
+		self.tokensHelper.match(":=")
+		asignExp = self.expresion()
+		new.addChild( asignExp )
+		self.tokensHelper.match(";")	
+		return new
+
+	#declaración → tipo lista-variables
+	def declaracion(self):
+		tmp = Node(self.tokensHelper.getCurrentToken().content)
+		self.tokensHelper.match(TokenConstants.ID,True)
+		self.lista_variables(tmp)
+		return tmp
+
+	#lista-variables → { identificador, } identificador
+	def lista_variables(self,parent):
+		parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
+		self.tokensHelper.match(TokenConstants.ID,True)
+
+		while self.tokensHelper.getCurrentToken().content == ",":
+			self.tokensHelper.match(",")
+			parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
+			self.tokensHelper.match(TokenConstants.ID,True)
+
+
+	def __init__(self,arg):
+		self.tokensHelper = TokensHelper(arg)
 		
-	return ifStmt
-	
-#expresión → expresión-simple { relación expresión-simple }
-def expresion():
-	exp = None
-	tmp = expresion_simple()
-	if( tokensHelper.getCurrentToken().content in _relacion ):
-		exp = relacion()
-		exp.addChild(tmp)
-		exp.addChild( expresion_simple() )
-	if exp == None:
-		exp = tmp
-	return exp
-
-def relacion():
-	rel = tokensHelper.getCurrentToken().content
-	tokensHelper.match(TokenConstants.RELATION,True)
-	return Node(rel)
-
-#expresión-simple → termino { suma-op termino }
-def expresion_simple():
-	tmp = termino()
-	while( tokensHelper.getCurrentToken().content[0] in _suma_op):
-		new = suma_op()
-		new.addChild(tmp)
-		term = termino()
-		#new.addChild( termino() )
-		if new.name == "-" and term.name[0] == "-":
-			term.name = term.name[1:]
-		new.addChild( term )
-		tmp = new
-	return tmp
-
-def suma_op():
-	rel = tokensHelper.getCurrentToken().content[0]
-	if(tokensHelper.getCurrentToken().type == TokenConstants.PLUS):
-		tokensHelper.match(TokenConstants.PLUS,True)
-	elif (tokensHelper.getCurrentToken().type == TokenConstants.LESS):
-		tokensHelper.match(TokenConstants.LESS,True)
-	return Node(rel)
-
-#termino → factor { mult-op factor }
-def termino():
-	tmp = factor()
-	while ( tokensHelper.getCurrentToken().content in _mult_op):
-		new = mult_op();
-		new.addChild(tmp)
-		new.addChild( factor() )
-		tmp = new
-	return tmp
-
-def mult_op():
-	rel = tokensHelper.getCurrentToken().content
-	if(tokensHelper.getCurrentToken().content == TokenConstants.TIMES):
-		tokensHelper.match(TokenConstants.TIMES)
-	elif (tokensHelper.getCurrentToken().content == TokenConstants.DIV):
-		tokensHelper.match(TokenConstants.DIV)
-	return Node(rel)
-
-#factor → ( expresión ) | numero | identificador
-def factor():
-	new = None
-	if tokensHelper.getCurrentToken().content == "(":
-		tokensHelper.match("(")
-		new = expresion()
-		tokensHelper.match(")")
-	elif tokensHelper.getCurrentToken().type == TokenConstants.INT:
-		if tokensHelper.getCurrentToken().content[0] == "+":
-			valueWithoutPlus = tokensHelper.getCurrentToken().content[1:]
-		else:
-			valueWithoutPlus = tokensHelper.getCurrentToken().content
-		new = Node(valueWithoutPlus)
-		tokensHelper.match(TokenConstants.INT,True)
-	
-	elif tokensHelper.getCurrentToken().type == TokenConstants.FLOAT:
-		if tokensHelper.getCurrentToken().content[0] == "+":
-			valueWithoutPlus = tokensHelper.getCurrentToken().content[1:]
-		else:
-			valueWithoutPlus = tokensHelper.getCurrentToken().content
-		new = Node(valueWithoutPlus)
-		tokensHelper.match(TokenConstants.FLOAT,True)
-
-	elif tokensHelper.getCurrentToken().type == TokenConstants.ID:
-		new = Node(tokensHelper.getCurrentToken().content)
-		tokensHelper.match(TokenConstants.ID,True)
-
-	return new
-
-#iteración → while ( expresión ) bloque
-def iteracion():
-	new = Node( TokenConstants.WHILE )
-	tokensHelper.match( TokenConstants.WHILE )
-	tokensHelper.match("(")
-	new.addChild( expresion() )
-	tokensHelper.match(")")
-	new.addChild( bloque() )
-	return new
-
-#repetición → do bloque until ( expresión ) ;
-def repeticion():
-	new = Node( TokenConstants.DO )
-	tokensHelper.match( TokenConstants.DO )
-	new.addChild( bloque() )
-	tokensHelper.match("until")
-	tokensHelper.match("(")
-	new.addChild( expresion() )
-	tokensHelper.match(")")
-	tokensHelper.match(";")
-	return new
-
-
-#sent-cin → cin identificador ;
-def sent_cin():
-	new = Node("cin")
-	tokensHelper.match("cin")
-	new.addChild( Node(tokensHelper.getCurrentToken().content ) )
-	tokensHelper.match(TokenConstants.ID,True)
-	tokensHelper.match(";")	
-	return new
-
-#sent-cout → cout expresión ;
-def sent_cout():	
-	new = Node("cout")
-	tokensHelper.match("cout")
-	new.addChild( Node(tokensHelper.getCurrentToken().content ) )
-	tokensHelper.match(TokenConstants.ID,True)
-	tokensHelper.match(";")	
-	return new
-
-def bloque():
-	tokensHelper.match("{")
-	new = lista_sentencias()
-	tokensHelper.match("}")
-	return new
-
-#asignación → identificador := expresión ;
-def asignacion():
-	new = Node(":=")
-	new.addChild( Node(tokensHelper.getCurrentToken().content) )
-	tokensHelper.match(TokenConstants.ID,True)
-	tokensHelper.match(":=")
-	asignExp = expresion()
-	new.addChild( asignExp )
-	tokensHelper.match(";")	
-	return new
-
-#declaración → tipo lista-variables
-def declaracion():
-	tmp = Node(tokensHelper.getCurrentToken().content)
-	tokensHelper.match(TokenConstants.ID,True)
-	lista_variables(tmp)
-	return tmp
-
-#lista-variables → { identificador, } identificador
-def lista_variables(parent):
-	parent.addChild(Node(tokensHelper.getCurrentToken().content))
-	tokensHelper.match(TokenConstants.ID,True)
-
-	while tokensHelper.getCurrentToken().content == ",":
-		tokensHelper.match(",")
-		parent.addChild(Node(tokensHelper.getCurrentToken().content))
-		tokensHelper.match(TokenConstants.ID,True)
-
-
-if __name__ == "__main__":
-	if len(sys.argv) > 0:
-		sys.argv = ["Syntax.py","C:/Users/Eduardo/Dev/TinyPlusPlus-Compiler/Libre IDE/bin/Debug/core/syntax/goodBoy.lex"]
-
-		#Tests:
-		if sys.argv[1] == "-t":
-			print("#### Tests for Syntax.py ####")
-		else:
-			tokensHelper = TokensHelper(sys.argv[1])
-			programa()
-	else:
-		print("Invalid call to Syntax program... plase use:\n[python] Syntax.py tokensFile.out",file=sys.stderr)
+	def go(self):
+		self.programa()

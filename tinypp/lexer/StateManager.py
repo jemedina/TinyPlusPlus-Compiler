@@ -1,5 +1,6 @@
-
-statesProperties = "config\states.properties"
+import sys
+runtimePath = sys.argv[0][0:len(sys.argv[0])-len("tinypp.py")]
+statesProperties = runtimePath+"lexer\config\states.properties"
 
 class StateManager:
 

@@ -1,4 +1,4 @@
-from LexerSourceNotFoundException import LexerSourceNotFoundException
+from lexer.LexerSourceNotFoundException import LexerSourceNotFoundException
 
 class LexerFileHandler:
 	eof = False
@@ -11,7 +11,7 @@ class LexerFileHandler:
 		try:
 			self.load()
 		except IOError as e:
-			raise LexerSourceNotFoundException("Lexer can't open the file ["+sourcePath+"] or it doesn't exists")
+			print("Lexer can't open the file ["+sourcePath+"] or it doesn't exists")
 
 	def open(self):
 		self.file = open(self.sourcePath,"r")
@@ -47,7 +47,8 @@ class LexerFileHandler:
 			return self.fileContent[self.row][self.col]
 
 	def close(self):
-		self.file.close()
+		if self.file != None:
+			self.file.close()
 
 	def isEOF(self):
 		return self.eof

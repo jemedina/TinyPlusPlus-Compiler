@@ -1,7 +1,9 @@
-from LexerFileHandler import LexerFileHandler
-from StateManager import StateManager
-from Token import Token
+from lexer.LexerFileHandler import LexerFileHandler
+from lexer.StateManager import StateManager
+from lexer.Token import Token
 import sys
+import os
+import ntpath
 class Lexer:
 
 	boolean_operators_pattern = "<|>|=|!"
@@ -9,11 +11,19 @@ class Lexer:
 	tokens = []
 
 	def __init__(self,pathOfSouce):
+		canonicalFileName = ntpath.basename(pathOfSouce)
+		withoutExtention = canonicalFileName[0:canonicalFileName.find(".")]
+		lexDirectory = "target_"+withoutExtention+"\\lex\\"
 		self.lexFileHandler = LexerFileHandler(pathOfSouce)
 		self.stateManager = StateManager()
 		self.stateManager.setState("INICIO")
-		self.errFile = open("err.lex","+w")
-		self.outFile = open("out.lex","+w")
+		basepath = ntpath.abspath(pathOfSouce)[0:len(ntpath.abspath(pathOfSouce))-len(canonicalFileName)]
+		try:
+			os.makedirs(basepath+lexDirectory)
+		except OSError:
+			pass
+		self.errFile = open(basepath+lexDirectory+"err.lex","+w")
+		self.outFile = open(basepath+lexDirectory+"out.lex","+w")
 	def matchOrPattern(self,charac,pattern):
 		patternArray = pattern.split("|")
 		return charac in patternArray
@@ -212,7 +222,3 @@ class Lexer:
 		self.errFile.close();
 		self.outFile.flush();
 		self.outFile.close();
-lex = Lexer(sys.argv[1])
-lex.eval()
-
-lex.close()
