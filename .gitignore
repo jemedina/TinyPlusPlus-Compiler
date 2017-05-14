@@ -1,3 +1,5 @@
 _pycache__/
 *.pyc
+tinypp/syntax/__pycache__/*.pyc
+tinypp/lexer/__pycache__/*.pyc
 
