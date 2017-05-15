@@ -30,6 +30,9 @@ if __name__ == "__main__":
             else:
                 sintactic(sys.argv[2],"json")
         else:    
-            error_cmd()
+            print("="*30,"LEXIC","="*30)
+            lexic(sys.argv[1])
+            print("="*30,"SINTAX","="*30)
+            sintactic(sys.argv[1],"tree")
     else:
         error_cmd()

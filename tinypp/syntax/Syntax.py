@@ -1,7 +1,8 @@
 from syntax.Tree import *
 from syntax.TokensHelper import *
 import json
-
+import os
+import ntpath
 ################### ENDPOINTS
 _tipo = ["int","float","boolean"]
 _sentencia = ["if","while","do","cin","cout","{"]
@@ -23,7 +24,7 @@ class Syntax:
 		self.root.addChild( self.lista_declaracion() )
 		self.root.addChild( self.lista_sentencias() )
 		self.tokensHelper.match("}")
-		print("INFO: Syntax Compilation finished. Tree:")
+		#print("INFO: Syntax Compilation finished. Tree:")
 		#TreeUtils.cliDisplay(root)
 		if self.outputType == "json":
 			print(json.dumps(self.root.__dict__, indent=4, sort_keys=False))
@@ -278,7 +279,15 @@ class Syntax:
 			self.tokensHelper.match(TokenConstants.ID,True)
 
 
-	def __init__(self,arg,outputType="json"):
+	def __init__(self,pathOfSouce,outputType="json"):
+		canonicalFileName = ntpath.basename(pathOfSouce)
+		withoutExtention = canonicalFileName[0:canonicalFileName.find(".")]
+		lexDirectory = "target_"+withoutExtention+"\\lex\\"
+		basepath = ntpath.abspath(pathOfSouce)[0:len(ntpath.abspath(pathOfSouce))-len(canonicalFileName)]
+		arg = basepath+lexDirectory+"out.lex"	
+		if not os.path.exists(arg):
+			print("Error, analisis lexico aun no ejecutado",file=sys.stderr)
+			exit(1)
 		self.tokensHelper = TokensHelper(arg)
 		self.outputType = outputType
 	def go(self):

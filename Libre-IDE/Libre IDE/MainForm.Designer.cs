@@ -70,6 +70,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.lexerOutTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.sintaxOutputTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
@@ -77,6 +78,7 @@
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.lexerErrTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.sintaxErrorTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.statusBar = new System.Windows.Forms.StatusStrip();
@@ -85,6 +87,7 @@
             this.toolStripSpacement1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.sintaxTreeView = new System.Windows.Forms.TreeView();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -105,8 +108,10 @@
             this.fileContainer.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            this.tabPage7.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -534,6 +539,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.sintaxTreeView);
+            this.tabPage2.Controls.Add(this.sintaxOutputTextBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -541,6 +548,14 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Sintactico";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // sintaxOutputTextBox
+            // 
+            this.sintaxOutputTextBox.Location = new System.Drawing.Point(8, 212);
+            this.sintaxOutputTextBox.Name = "sintaxOutputTextBox";
+            this.sintaxOutputTextBox.Size = new System.Drawing.Size(321, 125);
+            this.sintaxOutputTextBox.TabIndex = 0;
+            this.sintaxOutputTextBox.Text = "";
             // 
             // tabPage3
             // 
@@ -614,6 +629,7 @@
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.sintaxErrorTextBox);
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
@@ -621,6 +637,14 @@
             this.tabPage7.TabIndex = 1;
             this.tabPage7.Text = "Errores Sintacticos";
             this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // sintaxErrorTextBox
+            // 
+            this.sintaxErrorTextBox.Location = new System.Drawing.Point(0, 0);
+            this.sintaxErrorTextBox.Name = "sintaxErrorTextBox";
+            this.sintaxErrorTextBox.Size = new System.Drawing.Size(726, 96);
+            this.sintaxErrorTextBox.TabIndex = 0;
+            this.sintaxErrorTextBox.Text = "";
             // 
             // tabPage8
             // 
@@ -685,6 +709,13 @@
             this.contextMenuStrip1.ShowImageMargin = false;
             this.contextMenuStrip1.Size = new System.Drawing.Size(36, 4);
             // 
+            // sintaxTreeView
+            // 
+            this.sintaxTreeView.Location = new System.Drawing.Point(3, 6);
+            this.sintaxTreeView.Name = "sintaxTreeView";
+            this.sintaxTreeView.Size = new System.Drawing.Size(326, 179);
+            this.sintaxTreeView.TabIndex = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -722,8 +753,10 @@
             this.fileContainer.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
+            this.tabPage7.ResumeLayout(false);
             this.statusBar.ResumeLayout(false);
             this.statusBar.PerformLayout();
             this.ResumeLayout(false);
@@ -789,6 +822,9 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.RichTextBox lexerOutTextBox;
         private System.Windows.Forms.RichTextBox lexerErrTextBox;
+        private System.Windows.Forms.RichTextBox sintaxErrorTextBox;
+        private System.Windows.Forms.RichTextBox sintaxOutputTextBox;
+        private System.Windows.Forms.TreeView sintaxTreeView;
     }
 }
 

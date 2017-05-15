@@ -1,4 +1,5 @@
-﻿using ScintillaNET;
+﻿using Newtonsoft.Json;
+using ScintillaNET;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +19,7 @@ namespace Libre_IDE
         private Point _imageLocation = new Point(13, 5);
         private Point _imgHitArea = new Point(13, 2);
         private const string BASE_PATH = "C:\\Users\\";
+        private String sintaxJsonText;
         public MainForm()
         {
             InitializeComponent();
@@ -42,7 +44,6 @@ namespace Libre_IDE
             intEditor();
             calculateToolBarLabelsPosition();
             //ListDirectory(treeView1, BASE_PATH);
-            
         }
 
         private void setDefaultLayouts()
@@ -328,20 +329,49 @@ namespace Libre_IDE
 
         private void showCompillingView(object sender, EventArgs e)
         {
-            showCompilationStatusWindow();
+            runSintactico();
+            Node root = JsonConvert.DeserializeObject<Node>(sintaxJsonText);
+            TreeNode rootNode = populateSintaxTree(root);
+            sintaxTreeView.Nodes.Add(rootNode);
         }
+
+        private TreeNode populateSintaxTree(Node root, Boolean brotherAttched=false)
+        {
+            TreeNode treeNode = null;
+
+            if (root != null)
+            {
+                treeNode = new TreeNode(root.name);
+                for (int i = 0; i < root.sons.Count; i++)
+                {
+                    TreeNode tmpNode = populateSintaxTree(root.sons[i]);
+                    treeNode.Nodes.Add(tmpNode);
+                }
+                if (root.bro != null && brotherAttched == false)
+                {
+                    Node tmp = root;
+                    while (tmp.bro != null)
+                    {
+                        TreeNode tmpNode = populateSintaxTree(tmp.bro, true);
+                        treeNode.Nodes.Add(tmpNode);
+                        tmp = tmp.bro;
+                    }
+                }
+            }
+            return treeNode;
+        }
+
         private void runLexico(object sender, EventArgs e)
         {
             runLexico();
         }
-
         private void runLexico()
         {
             CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
             Process process = new Process();
             CheckForIllegalCrossThreadCalls = false;
             process.StartInfo.FileName = @"cmd";
-            process.StartInfo.Arguments = "/c tinypp -l \"" + tabPage.getCodeEditor().getPath() + "\"";
+            process.StartInfo.Arguments = "/c tiny -l \"" + tabPage.getCodeEditor().getPath() + "\"";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardOutput = true;
@@ -358,15 +388,50 @@ namespace Libre_IDE
 
             process.Close();
         }
+
+        private void runSintactico()
+        {
+            CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
+            Process process = new Process();
+            CheckForIllegalCrossThreadCalls = false;
+            process.StartInfo.FileName = @"cmd";
+            process.StartInfo.Arguments = "/c tiny -s \"" + tabPage.getCodeEditor().getPath() + "\"";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+
+
+            process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+            process.Start();
+            //* Read one element asynchronously
+            process.BeginErrorReadLine();
+            //* Read the other one synchronously
+            sintaxJsonText = "";
+            string output = process.StandardOutput.ReadToEnd();
+            sintaxOutputTextBox.Text += output;
+            sintaxJsonText += output;
+            process.Close();
+        }
         void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
-                string line = outLine.Data;
-                Console.WriteLine(line);
-                this.BeginInvoke(new MethodInvoker(() =>
-                {
-                    lexerErrTextBox.AppendText(outLine.Data+"\n" ?? string.Empty);
-                }));
-            
+            string line = outLine.Data;
+            Console.WriteLine(line);
+            this.BeginInvoke(new MethodInvoker(() =>
+            {
+                lexerErrTextBox.AppendText(outLine.Data + "\n" ?? string.Empty);
+            }));
+
+        }
+        void OutputHandlerSintax(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            string line = outLine.Data;
+            Console.WriteLine(line);
+            this.BeginInvoke(new MethodInvoker(() =>
+            {
+                sintaxErrorTextBox.AppendText(outLine.Data + "\n" ?? string.Empty);
+            }));
+
         }
         private void codeTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -384,5 +449,10 @@ namespace Libre_IDE
 
     }
 
-   
+    class Node : object
+    {
+        public String name {get ; set;}
+        public Node bro { get; set; }
+        public List<Node> sons {get;set;}
+    }
 }
