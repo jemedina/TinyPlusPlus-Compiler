@@ -18,17 +18,19 @@ class Syntax:
 		#self.tokensHelper.cliDisplayTokens()
 		firstToken = self.tokensHelper.getToken()	
 		self.tokensHelper.match("main")
-		root = Node(firstToken.content)
+		self.root = Node(firstToken.content)
 		self.tokensHelper.match("{")
-		root.addChild( self.lista_declaracion() )
-		root.addChild( self.lista_sentencias() )
+		self.root.addChild( self.lista_declaracion() )
+		self.root.addChild( self.lista_sentencias() )
 		self.tokensHelper.match("}")
 		print("INFO: Syntax Compilation finished. Tree:")
 		#TreeUtils.cliDisplay(root)
 		if self.outputType == "json":
-			print(json.dumps(root.__dict__, indent=4, sort_keys=False))
+			print(json.dumps(self.root.__dict__, indent=4, sort_keys=False))
 		elif self.outputType == "tree":
-			TreeUtils.cliDisplay(root)
+			TreeUtils.cliDisplay(self.root)
+		elif self.outputType == "none":
+			print("== No output ==")
 		else:
 			print("Invalid argument: "+self.outputType)
 	#lista-declaración -> { declaración; }
@@ -114,9 +116,13 @@ class Syntax:
 		while( self.tokensHelper.getCurrentToken().content[0] in _suma_op):
 			new = self.suma_op()
 			new.addChild(tmp)
-			term = self.termino()
+			comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
+			term = self.termino(comesFromALess)
 			#new.addChild( termino() )
+			#Here we're validating if the operation symbol is less and
+			#the second number of the operation is a negative number
 			if new.name == "-" and term.name[0] == "-":
+				#remove the negative number
 				term.name = term.name[1:]
 			new.addChild( term )
 			tmp = new
@@ -131,8 +137,13 @@ class Syntax:
 		return Node(rel)
 
 	#termino → factor { mult-op factor }
-	def termino(self):
+	def termino(self,comesFromALess=False):
 		tmp = self.factor()
+		#Verify if the parent is a less
+		#and check if the number is a negative number
+		if comesFromALess and tmp.name[0] == "-":
+			tmp.name = tmp.name[1:]
+
 		while ( self.tokensHelper.getCurrentToken().content in _mult_op):
 			new = self.mult_op();
 			new.addChild(tmp)
@@ -227,12 +238,26 @@ class Syntax:
 	#asignación → identificador := expresión ;
 	def asignacion(self):
 		new = Node(":=")
-		new.addChild( Node(self.tokensHelper.getCurrentToken().content) )
+		ide = Node(self.tokensHelper.getCurrentToken().content)
+		new.addChild(ide)
 		self.tokensHelper.match(TokenConstants.ID,True)
-		self.tokensHelper.match(":=")
-		asignExp = self.expresion()
-		new.addChild( asignExp )
-		self.tokensHelper.match(";")	
+		if self.tokensHelper.getCurrentToken().type == TokenConstants.INCREMENT:
+			plusNode = Node("+")
+			plusNode.addChild( ide )
+			self.tokensHelper.match(TokenConstants.INCREMENT,True)
+			plusNode.addChild(Node("1"))
+			new.addChild(plusNode)	
+		elif self.tokensHelper.getCurrentToken().type == TokenConstants.DECREMENT:
+			lessNode = Node("-")
+			lessNode.addChild( ide )
+			self.tokensHelper.match(TokenConstants.DECREMENT,True)
+			lessNode.addChild(Node("1"))
+			new.addChild(lessNode)
+		else:
+			self.tokensHelper.match(":=")
+			asignExp = self.expresion()
+			new.addChild( asignExp )
+		self.tokensHelper.match(";")
 		return new
 
 	#declaración → tipo lista-variables

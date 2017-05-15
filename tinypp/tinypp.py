@@ -16,6 +16,7 @@ def sintactic(lexFile,outputType):
     syntax.go()
     
 if __name__ == "__main__":
+    #sys.argv = ["tinypp.py","-s","testCases/target_test5/lex/out.lex","none"]
     #Check if by less we have 'python tinypp.py <other_argument>
     if len(sys.argv) > 1:
         #Check for Lexic analysis
