@@ -32,9 +32,12 @@ class Lexer:
 		while self.lexFileHandler.next() != None:
 			lexema = []
 			tipo = None
-			
+			row = 0
+			col = 0
 			#INICIO STATE
 			if self.stateManager.getState() == self.stateManager.getStateByName("INICIO"):
+				row = str(self.lexFileHandler.row+1)
+				col = str(self.lexFileHandler.col+1)	
 				if self.lexFileHandler.getCurrentValue() == '-':
 					self.stateManager.setState("MENOS")
 				elif self.lexFileHandler.getCurrentValue() == '+':
@@ -210,7 +213,7 @@ class Lexer:
 				#HECHO State
 				if self.stateManager.getState() == self.stateManager.getStateByName("HECHO"):
 					if tipo != "IGNORE":
-						newToken = Token(tipo,"".join(lexema))
+						newToken = Token(tipo,"".join(lexema),row,col)
 						self.tokens.append(newToken)
 						self.outFile.write(str(newToken)+'\n')
 						print(newToken)

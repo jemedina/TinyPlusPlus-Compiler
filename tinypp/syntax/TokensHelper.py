@@ -1,11 +1,12 @@
 from os import sys
 class Token:
-	def __init__(self,type,content):
+	def __init__(self,type,content,row=0,col=0):
 		self.type = type
 		self.content = content
-
+		self.row = row
+		self.col = col
 	def __str__(self):
-		return "{"+self.type+":"+self.content+"}"
+		return "{"+self.type+","+self.content+","+self.row+","+self.col+"}"
 
 class TokensHelper:
 
@@ -22,10 +23,14 @@ class TokensHelper:
 
 	def loadTokens(self):
 		for tokenText in self.tokensFile:
-			if tokenText.find(":") > 0:
-				identifier = tokenText[0:tokenText.find(":")].strip()
-				content = tokenText[tokenText.find(":")+1:len(tokenText)-1].strip()
-				self.tokens.append(Token(identifier,content))
+			if tokenText.find("#") > 0:
+				tokenInfo = tokenText.split("#")
+				identifier = tokenInfo[0].strip()
+				content = tokenInfo[1].strip()
+				row = tokenInfo[2].strip()
+				col = tokenInfo[3].strip()
+				newToken = Token(identifier,content,row,col)
+				self.tokens.append(newToken)
 
 	def match(self,testChar,byType=False):
 		if byType == True:
@@ -45,7 +50,7 @@ class TokensHelper:
 		for t in self.tokens:
 			print(t)
 	def error(self):
-		print("Syntax error near: "+self.getCurrentToken().content)
+		print("Syntax error in row = "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+self.getCurrentToken().content,file=sys.stderr)
 		
 	def getToken(self):
 		self.index += 1

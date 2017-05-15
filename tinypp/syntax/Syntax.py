@@ -121,7 +121,7 @@ class Syntax:
 			#new.addChild( termino() )
 			#Here we're validating if the operation symbol is less and
 			#the second number of the operation is a negative number
-			if new.name == "-" and term.name[0] == "-":
+			if new != None and term != None and new.name == "-" and term.name[0] == "-":
 				#remove the negative number
 				term.name = term.name[1:]
 			new.addChild( term )
