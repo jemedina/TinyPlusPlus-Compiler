@@ -329,10 +329,9 @@ namespace Libre_IDE
 
         private void showCompillingView(object sender, EventArgs e)
         {
-            runSintactico();
-            Node root = JsonConvert.DeserializeObject<Node>(sintaxJsonText);
-            TreeNode rootNode = populateSintaxTree(root);
-            sintaxTreeView.Nodes.Add(rootNode);
+            editionContainer.Panel2Collapsed = false;
+            editionContainer.Panel2.Show();
+            progresoDeCompilacionToolStripMenuItem.Checked = true;
         }
 
         private TreeNode populateSintaxTree(Node root, Boolean brotherAttched=false)
@@ -409,7 +408,6 @@ namespace Libre_IDE
             //* Read the other one synchronously
             sintaxJsonText = "";
             string output = process.StandardOutput.ReadToEnd();
-            sintaxOutputTextBox.Text += output;
             sintaxJsonText += output;
             process.Close();
         }
@@ -445,6 +443,15 @@ namespace Libre_IDE
             {
                 disableCompilationButtons();
             }
+        }
+
+        private void sintaxEvent(object sender, EventArgs e)
+        {
+            runSintactico();
+            sintaxTreeView.Nodes.Clear();
+            Node root = JsonConvert.DeserializeObject<Node>(sintaxJsonText);
+            TreeNode rootNode = populateSintaxTree(root);
+            sintaxTreeView.Nodes.Add(rootNode);
         }
 
     }
