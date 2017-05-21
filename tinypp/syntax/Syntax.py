@@ -289,8 +289,11 @@ class Syntax:
 			basepath = basepath.replace("\\","/")
 			arg = basepath+"out.lex"
 			if not os.path.exists(arg):
-				print("Error, analisis lexico aun no ejecutado",file=sys.stderr)
-				exit(1)
+				arg = basepath+lexDirectory+"out.lex"	
+				arg = arg.replace("\\","/")
+				if not os.path.exists(arg):
+					print("Error, analisis lexico aun no ejecutado",file=sys.stderr)
+					exit(1)
 		self.tokensHelper = TokensHelper(arg)
 		self.outputType = outputType
 	def go(self):

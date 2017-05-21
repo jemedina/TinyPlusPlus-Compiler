@@ -35,22 +35,24 @@ class TokensHelper:
 	def match(self,testChar,byType=False):
 		if byType == True:
 			if testChar == self.getCurrentToken().type:
-				return self.getToken()
+				self.getToken()
 			else:
 				self.error()
-				return None
 		else:
 			#print(self.index,self.getCurrentToken(),testChar)
 			if testChar == self.getCurrentToken().content:
-				return self.getToken()
+				self.getToken()
 			else:
 				self.error()
-				return None
+
 	def cliDisplayTokens(self):
 		for t in self.tokens:
 			print(t)
 	def error(self):
 		print("Syntax error in row = "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+self.getCurrentToken().content,file=sys.stderr)
+	
+	def syntaxError(message):
+		print("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message,file=sys.stderr)
 		
 	def getToken(self):
 		self.index += 1
