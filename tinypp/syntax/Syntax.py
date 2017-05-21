@@ -286,8 +286,11 @@ class Syntax:
 		basepath = ntpath.abspath(pathOfSouce)[0:len(ntpath.abspath(pathOfSouce))-len(canonicalFileName)]
 		arg = basepath+lexDirectory+"out.lex"	
 		if not os.path.exists(arg):
-			print("Error, analisis lexico aun no ejecutado",file=sys.stderr)
-			exit(1)
+			basepath = basepath.replace("\\","/")
+			arg = basepath+"out.lex"
+			if not os.path.exists(arg):
+				print("Error, analisis lexico aun no ejecutado",file=sys.stderr)
+				exit(1)
 		self.tokensHelper = TokensHelper(arg)
 		self.outputType = outputType
 	def go(self):
