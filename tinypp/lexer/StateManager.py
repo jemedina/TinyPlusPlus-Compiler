@@ -6,12 +6,20 @@ class StateManager:
 
 	def __init__(self):
 		self.states = {}
-		with open(statesProperties) as configFile:
-			for lineConf in configFile:
-				lineConf = lineConf.replace("\n","")
-				register = lineConf.split("=")
-				self.states[ register[0] ] = register[1]
-
+		try:
+			with open(statesProperties) as configFile:
+				for lineConf in configFile:
+					lineConf = lineConf.replace("\n","")
+					register = lineConf.split("=")
+					self.states[ register[0] ] = register[1]
+		except:
+			statesProperties = runtimePath+"lexer/config/states.properties"
+			with open(statesProperties) as configFile:
+				for lineConf in configFile:
+					lineConf = lineConf.replace("\n","")
+					register = lineConf.split("=")
+					self.states[ register[0] ] = register[1]
+	
 	def setState(self,state):
 		self.state = state
 
