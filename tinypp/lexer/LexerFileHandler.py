@@ -8,6 +8,7 @@ class LexerFileHandler:
 		self.row = 0
 		self.fileContent = []
 		self.file = None
+		self.done = False
 		try:
 			self.load()
 		except IOError as e:
@@ -22,6 +23,13 @@ class LexerFileHandler:
 			self.fileContent.append(line)
 		if len(self.fileContent) == 0:
 			self.eof = True
+
+	def isDone(self):
+		return self.done
+	
+	def setDone(self,done):
+		self.done = done
+	
 	def next(self):
 		if(len(self.fileContent) > 0 and self.col < (len(self.fileContent[self.row])-1)):
 			self.col+=1

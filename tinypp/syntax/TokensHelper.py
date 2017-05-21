@@ -58,10 +58,15 @@ class TokensHelper:
 			return self.tokens[self.index]
 		else:
 			return None
-
+	def isEOF(self):
+		return self.getCurrentToken().content == TokenConstants.EOF and self.index >= 0
+	
 	def getCurrentToken(self):
 		return self.tokens[self.index]
-		
+	
+	#def scanto(self,synchset):
+	#	while not self.getCurrentToken().content in synchset 
+
 class TokenConstants:
 	CHAR_SP = "CARACTER_ESPECIAL"
 	ID = "IDENTIFICADOR"
@@ -86,3 +91,4 @@ class TokenConstants:
 	TIMES = "*"
 	DIV = "/"
 	ELSE = "else"
+	EOF = "$"

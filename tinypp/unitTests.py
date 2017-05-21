@@ -65,7 +65,30 @@ def multipleTestCases():
     s.go()
     result = evaluator(s.root.getChild(0).getChild(1))
     assertThat(-19-8-7-6-5-4-3-2-1*(2+3+4+3+2),result)
+#####TokensHelper Tests#####
+def testTokensHelper():
+    print("="*6,"TokensHelper","="*6)
+
+    testIsEOF()
+
+def testIsEOF():
+    print("-- test isEOF() -- ")
+    #This Test Case has 12 tokens + eof
+    t = TokensHelper("testCases/target_test1/lex/out.lex")
+    t.loadTokens()
+    
+    endOfFile = False
+    assertThat(endOfFile,t.isEOF())
+    
+    #Consume the 13 tokens
+    numOfTokens = 13 #13 token is $ 
+    for i in range(numOfTokens):
+        t.getToken()
+
+    endOfFile = True
+    assertThat(endOfFile,t.isEOF())
 
 if __name__ == "__main__":
     testEvaluator()
     multipleTestCases()
+    testTokensHelper()

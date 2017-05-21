@@ -40,7 +40,8 @@ class Lexer:
 		return charac in patternArray
 
 	def eval(self):
-		while self.lexFileHandler.next() != None:
+		while not self.lexFileHandler.isDone():
+			self.lexFileHandler.next()
 			lexema = []
 			tipo = None
 			row = 0
@@ -49,7 +50,12 @@ class Lexer:
 			if self.stateManager.getState() == self.stateManager.getStateByName("INICIO"):
 				row = str(self.lexFileHandler.row+1)
 				col = str(self.lexFileHandler.col+1)	
-				if self.lexFileHandler.getCurrentValue() == '-':
+				if self.lexFileHandler.isEOF():
+					lexema.append("$")
+					tipo = "EOF"
+					self.stateManager.setState("HECHO")
+					self.lexFileHandler.setDone(True)
+				elif self.lexFileHandler.getCurrentValue() == '-':
 					self.stateManager.setState("MENOS")
 				elif self.lexFileHandler.getCurrentValue() == '+':
 					self.stateManager.setState("MAS")
@@ -70,6 +76,7 @@ class Lexer:
 				elif self.lexFileHandler.getCurrentValue() == ' ' or self.lexFileHandler.getCurrentValue() == '\t' or self.lexFileHandler.getCurrentValue() == '\n' or self.lexFileHandler.isEOF():
 					self.stateManager.setState("HECHO")
 					tipo = "IGNORE"
+				
 				if self.stateManager.getState() == self.stateManager.getStateByName("INICIO"):
 					self.stateManager.setState("ERROR")
 
