@@ -117,8 +117,8 @@ class Syntax:
 		while( self.tokensHelper.getCurrentToken().content[0] in _suma_op):
 			new = self.suma_op()
 			new.addChild(tmp)
-			comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
-			term = self.termino(comesFromALess)
+			#comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
+			term = self.termino(False)
 			#new.addChild( termino() )
 			#Here we're validating if the operation symbol is less and
 			#the second number of the operation is a negative number

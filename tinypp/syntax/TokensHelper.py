@@ -37,13 +37,13 @@ class TokensHelper:
 			if testChar == self.getCurrentToken().type:
 				self.getToken()
 			else:
-				self.error()
+				self.syntaxError("unexpected token -> "+self.getCurrentToken().content)
 		else:
 			#print(self.index,self.getCurrentToken(),testChar)
 			if testChar == self.getCurrentToken().content:
 				self.getToken()
 			else:
-				self.error()
+				self.syntaxError("unexpected token -> "+self.getCurrentToken().content)
 
 	def cliDisplayTokens(self):
 		for t in self.tokens:
@@ -51,7 +51,7 @@ class TokensHelper:
 	def error(self):
 		print("Syntax error in row = "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+self.getCurrentToken().content,file=sys.stderr)
 	
-	def syntaxError(message):
+	def syntaxError(self,message):
 		print("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message,file=sys.stderr)
 		
 	def getToken(self):
