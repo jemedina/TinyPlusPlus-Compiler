@@ -88,8 +88,8 @@ class Lexer:
 						lexema.append(self.lexFileHandler.getCurrentValue())
 						tipo = "INCREMENTO"
 						self.stateManager.setState("HECHO")
-					#elif not self.lexFileHandler.isEOF() and self.lexFileHandler.getCurrentValue().isdigit():
-					#	self.stateManager.setState("NUMERO")
+					elif not self.lexFileHandler.isEOF() and self.lexFileHandler.getCurrentValue().isdigit():
+						self.stateManager.setState("NUMERO")
 					else:
 						self.lexFileHandler.previous()
 						tipo = "MAS"
@@ -103,8 +103,8 @@ class Lexer:
 						lexema.append(self.lexFileHandler.getCurrentValue())
 						tipo = "DECREMENTO"
 						self.stateManager.setState("HECHO")
-					#elif not self.lexFileHandler.isEOF() and self.lexFileHandler.getCurrentValue().isdigit():
-					#	self.stateManager.setState("NUMERO")
+					elif not self.lexFileHandler.isEOF() and self.lexFileHandler.getCurrentValue().isdigit():
+						self.stateManager.setState("NUMERO")
 					else:
 						self.lexFileHandler.previous()
 						tipo = "MENOS"

@@ -117,8 +117,8 @@ class Syntax:
 		while( self.tokensHelper.getCurrentToken().content[0] in _suma_op):
 			new = self.suma_op()
 			new.addChild(tmp)
-			#comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
-			term = self.termino(False)
+			comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
+			term = self.termino(comesFromALess)
 			#new.addChild( termino() )
 			#Here we're validating if the operation symbol is less and
 			#the second number of the operation is a negative number
@@ -144,7 +144,7 @@ class Syntax:
 		#and check if the number is a negative number
 		if comesFromALess and tmp.name[0] == "-":
 			tmp.name = tmp.name[1:]
-
+	
 		while ( self.tokensHelper.getCurrentToken().content in _mult_op):
 			new = self.mult_op();
 			new.addChild(tmp)
@@ -182,8 +182,7 @@ class Syntax:
 				valueWithoutPlus = self.tokensHelper.getCurrentToken().content
 			new = Node(valueWithoutPlus)
 			self.tokensHelper.match(TokenConstants.FLOAT,True)
-
-		elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
+		else:
 			new = Node(self.tokensHelper.getCurrentToken().content)
 			self.tokensHelper.match(TokenConstants.ID,True)
 
