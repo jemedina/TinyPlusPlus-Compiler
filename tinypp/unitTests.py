@@ -1,13 +1,19 @@
 from syntax.Tree import *
 from syntax.TokensHelper import *
-from syntax.Syntax import Syntax
+from syntax.Syntax import *
 import random
+import sys
+GREEN = '\x1b[6;30;42m'
+RED   = "\033[1;30;31m"
+
 def assertThat(expectedResult,result):
     if expectedResult == result:
+        sys.stdout.write(GREEN)
         print("TEST OK")
     else:
+        sys.stdout.write(RED)
         print("TEST FAILED: Was expected <"+str(expectedResult)+"> but was end in <"+str(result)+">")
-
+    sys.stdout.write("\033[0;0m")
 def evaluator(node):
     if node.name.isnumeric() or len(node.name)>1 and node.name[1:].isnumeric():
         return float(node.name)
@@ -88,7 +94,68 @@ def testIsEOF():
     endOfFile = True
     assertThat(endOfFile,t.isEOF())
 
+def testConjuntoPrimero():
+    print("="*6,"test conjunto primero","="*6)
+    print("--main--")
+    expected = set(["main"])
+    assertThat(expected,set(primero("main")))
+    print("--lista-declaracion--")
+    expected =set(["$","int","float","boolean"])
+    assertThat(expected,set(primero("lista-declaracion")))
+    print("--declaracion--")
+    expected =set(["int","float","boolean"])
+    assertThat(expected,set(primero("declaracion")))
+    print("--tipo--")
+    expected =set(["int","float","boolean"])
+    assertThat(expected,set(primero("tipo")))
+    print("--lista-variables--")
+    expected =set(["identificador"])
+    assertThat(expected,set(primero("lista-variables")))
+    print("--lista-sentencias--")
+    expected =set(["if","while","do","cin","cout","{","identificador","$"])
+    assertThat(expected,set(primero("lista-sentencias")))
+    print("--sentencia--")
+    expected =set(["if","while","do","cin","cout","{","identificador"])
+    assertThat(expected,set(primero("sentencia")))
+    print("--seleccion--")
+    expected =set(["if"])
+    assertThat(expected,set(primero("seleccion")))
+    print("--iteracion--")
+    expected =set(["while"])
+    assertThat(expected,set(primero("iteracion")))
+    print("--repeticion--")
+    expected =set(["do"])
+    assertThat(expected,set(primero("repeticion")))
+    print("--sent-cin--")
+    expected =set(["cin"])
+    assertThat(expected,set(primero("sent-cin")))
+    print("--sent-cout--")
+    expected =set(["cout"])
+    assertThat(expected,set(primero("sent-cout")))
+    print("--bloque--")
+    expected =set(["{"])
+    assertThat(expected,set(primero("bloque")))
+    print("--asignacion--")
+    expected =set(["identificador"])
+    assertThat(expected,set(primero("asignacion")))
+    print("--expresion--")
+    #TODO Ask if this is correct
+    expected =set(['-', 'identificador', '*', '(', 'numero', '/', '+'])
+    assertThat(expected,set(primero("expresion")))
+    print("--expresion-simple--")
+    expected =set(['-', 'identificador', '*', '(', 'numero', '/', '+'])
+    assertThat(expected,set(primero("expresion-simple")))
+    print("--suma-op--")
+    expected =set(['-', '+'])
+    assertThat(expected,set(primero("suma-op")))
+    print("--mult-op--")
+    expected =set(['*', '/'])
+    assertThat(expected,set(primero("mult-op")))
+    print("--factor--")
+    expected =set(['(', 'numero', 'identificador'])
+    assertThat(expected,set(primero("factor")))
 if __name__ == "__main__":
     testEvaluator()
     multipleTestCases()
     testTokensHelper()
+    testConjuntoPrimero()

@@ -10,8 +10,51 @@ _relacion = ["<=", "<", ">" ,">=", "==", "!="]
 _suma_op = ["+","-"]
 _mult_op = ["*","/"]
 #############################
+_gramatica = {"programa":[[ "main","{","lista-sentencias","}" ]],
+			"lista-declaracion":[ ["declaracion",";","lista-declaracion"],["$"] ],
+			"declaracion":[["tipo","lista-variables"]],
+			"tipo":[ ["int"],["float"],["boolean"]],
+			"lista-variables":[["identificador",",","lista-variables"],["identificador"]],
+			"lista-sentencias":[["sentencia","lista-sentencias"],["sentencia"],["$"]],
+			"sentencia":[["seleccion"],["iteracion"],["repeticion"],["sent-cin"],["sent-cout"],["bloque"],["asignacion"]],
+			"seleccion":[["if","(","expresion",")","then","bloque"],["if","(","expresion",")","then","bloque","else","bloque"]],
+			"iteracion":[["while","(","expresion",")","bloque"]],
+			"repeticion":[["do","bloque","until","(","expresion",")",";"]],
+			"sent-cin":[["cin","identificador",";"]],
+			"sent-cout":[["cout","expresion",";"]],
+			"bloque":[["{","lista-sentencias","}"]],
+			"asignacion":[["identificador",":=","expresion",";"]],
+			"expresion":[["expresion-simple","relacion","expresion-simple"],["expresion-simple"]],
+			"relacion":[["<="],["<"],[">"],[">="],["="],["!="]],
+			"expresion-simple":[["expresion-simple","suma-op","termino"],["termino"]],
+			"suma-op":[["+"],["-"]],
+			"termino":[["termino","mult-op","factor"],["factor"]],
+			"mult-op":[["*"],["/"]],
+			"factor":[["(","expresion",")"],["numero"],["identificador"]]						
+			}
 
+#############################
+def isTerminal(X):
+	_isTerminal = False
+	try:
+		_gramatica[X]
+	except:
+		_isTerminal = True
+	return _isTerminal
 
+def primero(X,cambio=None):
+	if isTerminal(X):
+		return [X]
+	elif X == cambio:
+		conjunto = []
+		Y = _gramatica[X]
+		conjunto = list(set(conjunto).union( primero(Y[0][1],X) ))
+	else:		
+		conjunto = []
+		Y = _gramatica[X]
+		for x in Y:
+			conjunto = list(set(conjunto).union( primero(x[0],X) ))
+	return conjunto
 
 class Syntax:
 	#programa → main “{“ lista-declaración lista-sentencias “}”
@@ -224,8 +267,8 @@ class Syntax:
 	def sent_cout(self):	
 		new = Node("cout")
 		self.tokensHelper.match("cout")
-		new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
-		self.tokensHelper.match(TokenConstants.ID,True)
+		exp = self.expresion()
+		new.addChild( exp ) 
 		self.tokensHelper.match(";")	
 		return new
 
