@@ -70,7 +70,7 @@ def multipleTestCases():
     s=Syntax("testCases/target_test3/lex/out.lex","none")
     s.go()
     result = evaluator(s.root.getChild(0).getChild(1))
-    assertThat(-19-8-7-6-5-4-3-2-1*(2+3+4+3+2),result)
+    assertThat(19-8-7-6-5-4-3-2-1*(2+3+4+3+2),result)
 #####TokensHelper Tests#####
 def testTokensHelper():
     print("="*6,"TokensHelper","="*6)
@@ -86,8 +86,8 @@ def testIsEOF():
     endOfFile = False
     assertThat(endOfFile,t.isEOF())
     
-    #Consume the 13 tokens
-    numOfTokens = 13 #13 token is $ 
+    #Consume the 18 tokens
+    numOfTokens = 18 #18 token is $ 
     for i in range(numOfTokens):
         t.getToken()
 

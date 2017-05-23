@@ -185,8 +185,8 @@ class Syntax:
 		tmp = self.factor()
 		#Verify if the parent is a less
 		#and check if the number is a negative number
-		if comesFromALess and tmp.name[0] == "-":
-			tmp.name = tmp.name[1:]
+		#if comesFromALess and tmp.name[0] == "-":
+		#	tmp.name = tmp.name[1:]
 	
 		while ( self.tokensHelper.getCurrentToken().content in _mult_op):
 			new = self.mult_op();
@@ -211,19 +211,11 @@ class Syntax:
 			new = self.expresion()
 			self.tokensHelper.match(")")
 		elif self.tokensHelper.getCurrentToken().type == TokenConstants.INT:
-			if self.tokensHelper.getCurrentToken().content[0] == "+":
-				valueWithoutPlus = self.tokensHelper.getCurrentToken().content[1:]
-			else:
-				valueWithoutPlus = self.tokensHelper.getCurrentToken().content
-			new = Node(valueWithoutPlus)
+			new = Node(self.tokensHelper.getCurrentToken().content)
 			self.tokensHelper.match(TokenConstants.INT,True)
 		
 		elif self.tokensHelper.getCurrentToken().type == TokenConstants.FLOAT:
-			if self.tokensHelper.getCurrentToken().content[0] == "+":
-				valueWithoutPlus = self.tokensHelper.getCurrentToken().content[1:]
-			else:
-				valueWithoutPlus = self.tokensHelper.getCurrentToken().content
-			new = Node(valueWithoutPlus)
+			new = Node(self.tokensHelper.getCurrentToken().content)
 			self.tokensHelper.match(TokenConstants.FLOAT,True)
 		else:
 			new = Node(self.tokensHelper.getCurrentToken().content)
