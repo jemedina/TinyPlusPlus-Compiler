@@ -61,169 +61,202 @@ _s_factor=set([")",";","+","-","*","/","<","<=",">",">=","==","!="])
 class Syntax:
 	#programa → main “{“ lista-declaración lista-sentencias “}”
 	def programa(self):
-		#self.tokensHelper.cliDisplayTokens()
-		firstToken = self.tokensHelper.getToken()	
-		self.tokensHelper.match("main")
-		self.root = Node(firstToken.content)
-		self.tokensHelper.match("{")
-		self.root.addChild( self.lista_declaracion() )
-		self.root.addChild( self.lista_sentencias() )
-		self.tokensHelper.match("}")
-		#print("INFO: Syntax Compilation finished. Tree:")
-		#TreeUtils.cliDisplay(root)
-		if self.outputType == "json":
-			print(json.dumps(self.root.__dict__, indent=4, sort_keys=False))
-		elif self.outputType == "tree":
-			TreeUtils.cliDisplay(self.root)
-		elif self.outputType == "none":
-			print("== No output ==")
-		else:
-			print("Invalid argument: "+self.outputType)
-	#lista-declaración -> { declaración; }
-	def lista_declaracion(self):
-		decl = None
-		while self.tokensHelper.getCurrentToken().content in _tipo:
-			if decl == None:
-				decl = self.declaracion()
+		sync = _s_programa
+		firstToken = self.tokensHelper.getToken()
+		self.tokensHelper.checkInput(_p_programa,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			self.tokensHelper.match("main")
+			self.root = Node(firstToken.content)
+			self.tokensHelper.match("{")
+			self.root.addChild( self.lista_declaracion(_s_lista_declaracion) )
+			self.root.addChild( self.lista_sentencias(_s_lista_sentencias) )
+			self.tokensHelper.match("}")
+			#print("INFO: Syntax Compilation finished. Tree:")
+			#TreeUtils.cliDisplay(root)
+			if self.outputType == "json":
+				print(json.dumps(self.root.__dict__, indent=4, sort_keys=False))
+			elif self.outputType == "tree":
+				TreeUtils.cliDisplay(self.root)
+			elif self.outputType == "none":
+				print("== No output ==")
 			else:
-				decl.appendBro( self.declaracion() )
-			self.tokensHelper.match(";")
-		
-		if decl != None and len(decl.sons) > 0:
-			return decl
-		else:
-			return None
+				print("Invalid argument: "+self.outputType)
+			self.tokensHelper.checkInput(sync,_p_programa)
+	#lista-declaración -> { declaración; }
+	def lista_declaracion(self,sync):
+		self.tokensHelper.checkInput(_p_lista_declaracion,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			decl = None
+			while self.tokensHelper.getCurrentToken().content in _tipo:
+				if decl == None:
+					decl = self.declaracion(_s_declaracion)
+				else:
+					decl.appendBro( self.declaracion(_s_declaracion) )
+				self.tokensHelper.match(";")
+			
+			if decl != None and len(decl.sons) > 0:
+				return decl
+			else:
+				return None
+			self.tokensHelper.checkInput(sync,_p_lista_declaracion)
 
 	#lista-sentencias → { sentencia }
 	#sentencia → selección | iteración | repetición | sent-cin |sent-out | bloque | asignación
-	def lista_sentencias(self):
-		tmp = new = None
-		while self.tokensHelper.getCurrentToken().content in _sentencia or self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
-			if self.tokensHelper.getCurrentToken().content == TokenConstants.IF:
-				new = self.seleccion()
-			elif self.tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
-				new = self.iteracion()
-			elif self.tokensHelper.getCurrentToken().content == TokenConstants.DO:
-				new = self.repeticion()
-			elif self.tokensHelper.getCurrentToken().content == TokenConstants.CIN:
-				new = self.sent_cin()
-			elif self.tokensHelper.getCurrentToken().content == TokenConstants.COUT:
-				new = self.sent_cout()
-			elif self.tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
-				new = self.bloque()
-			elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
-				new = self.asignacion()
-			
-			if tmp == None:
-				tmp = new
+	def lista_sentencias(self,sync):
+		self.tokensHelper.checkInput(_p_lista_sentencias,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			tmp = new = None
+			while self.tokensHelper.getCurrentToken().content in _sentencia or self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
+				if self.tokensHelper.getCurrentToken().content == TokenConstants.IF:
+					new = self.seleccion(_s_seleccion)
+				elif self.tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
+					new = self.iteracion(_s_iteracion)
+				elif self.tokensHelper.getCurrentToken().content == TokenConstants.DO:
+					new = self.repeticion(_s_repeticion)
+				elif self.tokensHelper.getCurrentToken().content == TokenConstants.CIN:
+					new = self.sent_cin(_s_sent_cin)
+				elif self.tokensHelper.getCurrentToken().content == TokenConstants.COUT:
+					new = self.sent_cout(_s_sent_cout)
+				elif self.tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
+					new = self.bloque(_s_bloque)
+				elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
+					new = self.asignacion(_s_asignacion)
+				
+				if tmp == None:
+					tmp = new
+				else:
+					tmp.appendBro( new )
+			if tmp != None and len(tmp.sons) > 0:
+				return tmp
 			else:
-				tmp.appendBro( new )
-		if tmp != None and len(tmp.sons) > 0:
-			return tmp
-		else:
-			return None
+				return None
+			self.tokensHelper.checkInput(sync,_p_lista_sentencias)
 			
 	#selección → if ( expresión ) then bloque | if ( expresión ) then bloque else bloque
-	def seleccion(self):
-		ifStmt = Node( TokenConstants.IF )
-		self.tokensHelper.match( TokenConstants.IF )
-		self.tokensHelper.match( "(" )
-		ifStmt.addChild ( self.expresion() )
-		self.tokensHelper.match( ")" )
-		self.tokensHelper.match( "then" )
-		ifStmt.addChild( self.bloque() )
+	def seleccion(self,sync):
+		self.tokensHelper.checkInput(_p_seleccion,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			ifStmt = Node( TokenConstants.IF )
+			self.tokensHelper.match( TokenConstants.IF )
+			self.tokensHelper.match( "(" )
+			ifStmt.addChild ( self.expresion(_s_expresion) )
+			self.tokensHelper.match( ")" )
+			self.tokensHelper.match( "then" )
+			ifStmt.addChild( self.bloque(_s_bloque) )
 
-		if( self.tokensHelper.getCurrentToken().content == TokenConstants.ELSE ):
-			self.tokensHelper.match( TokenConstants.ELSE )
-			ifStmt.addChild( self.bloque() )
-			
-		return ifStmt
-		
+			if( self.tokensHelper.getCurrentToken().content == TokenConstants.ELSE ):
+				self.tokensHelper.match( TokenConstants.ELSE )
+				ifStmt.addChild( self.bloque(_s_bloque) )
+				
+			return ifStmt
+			self.tokensHelper.checkInput(sync,_p_seleccion)
 	#expresión → expresión-simple { relación expresión-simple }
-	def expresion(self):
-		exp = None
-		tmp = self.expresion_simple()
-		if( self.tokensHelper.getCurrentToken().content in _relacion ):
-			exp = self.relacion()
-			exp.addChild(tmp)
-			exp.addChild( self.expresion_simple() )
-		if exp == None:
-			exp = tmp
-		return exp
+	def expresion(self,sync):
+		self.tokensHelper.checkInput(_p_expresion,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			exp = None
+			tmp = self.expresion_simple(_s_expresion_simple)
+			if( self.tokensHelper.getCurrentToken().content in _relacion ):
+				exp = self.relacion(_s_relacion)
+				exp.addChild(tmp)
+				exp.addChild( self.expresion_simple(_s_expresion_simple) )
+			if exp == None:
+				exp = tmp
+			return exp
+			self.tokensHelper.checkInput(sync,_p_expresion)
 
-	def relacion(self):
-		rel = self.tokensHelper.getCurrentToken().content
-		self.tokensHelper.match(TokenConstants.RELATION,True)
-		return Node(rel)
+	def relacion(self,sync):
+		self.tokensHelper.checkInput(_p_relacion,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			rel = self.tokensHelper.getCurrentToken().content
+			self.tokensHelper.match(TokenConstants.RELATION,True)
+			return Node(rel)
+			self.tokensHelper.checkInput(sync,_p_relacion)
 
 	#expresión-simple → termino { suma-op termino }
-	def expresion_simple(self):
-		tmp = self.termino()
-		while( self.tokensHelper.getCurrentToken().content[0] in _suma_op):
-			new = self.suma_op()
-			new.addChild(tmp)
-			comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
-			term = self.termino(comesFromALess)
-			#new.addChild( termino() )
-			#Here we're validating if the operation symbol is less and
-			#the second number of the operation is a negative number
-			if new != None and term != None and new.name == "-" and term.name[0] == "-":
-				#remove the negative number
-				term.name = term.name[1:]
-			new.addChild( term )
-			tmp = new
-		return tmp
+	def expresion_simple(self,sync):
+		self.tokensHelper.checkInput(_p_expresion_simple,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			tmp = self.termino()
+			while( self.tokensHelper.getCurrentToken().content[0] in _suma_op):
+				new = self.suma_op(_s_suma_op)
+				new.addChild(tmp)
+				comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
+				term = self.termino(comesFromALess)
+				#new.addChild( termino() )
+				#Here we're validating if the operation symbol is less and
+				#the second number of the operation is a negative number
+				if new != None and term != None and new.name == "-" and term.name[0] == "-":
+					#remove the negative number
+					term.name = term.name[1:]
+				new.addChild( term )
+				tmp = new
+			return tmp
+			self.tokensHelper.checkInput(sync,_p_expresion_simple)
+			
 
-	def suma_op(self):
-		rel = self.tokensHelper.getCurrentToken().content[0]
-		if(self.tokensHelper.getCurrentToken().type == TokenConstants.PLUS):
-			self.tokensHelper.match(TokenConstants.PLUS,True)
-		elif (self.tokensHelper.getCurrentToken().type == TokenConstants.LESS):
-			self.tokensHelper.match(TokenConstants.LESS,True)
-		return Node(rel)
-
+	def suma_op(self,sync):
+		self.tokensHelper.checkInput(_p_suma_op,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			rel = self.tokensHelper.getCurrentToken().content[0]
+			if(self.tokensHelper.getCurrentToken().type == TokenConstants.PLUS):
+				self.tokensHelper.match(TokenConstants.PLUS,True)
+			elif (self.tokensHelper.getCurrentToken().type == TokenConstants.LESS):
+				self.tokensHelper.match(TokenConstants.LESS,True)
+			return Node(rel)
+			self.tokensHelper.checkInput(sync,_p_suma_op)
 	#termino → factor { mult-op factor }
-	def termino(self,comesFromALess=False):
-		tmp = self.factor()
-		#Verify if the parent is a less
-		#and check if the number is a negative number
-		#if comesFromALess and tmp.name[0] == "-":
-		#	tmp.name = tmp.name[1:]
-	
-		while ( self.tokensHelper.getCurrentToken().content in _mult_op):
-			new = self.mult_op();
-			new.addChild(tmp)
-			new.addChild( self.factor() )
-			tmp = new
-		return tmp
+	def termino(self,sync,comesFromALess=False):
 
-	def mult_op(self):
-		rel = self.tokensHelper.getCurrentToken().content
-		if(self.tokensHelper.getCurrentToken().content == TokenConstants.TIMES):
-			self.tokensHelper.match(TokenConstants.TIMES)
-		elif (self.tokensHelper.getCurrentToken().content == TokenConstants.DIV):
-			self.tokensHelper.match(TokenConstants.DIV)
-		return Node(rel)
+		self.tokensHelper.checkInput(_p_termino,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			tmp = self.factor()
+			#Verify if the parent is a less
+			#and check if the number is a negative number
+			#if comesFromALess and tmp.name[0] == "-":
+			#	tmp.name = tmp.name[1:]
+		
+			while ( self.tokensHelper.getCurrentToken().content in _mult_op):
+				new = self.mult_op(_s_mult_op);
+				new.addChild(tmp)
+				new.addChild( self.factor(_s_factor) )
+				tmp = new
+			return tmp
+			self.tokensHelper.checkInput(sync,_p_termino)
+
+	def mult_op(self,sync):
+		self.tokensHelper.checkInput(_p_mult_op,sync)
+		if self.tokensHelper.getCurrentToken().content in sync:
+			rel = self.tokensHelper.getCurrentToken().content
+			if(self.tokensHelper.getCurrentToken().content == TokenConstants.TIMES):
+				self.tokensHelper.match(TokenConstants.TIMES)
+			elif (self.tokensHelper.getCurrentToken().content == TokenConstants.DIV):
+				self.tokensHelper.match(TokenConstants.DIV)
+			return Node(rel)
+			self.tokensHelper.checkInput(sync,_p_mult_op)
 
 	#factor → ( expresión ) | numero | identificador
-	def factor(self):
-		new = None
-		if self.tokensHelper.getCurrentToken().content == "(":
-			self.tokensHelper.match("(")
-			new = self.expresion()
-			self.tokensHelper.match(")")
-		elif self.tokensHelper.getCurrentToken().type == TokenConstants.INT:
-			new = Node(self.tokensHelper.getCurrentToken().content)
-			self.tokensHelper.match(TokenConstants.INT,True)
-		
-		elif self.tokensHelper.getCurrentToken().type == TokenConstants.FLOAT:
-			new = Node(self.tokensHelper.getCurrentToken().content)
-			self.tokensHelper.match(TokenConstants.FLOAT,True)
-		else:
-			new = Node(self.tokensHelper.getCurrentToken().content)
-			self.tokensHelper.match(TokenConstants.ID,True)
+	def factor(self,sync):
+		self.tokensHelper.checkInput(_p_factor,sync)
+		if self.tokensHelper.getCurrentToken().content in sync:
+			new = None
+			if self.tokensHelper.getCurrentToken().content == "(":
+				self.tokensHelper.match("(")
+				new = self.expresion(_s_expresion)
+				self.tokensHelper.match(")")
+			elif self.tokensHelper.getCurrentToken().type == TokenConstants.INT:
+				new = Node(self.tokensHelper.getCurrentToken().content)
+				self.tokensHelper.match(TokenConstants.INT,True)
+			
+			elif self.tokensHelper.getCurrentToken().type == TokenConstants.FLOAT:
+				new = Node(self.tokensHelper.getCurrentToken().content)
+				self.tokensHelper.match(TokenConstants.FLOAT,True)
+			else:
+				new = Node(self.tokensHelper.getCurrentToken().content)
+				self.tokensHelper.match(TokenConstants.ID,True)
 
-		return new
+			return new
+			self.tokensHelper.checkInput(_p_mult_op,sync)
 
 	#iteración → while ( expresión ) bloque
 	def iteracion(self):

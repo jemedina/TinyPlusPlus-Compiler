@@ -66,8 +66,14 @@ class TokensHelper:
 	def getCurrentToken(self):
 		return self.tokens[self.index]
 	
-	#def scanto(self,synchset):
-	#	while not self.getCurrentToken().content in synchset 
+	def scanto(self,synchset):
+		while not self.getCurrentToken().content in synchset.union(["$"]):
+			self.getToken()
+	
+	def checkInput(first,follow):
+		if not self.getCurrentToken().content in first:
+			self.syntaxError("unexpected token")
+			self.scanto(first.union(follow))
 
 class TokenConstants:
 	CHAR_SP = "CARACTER_ESPECIAL"
