@@ -9,52 +9,54 @@ _sentencia = ["if","while","do","cin","cout","{"]
 _relacion = ["<=", "<", ">" ,">=", "==", "!="]
 _suma_op = ["+","-"]
 _mult_op = ["*","/"]
+EMPTY = "ε";
 #############################
-_gramatica = {"programa":[[ "main","{","lista-sentencias","}" ]],
-			"lista-declaracion":[ ["declaracion",";","lista-declaracion"],["$"] ],
-			"declaracion":[["tipo","lista-variables"]],
-			"tipo":[ ["int"],["float"],["boolean"]],
-			"lista-variables":[["identificador",",","lista-variables"],["identificador"]],
-			"lista-sentencias":[["sentencia","lista-sentencias"],["sentencia"],["$"]],
-			"sentencia":[["seleccion"],["iteracion"],["repeticion"],["sent-cin"],["sent-cout"],["bloque"],["asignacion"]],
-			"seleccion":[["if","(","expresion",")","then","bloque"],["if","(","expresion",")","then","bloque","else","bloque"]],
-			"iteracion":[["while","(","expresion",")","bloque"]],
-			"repeticion":[["do","bloque","until","(","expresion",")",";"]],
-			"sent-cin":[["cin","identificador",";"]],
-			"sent-cout":[["cout","expresion",";"]],
-			"bloque":[["{","lista-sentencias","}"]],
-			"asignacion":[["identificador",":=","expresion",";"]],
-			"expresion":[["expresion-simple","relacion","expresion-simple"],["expresion-simple"]],
-			"relacion":[["<="],["<"],[">"],[">="],["="],["!="]],
-			"expresion-simple":[["expresion-simple","suma-op","termino"],["termino"]],
-			"suma-op":[["+"],["-"]],
-			"termino":[["termino","mult-op","factor"],["factor"]],
-			"mult-op":[["*"],["/"]],
-			"factor":[["(","expresion",")"],["numero"],["identificador"]]						
-			}
+#PRIMARY SETS
+_p_programa=set(["main"])
+_p_lista_declaracion=set(["int","float","boolean",EMPTY])
+_p_declaracion=set(["int","float","boolean"])
+_p_tipo=set(["int","float","boolean"])
+_p_lista_variables=set(["identificador"])
+_p_lista_sentencias=set(["if","while","until","cin","cout","{","identificador",EMPTY])
+_p_sentencia=set(["if","while","repeat","cin","cout","{","identificador"])
+_p_seleccion=set(["if"])
+_p_iteracion=set(["while"])
+_p_repeticion=set(["repeat"])
+_p_sent_cin=set(["cin"])
+_p_sent_cout=set(["cout"])
+_p_bloque=set(["{"])
+_p_asignacion=set(["identificador"])
+_p_expresion=set(["(","numero","identificador"])
+_p_relacion=set(["<=","<",">",">=","==","!="])
+_p_expresion_simple=set(["(","numero","identificador"])
+_p_suma_op=set(['-', '+'])
+_p_termino=set(["(","numero","identificador"])
+_p_mult_op=set(['*', '/'])
+_p_factor=set(['(', 'numero', 'identificador'])
 
-#############################
-def isTerminal(X):
-	_isTerminal = False
-	try:
-		_gramatica[X]
-	except:
-		_isTerminal = True
-	return _isTerminal
-
-def primero(X,cambio=None):
-	if isTerminal(X):
-		return [X]
-	elif X == cambio:
-		conjunto = []
-		Y = _gramatica[X]
-		conjunto = list(set(conjunto).union( primero(Y[0][1],X) ))
-	else:		
-		conjunto = []
-		Y = _gramatica[X]
-		for x in Y:
-			conjunto = list(set(conjunto).union( primero(x[0],X) ))
-	return conjunto
+#NEXT SETS
+_s_programa=set(["$"])
+#TODO: Verify is this set needs the EMPTY item
+_s_lista_declaracion=set(["$","if","while","repeat","cin","cout","{"])
+_s_declaracion=set([";"])
+_s_tipo=set(["identificador"])
+_s_lista_variables=set([";"])
+_s_lista_sentencias=set(["}"])
+_s_sentencia=set(["if","while","repeat","cin","cout","{","identificador","}"])
+_s_seleccion=set(["if","while","repeat","cin","cout","{","identificador","}"])
+_s_iteracion=set(["if","while","repeat","cin","cout","{","identificador","}"])
+_s_repeticion=set(["if","while","repeat","cin","cout","{","identificador","}"])
+_s_sent_cin=set(["if","while","repeat","cin","cout","{","identificador","}"])
+_s_sent_cout=set(["if","while","repeat","cin","cout","{","identificador","}"])
+_s_bloque=set(["if","while","repeat","cin","cout","{","identificador","}","until","else"])
+_s_asignacion=set(["if","while","repeat","cin","cout","{","identificador","}"])
+_s_expresion=set([")",";"])
+_s_relacion=set(["(","numero","identificaodr"])
+_s_expresion_simple=set([")",";","+","-","<","<=",">",">=","==","!="])
+_s_suma_op=set(["(","numero","identificaodr"])
+_s_termino=set([")",";","+","-","*","/","<","<=",">",">=","==","!="])
+_s_mult_op=set(["(","numero","identificaodr"])
+_s_factor=set([")",";","+","-","*","/","<","<=",">",">=","==","!="])
 
 class Syntax:
 	#programa → main “{“ lista-declaración lista-sentencias “}”
