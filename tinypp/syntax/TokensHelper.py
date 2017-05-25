@@ -70,7 +70,7 @@ class TokensHelper:
 		while not self.getCurrentToken().content in synchset.union(["$"]):
 			self.getToken()
 	
-	def checkInput(first,follow):
+	def checkInput(self,first,follow):
 		if not self.getCurrentToken().content in first:
 			self.syntaxError("unexpected token")
 			self.scanto(first.union(follow))

@@ -297,62 +297,76 @@ class Syntax:
 			return new
 			self.tokensHelper.checkInput(_p_sent_cin,sync)
 	#sent-cout → cout expresión ;
-	def sent_cout(self):	
-		new = Node("cout")
-		self.tokensHelper.match("cout")
-		exp = self.expresion()
-		new.addChild( exp ) 
-		self.tokensHelper.match(";")	
-		return new
+	def sent_cout(self,sync):
+		self.tokensHelper.checkInput(_p_sent_cout,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:	
+			new = Node("cout")
+			self.tokensHelper.match("cout")
+			exp = self.expresion(_s_expresion)
+			new.addChild( exp ) 
+			self.tokensHelper.match(";")	
+			return new
+			self.tokensHelper.checkInput(_p_sent_cout,sync)
 
-	def bloque(self):
-		self.tokensHelper.match("{")
-		new = self.lista_sentencias()
-		self.tokensHelper.match("}")
-		return new
+
+	def bloque(self,sync):
+		self.tokensHelper.checkInput(_p_bloque,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:	
+			self.tokensHelper.match("{")
+			new = self.lista_sentencias(_s_lista_sentencias)
+			self.tokensHelper.match("}")
+			return new
+			self.tokensHelper.checkInput(_p_bloque,sync)
 
 	#asignación → identificador := expresión ;
-	def asignacion(self):
-		new = Node(":=")
-		ide = Node(self.tokensHelper.getCurrentToken().content)
-		new.addChild(ide)
-		self.tokensHelper.match(TokenConstants.ID,True)
-		if self.tokensHelper.getCurrentToken().type == TokenConstants.INCREMENT:
-			plusNode = Node("+")
-			plusNode.addChild( ide )
-			self.tokensHelper.match(TokenConstants.INCREMENT,True)
-			plusNode.addChild(Node("1"))
-			new.addChild(plusNode)	
-		elif self.tokensHelper.getCurrentToken().type == TokenConstants.DECREMENT:
-			lessNode = Node("-")
-			lessNode.addChild( ide )
-			self.tokensHelper.match(TokenConstants.DECREMENT,True)
-			lessNode.addChild(Node("1"))
-			new.addChild(lessNode)
-		else:
-			self.tokensHelper.match(":=")
-			asignExp = self.expresion()
-			new.addChild( asignExp )
-		self.tokensHelper.match(";")
-		return new
+	def asignacion(self,sync):
+		self.tokensHelper.checkInput(_p_asignacion,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:	
+			new = Node(":=")
+			ide = Node(self.tokensHelper.getCurrentToken().content)
+			new.addChild(ide)
+			self.tokensHelper.match(TokenConstants.ID,True)
+			if self.tokensHelper.getCurrentToken().type == TokenConstants.INCREMENT:
+				plusNode = Node("+")
+				plusNode.addChild( ide )
+				self.tokensHelper.match(TokenConstants.INCREMENT,True)
+				plusNode.addChild(Node("1"))
+				new.addChild(plusNode)	
+			elif self.tokensHelper.getCurrentToken().type == TokenConstants.DECREMENT:
+				lessNode = Node("-")
+				lessNode.addChild( ide )
+				self.tokensHelper.match(TokenConstants.DECREMENT,True)
+				lessNode.addChild(Node("1"))
+				new.addChild(lessNode)
+			else:
+				self.tokensHelper.match(":=")
+				asignExp = self.expresion(_s_asignacion)
+				new.addChild( asignExp )
+			self.tokensHelper.match(";")
+			return new
+			self.tokensHelper.checkInput(_p_asignacion,sync)
 
 	#declaración → tipo lista-variables
-	def declaracion(self):
-		tmp = Node(self.tokensHelper.getCurrentToken().content)
-		self.tokensHelper.match(TokenConstants.ID,True)
-		self.lista_variables(tmp)
-		return tmp
-
+	def declaracion(self,sync):
+		self.tokensHelper.checkInput(_p_declaracion,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:	
+			tmp = Node(self.tokensHelper.getCurrentToken().content)
+			self.tokensHelper.match(TokenConstants.ID,True)
+			self.lista_variables(tmp,_s_lista_variables)
+			return tmp
+			self.tokensHelper.checkInput(_p_declaracion,sync)
+			
 	#lista-variables → { identificador, } identificador
-	def lista_variables(self,parent):
-		parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
-		self.tokensHelper.match(TokenConstants.ID,True)
-
-		while self.tokensHelper.getCurrentToken().content == ",":
-			self.tokensHelper.match(",")
+	def lista_variables(self,parent,sync):
+		self.tokensHelper.checkInput(_p_lista_variables,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
 			parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
 			self.tokensHelper.match(TokenConstants.ID,True)
-
+			while self.tokensHelper.getCurrentToken().content == ",":
+				self.tokensHelper.match(",")
+				parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
+				self.tokensHelper.match(TokenConstants.ID,True)
+			self.tokensHelper.checkInput(_p_lista_variables,sync)
 
 	def __init__(self,pathOfSouce,outputType="json"):
 		canonicalFileName = ntpath.basename(pathOfSouce)
