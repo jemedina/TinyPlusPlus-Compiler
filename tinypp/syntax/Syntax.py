@@ -182,7 +182,7 @@ class Syntax:
 				new = self.suma_op(_s_suma_op)
 				new.addChild(tmp)
 				comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
-				term = self.termino(comesFromALess)
+				term = self.termino(_s_termino,comesFromALess)
 				#new.addChild( termino() )
 				#Here we're validating if the operation symbol is less and
 				#the second number of the operation is a negative number
@@ -259,37 +259,43 @@ class Syntax:
 			self.tokensHelper.checkInput(_p_mult_op,sync)
 
 	#iteración → while ( expresión ) bloque
-	def iteracion(self):
-		new = Node( TokenConstants.WHILE )
-		self.tokensHelper.match( TokenConstants.WHILE )
-		self.tokensHelper.match("(")
-		new.addChild( self.expresion() )
-		self.tokensHelper.match(")")
-		new.addChild( self.bloque() )
-		return new
-
+	def iteracion(self,sync):
+		self.tokensHelper.checkInput(_p_iteracion,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			new = Node( TokenConstants.WHILE )
+			self.tokensHelper.match( TokenConstants.WHILE )
+			self.tokensHelper.match("(")
+			new.addChild( self.expresion(_s_expresion) )
+			self.tokensHelper.match(")")
+			new.addChild( self.bloque(_s_bloque) )
+			return new
+			self.tokensHelper.checkInput(_p_iteracion,sync)
 	#repetición → do bloque until ( expresión ) ;
-	def repeticion(self):
-		new = Node( TokenConstants.DO )
-		self.tokensHelper.match( TokenConstants.DO )
-		new.addChild( self.bloque() )
-		self.tokensHelper.match("until")
-		self.tokensHelper.match("(")
-		new.addChild( self.expresion() )
-		self.tokensHelper.match(")")
-		self.tokensHelper.match(";")
-		return new
-
+	def repeticion(self,sync):
+		self.tokensHelper.checkInput(_p_repeticion,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			new = Node( TokenConstants.DO )
+			self.tokensHelper.match( TokenConstants.DO )
+			new.addChild( self.bloque(_s_bloque) )
+			self.tokensHelper.match("until")
+			self.tokensHelper.match("(")
+			new.addChild( self.expresion(_s_expresion) )
+			self.tokensHelper.match(")")
+			self.tokensHelper.match(";")
+			return new
+			self.tokensHelper.checkInput(_p_repeticion,sync)
 
 	#sent-cin → cin identificador ;
-	def sent_cin(self):
-		new = Node("cin")
-		self.tokensHelper.match("cin")
-		new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
-		self.tokensHelper.match(TokenConstants.ID,True)
-		self.tokensHelper.match(";")	
-		return new
-
+	def sent_cin(self,sync):
+		self.tokensHelper.checkInput(_p_sent_cin,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync:
+			new = Node("cin")
+			self.tokensHelper.match("cin")
+			new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
+			self.tokensHelper.match(TokenConstants.ID,True)
+			self.tokensHelper.match(";")	
+			return new
+			self.tokensHelper.checkInput(_p_sent_cin,sync)
 	#sent-cout → cout expresión ;
 	def sent_cout(self):	
 		new = Node("cout")
