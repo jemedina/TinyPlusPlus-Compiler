@@ -37,13 +37,13 @@ class TokensHelper:
 			if testChar == self.getCurrentToken().type:
 				self.getToken()
 			else:
-				self.syntaxError("unexpected token -> "+self.getCurrentToken().content)
+				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+"> was expected <"+testChar+">")
 		else:
 			#print(self.index,self.getCurrentToken(),testChar)
 			if testChar == self.getCurrentToken().content:
 				self.getToken()
 			else:
-				self.syntaxError("unexpected token -> "+self.getCurrentToken().content)
+				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+"> was expected <"+testChar+">")
 
 	def cliDisplayTokens(self):
 		for t in self.tokens:
@@ -70,8 +70,8 @@ class TokensHelper:
 		while not self.getCurrentToken().content in synchset.union(["$"]):
 			self.getToken()
 	
-	def checkInput(self,first,follow):
-		if not self.getCurrentToken().content in first:
+	def checkInput(self,first,follow,complementaryset=set()):
+		if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or self.getCurrentToken().type.lower() in first.union(complementaryset)):
 			self.syntaxError("unexpected token")
 			self.scanto(first.union(follow))
 

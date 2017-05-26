@@ -149,10 +149,10 @@ class Syntax:
 				ifStmt.addChild( self.bloque(_s_bloque) )
 				
 			return ifStmt
-			self.tokensHelper.checkInput(sync,_p_seleccion)
+			self.tokensHelper.checkInput(sync,_p_seleccion,set(["entero","flotante"]))
 	#expresión → expresión-simple { relación expresión-simple }
 	def expresion(self,sync):
-		self.tokensHelper.checkInput(_p_expresion,sync)
+		self.tokensHelper.checkInput(_p_expresion,sync,set(["entero","flotante"]))
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			exp = None
 			tmp = self.expresion_simple(_s_expresion_simple)
@@ -175,9 +175,9 @@ class Syntax:
 
 	#expresión-simple → termino { suma-op termino }
 	def expresion_simple(self,sync):
-		self.tokensHelper.checkInput(_p_expresion_simple,sync)
+		self.tokensHelper.checkInput(_p_expresion_simple,sync,set(["entero","flotante"]))
 		if not self.tokensHelper.getCurrentToken().content in sync:
-			tmp = self.termino()
+			tmp = self.termino(_s_termino)
 			while( self.tokensHelper.getCurrentToken().content[0] in _suma_op):
 				new = self.suma_op(_s_suma_op)
 				new.addChild(tmp)
@@ -210,7 +210,7 @@ class Syntax:
 
 		self.tokensHelper.checkInput(_p_termino,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:
-			tmp = self.factor()
+			tmp = self.factor(_s_factor)
 			#Verify if the parent is a less
 			#and check if the number is a negative number
 			#if comesFromALess and tmp.name[0] == "-":
@@ -340,7 +340,7 @@ class Syntax:
 				new.addChild(lessNode)
 			else:
 				self.tokensHelper.match(":=")
-				asignExp = self.expresion(_s_asignacion)
+				asignExp = self.expresion(_s_expresion)
 				new.addChild( asignExp )
 			self.tokensHelper.match(";")
 			return new
@@ -353,8 +353,9 @@ class Syntax:
 			tmp = Node(self.tokensHelper.getCurrentToken().content)
 			self.tokensHelper.match(TokenConstants.ID,True)
 			self.lista_variables(tmp,_s_lista_variables)
+			self.tokensHelper.checkInput(_p_declaracion,sync,set([";"]))
 			return tmp
-			self.tokensHelper.checkInput(_p_declaracion,sync)
+			
 			
 	#lista-variables → { identificador, } identificador
 	def lista_variables(self,parent,sync):
@@ -366,7 +367,7 @@ class Syntax:
 				self.tokensHelper.match(",")
 				parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
 				self.tokensHelper.match(TokenConstants.ID,True)
-			self.tokensHelper.checkInput(_p_lista_variables,sync)
+			self.tokensHelper.checkInput(_p_lista_variables,sync,set([";"]))
 
 	def __init__(self,pathOfSouce,outputType="json"):
 		canonicalFileName = ntpath.basename(pathOfSouce)
@@ -387,3 +388,4 @@ class Syntax:
 		self.outputType = outputType
 	def go(self):
 		self.programa()
+		return self.root
