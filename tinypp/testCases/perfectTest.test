@@ -1,4 +1,8 @@
 main {
-    int x;
-    x := 1;
+    float a;
+    cout 1*2*4;
+    cin a;
+    if(a>=20) then {
+        
+    }
 }

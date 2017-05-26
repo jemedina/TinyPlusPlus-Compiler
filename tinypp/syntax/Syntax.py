@@ -135,7 +135,7 @@ class Syntax:
 	#selección → if ( expresión ) then bloque | if ( expresión ) then bloque else bloque
 	def seleccion(self,sync):
 		self.tokensHelper.checkInput(_p_seleccion,sync)
-		if not self.tokensHelper.getCurrentToken().content in sync:
+		if not self.tokensHelper.getCurrentToken().content in sync.difference(["if"]):
 			ifStmt = Node( TokenConstants.IF )
 			self.tokensHelper.match( TokenConstants.IF )
 			self.tokensHelper.match( "(" )
@@ -176,7 +176,7 @@ class Syntax:
 	#expresión-simple → termino { suma-op termino }
 	def expresion_simple(self,sync):
 		self.tokensHelper.checkInput(_p_expresion_simple,sync,set(["entero","flotante"]))
-		if not self.tokensHelper.getCurrentToken().content in sync:
+		if not self.tokensHelper.getCurrentToken().content in sync.union(set(["entero","flotante"])):
 			tmp = self.termino(_s_termino)
 			while( self.tokensHelper.getCurrentToken().content[0] in _suma_op):
 				new = self.suma_op(_s_suma_op)
@@ -208,8 +208,8 @@ class Syntax:
 	#termino → factor { mult-op factor }
 	def termino(self,sync,comesFromALess=False):
 
-		self.tokensHelper.checkInput(_p_termino,sync)
-		if not self.tokensHelper.getCurrentToken().content in sync:
+		self.tokensHelper.checkInput(_p_termino,sync,set(["entero","flotante"]))
+		if not self.tokensHelper.getCurrentToken().content in sync.union(set(["entero","flotante"])):
 			tmp = self.factor(_s_factor)
 			#Verify if the parent is a less
 			#and check if the number is a negative number
@@ -222,11 +222,11 @@ class Syntax:
 				new.addChild( self.factor(_s_factor) )
 				tmp = new
 			return tmp
-			self.tokensHelper.checkInput(sync,_p_termino)
+			self.tokensHelper.checkInput(sync,_p_termino,_p_termino)
 
 	def mult_op(self,sync):
 		self.tokensHelper.checkInput(_p_mult_op,sync)
-		if self.tokensHelper.getCurrentToken().content in sync:
+		if self.tokensHelper.getCurrentToken().content in sync.union(_p_mult_op):
 			rel = self.tokensHelper.getCurrentToken().content
 			if(self.tokensHelper.getCurrentToken().content == TokenConstants.TIMES):
 				self.tokensHelper.match(TokenConstants.TIMES)
@@ -237,8 +237,9 @@ class Syntax:
 
 	#factor → ( expresión ) | numero | identificador
 	def factor(self,sync):
-		self.tokensHelper.checkInput(_p_factor,sync)
-		if self.tokensHelper.getCurrentToken().content in sync:
+		sync = sync.union(set(["entero","flotante"])).union(_p_factor)
+		self.tokensHelper.checkInput(_p_factor,sync,set(["entero","flotante"]))
+		if self.tokensHelper.getCurrentToken().content in sync or self.tokensHelper.getCurrentToken().type.lower() in sync:
 			new = None
 			if self.tokensHelper.getCurrentToken().content == "(":
 				self.tokensHelper.match("(")
@@ -256,7 +257,7 @@ class Syntax:
 				self.tokensHelper.match(TokenConstants.ID,True)
 
 			return new
-			self.tokensHelper.checkInput(_p_mult_op,sync)
+			self.tokensHelper.checkInput(_p_factor,sync)
 
 	#iteración → while ( expresión ) bloque
 	def iteracion(self,sync):
@@ -288,7 +289,7 @@ class Syntax:
 	#sent-cin → cin identificador ;
 	def sent_cin(self,sync):
 		self.tokensHelper.checkInput(_p_sent_cin,sync)
-		if not self.tokensHelper.getCurrentToken().content in sync:
+		if not self.tokensHelper.getCurrentToken().content in sync.difference(["cin"]):
 			new = Node("cin")
 			self.tokensHelper.match("cin")
 			new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
@@ -299,7 +300,7 @@ class Syntax:
 	#sent-cout → cout expresión ;
 	def sent_cout(self,sync):
 		self.tokensHelper.checkInput(_p_sent_cout,sync)
-		if not self.tokensHelper.getCurrentToken().content in sync:	
+		if not self.tokensHelper.getCurrentToken().content in sync.difference(["cout"]):	
 			new = Node("cout")
 			self.tokensHelper.match("cout")
 			exp = self.expresion(_s_expresion)
@@ -311,7 +312,7 @@ class Syntax:
 
 	def bloque(self,sync):
 		self.tokensHelper.checkInput(_p_bloque,sync)
-		if not self.tokensHelper.getCurrentToken().content in sync:	
+		if not self.tokensHelper.getCurrentToken().content in sync.difference(["{"]):	
 			self.tokensHelper.match("{")
 			new = self.lista_sentencias(_s_lista_sentencias)
 			self.tokensHelper.match("}")
