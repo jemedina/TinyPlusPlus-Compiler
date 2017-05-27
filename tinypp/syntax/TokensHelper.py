@@ -16,6 +16,7 @@ class TokensHelper:
 			self.tokens = []
 			self.index = -1
 			self.loadTokens()
+			self.lastToken = None
 		except Exception as e:
 			print("File ["+tokensFilePath+"] was not found...",file=sys.stderr)
 			self.tokensFile = None
@@ -40,8 +41,13 @@ class TokensHelper:
 				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+"> was expected <"+testChar+">")
 		else:
 			#print(self.index,self.getCurrentToken(),testChar)
-			if testChar == self.getCurrentToken().content:
-				self.getToken()
+			isAnEmptyBlock = (self.lastToken != None and self.lastToken.content == "{" and testChar == "}")
+			if testChar == self.getCurrentToken().content or isAnEmptyBlock:
+				if isAnEmptyBlock:
+					self.index+=1
+					self.getToken()
+				else:
+					self.getToken()
 			else:
 				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+"> was expected <"+testChar+">")
 
@@ -55,7 +61,10 @@ class TokensHelper:
 		print("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message,file=sys.stderr)
 		
 	def getToken(self):
+		self.lastToken = self.tokens[self.index]
 		self.index += 1
+		if self.lastToken.content == "{" and self.tokens[self.index].content == "}":
+			self.tokens.insert(self.index,Token("empty","ε","unknown","unknown"))
 		if self.index < len(self.tokens):
 			return self.tokens[self.index]
 		else:
@@ -67,13 +76,13 @@ class TokensHelper:
 		return self.tokens[self.index]
 	
 	def scanto(self,synchset):
-		while not self.getCurrentToken().content in synchset.union(["$"]):
+		while not (self.getCurrentToken().content.lower() in synchset.union(["$"]) or self.getCurrentToken().type.lower() in synchset.union(["$"])):
 			self.getToken()
 	
 	def checkInput(self,first,follow,complementaryset=set()):
 		if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or self.getCurrentToken().type.lower() in first.union(complementaryset)):
-			self.syntaxError("unexpected token")
-			self.scanto(first.union(follow))
+			self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
+			self.scanto(first.union(follow).union(complementaryset))
 
 class TokenConstants:
 	CHAR_SP = "CARACTER_ESPECIAL"

@@ -84,7 +84,8 @@ class Syntax:
 			self.tokensHelper.checkInput(sync,_p_programa)
 	#lista-declaración -> { declaración; }
 	def lista_declaracion(self,sync):
-		self.tokensHelper.checkInput(_p_lista_declaracion,sync)
+		initialAcceptedSet = _p_lista_declaracion.union(_p_lista_sentencias)
+		self.tokensHelper.checkInput(initialAcceptedSet,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			decl = None
 			while self.tokensHelper.getCurrentToken().content in _tipo:
@@ -103,7 +104,8 @@ class Syntax:
 	#lista-sentencias → { sentencia }
 	#sentencia → selección | iteración | repetición | sent-cin |sent-out | bloque | asignación
 	def lista_sentencias(self,sync):
-		self.tokensHelper.checkInput(_p_lista_sentencias,sync)
+		acceptedSet = _p_lista_sentencias.union("}")
+		self.tokensHelper.checkInput(acceptedSet,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			tmp = new = None
 			while self.tokensHelper.getCurrentToken().content in _sentencia or self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
@@ -182,7 +184,8 @@ class Syntax:
 				new = self.suma_op(_s_suma_op)
 				new.addChild(tmp)
 				comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
-				term = self.termino(_s_termino,comesFromALess)
+				customSet = set(["numero","entero","flotante","("])
+				term = self.termino(customSet,comesFromALess)
 				#new.addChild( termino() )
 				#Here we're validating if the operation symbol is less and
 				#the second number of the operation is a negative number
@@ -210,16 +213,12 @@ class Syntax:
 
 		self.tokensHelper.checkInput(_p_termino,sync,set(["entero","flotante"]))
 		if not self.tokensHelper.getCurrentToken().content in sync.union(set(["entero","flotante"])):
-			tmp = self.factor(_s_factor)
-			#Verify if the parent is a less
-			#and check if the number is a negative number
-			#if comesFromALess and tmp.name[0] == "-":
-			#	tmp.name = tmp.name[1:]
-		
+			tmp = self.factor(_s_factor)		
 			while ( self.tokensHelper.getCurrentToken().content in _mult_op):
 				new = self.mult_op(_s_mult_op);
 				new.addChild(tmp)
-				new.addChild( self.factor(_s_factor) )
+				customSet = set(["numero","("])
+				new.addChild( self.factor(customSet) )
 				tmp = new
 			return tmp
 			self.tokensHelper.checkInput(sync,_p_termino,_p_termino)
