@@ -184,7 +184,7 @@ class Syntax:
 				new = self.suma_op(_s_suma_op)
 				new.addChild(tmp)
 				comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
-				customSet = set(["numero","entero","flotante","("])
+				customSet = set(["numero","entero","flotante"])
 				term = self.termino(customSet,comesFromALess)
 				#new.addChild( termino() )
 				#Here we're validating if the operation symbol is less and

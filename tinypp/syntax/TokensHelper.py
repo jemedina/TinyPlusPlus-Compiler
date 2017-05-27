@@ -65,6 +65,18 @@ class TokensHelper:
 		self.index += 1
 		if self.lastToken.content == "{" and self.tokens[self.index].content == "}":
 			self.tokens.insert(self.index,Token("empty","ε","unknown","unknown"))
+		if self.lastToken.type != TokenConstants.ID and self.getCurrentToken().content in ["++","--"]:
+			temporalToken = self.getCurrentToken()
+			self.tokens.pop(self.index)
+			if temporalToken.content == "++":
+				self.tokens.insert(self.index,Token("MAS","+",temporalToken.row,temporalToken.col))
+				temporalToken.col=str(int(temporalToken.col)+1)
+				self.tokens.insert(self.index,Token("MAS","+",temporalToken.row,temporalToken.col))
+			elif temporalToken.content == "--":
+				self.tokens.insert(self.index,Token("MENOS","-",temporalToken.row,temporalToken.col))
+				temporalToken.col=str(int(temporalToken.col)+1)
+				self.tokens.insert(self.index,Token("MENOS","-",temporalToken.row,temporalToken.col))
+		
 		if self.index < len(self.tokens):
 			return self.tokens[self.index]
 		else:
