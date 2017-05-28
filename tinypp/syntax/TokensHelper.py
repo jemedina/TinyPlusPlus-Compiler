@@ -121,3 +121,4 @@ class TokenConstants:
 	DIV = "/"
 	ELSE = "else"
 	EOF = "$"
+	REPEAT = "repeat"

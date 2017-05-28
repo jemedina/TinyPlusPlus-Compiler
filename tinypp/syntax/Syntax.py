@@ -112,9 +112,9 @@ class Syntax:
 				if self.tokensHelper.getCurrentToken().content == TokenConstants.IF:
 					new = self.seleccion(_s_seleccion)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
-					new = self.iteracion(_s_iteracion)
-				elif self.tokensHelper.getCurrentToken().content == TokenConstants.DO:
-					new = self.repeticion(_s_repeticion)
+					new = self.iteracion(_s_iteracion.difference([TokenConstants.WHILE]))
+				elif self.tokensHelper.getCurrentToken().content == TokenConstants.REPEAT:
+					new = self.repeticion(_s_repeticion.difference([TokenConstants.REPEAT]))
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.CIN:
 					new = self.sent_cin(_s_sent_cin)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.COUT:
@@ -274,8 +274,8 @@ class Syntax:
 	def repeticion(self,sync):
 		self.tokensHelper.checkInput(_p_repeticion,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:
-			new = Node( TokenConstants.DO )
-			self.tokensHelper.match( TokenConstants.DO )
+			new = Node( TokenConstants.REPEAT )
+			self.tokensHelper.match( TokenConstants.REPEAT )
 			new.addChild( self.bloque(_s_bloque) )
 			self.tokensHelper.match("until")
 			self.tokensHelper.match("(")

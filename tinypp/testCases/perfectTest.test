@@ -1,3 +1,22 @@
 main {
-    x:=2++2-3;
+    int a,b,c;
+    float x,y;
+    if (a == b) then {
+        repeat {
+            cout a;
+        } until(b == 0);
+        cin x;
+    }
+    while ( a <= 10) {
+        if (x != z) then {
+            if ( a >= 1) then {
+                cout i;
+            }
+            else {
+                cin x;
+            }
+        } else {
+            cin a;
+        }
+    }
 }
