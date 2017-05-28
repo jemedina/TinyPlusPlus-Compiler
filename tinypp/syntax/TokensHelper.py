@@ -94,29 +94,44 @@ class TokensHelper:
 		else:
 			return None
 	
-	def scanto(self,synchset,nextSet=None):
-		if nextSet == None:
-			while not (self.getCurrentToken().content.lower() in synchset.union(["$"]) \
-			or self.getCurrentToken().type.lower() in synchset.union(["$"])):
-				self.getToken()
-		else:
-			while not (self.getCurrentToken().content.lower() in synchset.union(["$"]) \
-			or self.getCurrentToken().type.lower() in synchset.union(["$"]) \
-			or self.getNextToken().content in nextSet):
-				self.getToken()
+	def scanto(self,synchset):
+		while not (self.getCurrentToken().content.lower() in synchset.union(["$"]) \
+		or self.getCurrentToken().type.lower() in synchset.union(["$"])):
+			self.getToken()
+	def scantoNext(self,synchset,nextSet):
+		while not (self.getCurrentToken().content.lower() in synchset.union(["$"]) \
+		or self.getCurrentToken().type.lower() in synchset.union(["$"]) \
+		or self.getNextToken().content in nextSet):
+			self.getToken()
+	def scantoStillNotExpected(self,synchset,stillNotExpectedSet):
+		while not (self.getCurrentToken().content.lower() in synchset.union(["$"]) \
+		or self.getCurrentToken().type.lower() in synchset.union(["$"]) \
+		or self.getCurrentToken().type.lower() in stillNotExpectedSet):
+			self.getToken()
 	
-	def checkInput(self,first,follow,complementaryset=set(),nextSet=None):
-		if nextSet == None:
+	def checkInput(self,first,follow,complementaryset=set(),nextSet=None,stillNotExpectedSet=None):
+		hasError = False
+		if nextSet == None and stillNotExpectedSet == None:
 			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
 			self.getCurrentToken().type.lower() in first.union(complementaryset)):
+				hasError = True
 				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
 				self.scanto(first.union(follow).union(complementaryset))
-		else:
+		elif nextSet != None:
 			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
 			self.getCurrentToken().type.lower() in first.union(complementaryset) or \
 			self.getNextToken().content in nextSet):
+				hasError = True
 				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
-				self.scanto(first.union(follow).union(complementaryset),nextSet)
+				self.scantoNext(first.union(follow).union(complementaryset),nextSet)
+		elif stillNotExpectedSet != None:
+			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
+			self.getCurrentToken().type.lower() in first.union(complementaryset) or \
+			not self.getCurrentToken().type.lower() in stillNotExpectedSet):
+				hasError = True
+				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
+				self.scantoStillNotExpected(first.union(follow).union(complementaryset),stillNotExpectedSet)
+		return hasError
 class TokenConstants:
 	CHAR_SP = "CARACTER_ESPECIAL"
 	ID = "IDENTIFICADOR"

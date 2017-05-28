@@ -72,6 +72,7 @@ class Syntax:
 			self.root.addChild( self.lista_declaracion(_s_lista_declaracion) )
 			self.root.addChild( self.lista_sentencias(_s_lista_sentencias) )
 			self.tokensHelper.match("}")
+			self.tokensHelper.checkInput(sync,_p_programa)
 			#print("INFO: Syntax Compilation finished. Tree:")
 			#TreeUtils.cliDisplay(root)
 			if self.outputType == "json":
@@ -82,7 +83,6 @@ class Syntax:
 				print("== No output ==")
 			else:
 				print("Invalid argument: "+self.outputType)
-			self.tokensHelper.checkInput(sync,_p_programa)
 	#lista-declaración -> { declaración; }
 	def lista_declaracion(self,sync):
 		initialAcceptedSet = _p_lista_declaracion.union(_p_lista_sentencias).difference(["identificador"])
@@ -163,14 +163,20 @@ class Syntax:
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			exp = None
 			tmp = self.expresion_simple(_s_expresion_simple)
+			existsError = self.tokensHelper.checkInput(_p_relacion,sync,stillNotExpectedSet = set(["entero","flotante","identificador","numero"]))
 			if( self.tokensHelper.getCurrentToken().content in _relacion ):
 				exp = self.relacion(_s_relacion)
 				exp.addChild(tmp)
 				exp.addChild( self.expresion_simple(_s_expresion_simple) )
+			elif existsError and not (tmp.name in set().union(_suma_op).union(_mult_op)):
+				exp = Node("error")
+				exp.addChild(tmp)
+				exp.addChild( self.expresion_simple(_s_expresion_simple) )
+				
+			#self.tokensHelper.checkInput(sync,_p_expresion)
 			if exp == None:
 				exp = tmp
 			return exp
-			self.tokensHelper.checkInput(sync,_p_expresion)
 
 	def relacion(self,sync):
 		self.tokensHelper.checkInput(_p_relacion,sync)
