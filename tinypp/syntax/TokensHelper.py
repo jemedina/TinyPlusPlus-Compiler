@@ -109,27 +109,30 @@ class TokensHelper:
 		or self.getCurrentToken().type.lower() in stillNotExpectedSet):
 			self.getToken()
 	
-	def checkInput(self,first,follow,complementaryset=set(),nextSet=None,stillNotExpectedSet=None):
+	def checkInput(self,first,follow,complementaryset=set(),nextSet=None,stillNotExpectedSet=None,displayErrors=True):
 		hasError = False
 		if nextSet == None and stillNotExpectedSet == None:
 			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
 			self.getCurrentToken().type.lower() in first.union(complementaryset)):
 				hasError = True
-				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
+				if displayErrors:
+					self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
 				self.scanto(first.union(follow).union(complementaryset))
 		elif nextSet != None:
 			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
 			self.getCurrentToken().type.lower() in first.union(complementaryset) or \
 			self.getNextToken().content in nextSet):
 				hasError = True
-				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
+				if displayErrors:
+					self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
 				self.scantoNext(first.union(follow).union(complementaryset),nextSet)
 		elif stillNotExpectedSet != None:
 			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
 			self.getCurrentToken().type.lower() in first.union(complementaryset) or \
 			not self.getCurrentToken().type.lower() in stillNotExpectedSet):
 				hasError = True
-				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
+				if displayErrors:
+					self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
 				self.scantoStillNotExpected(first.union(follow).union(complementaryset),stillNotExpectedSet)
 		return hasError
 class TokenConstants:

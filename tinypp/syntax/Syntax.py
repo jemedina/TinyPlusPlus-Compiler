@@ -163,12 +163,14 @@ class Syntax:
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			exp = None
 			tmp = self.expresion_simple(_s_expresion_simple)
-			existsError = self.tokensHelper.checkInput(_p_relacion,sync,stillNotExpectedSet = set(["entero","flotante","identificador","numero"]))
+			succesfulSimpleExpresion =  tmp.name in set().union(_suma_op).union(_mult_op)
+			notExpectedSet = set(["entero","flotante","identificador","numero"])
+			existsError = self.tokensHelper.checkInput(_p_relacion,sync,stillNotExpectedSet = notExpectedSet,displayErrors=not succesfulSimpleExpresion)
 			if( self.tokensHelper.getCurrentToken().content in _relacion ):
 				exp = self.relacion(_s_relacion)
 				exp.addChild(tmp)
 				exp.addChild( self.expresion_simple(_s_expresion_simple) )
-			elif existsError and not (tmp.name in set().union(_suma_op).union(_mult_op)):
+			elif existsError and not succesfulSimpleExpresion:
 				exp = Node("error")
 				exp.addChild(tmp)
 				exp.addChild( self.expresion_simple(_s_expresion_simple) )
@@ -354,8 +356,8 @@ class Syntax:
 				asignExp = self.expresion(_s_expresion)
 				new.addChild( asignExp )
 			self.tokensHelper.match(";")
+			self.tokensHelper.checkInput(_p_asignacion,sync,displayErrors=False)
 			return new
-			self.tokensHelper.checkInput(_p_asignacion,sync)
 
 	#declaración → tipo lista-variables
 	def declaracion(self,sync):
