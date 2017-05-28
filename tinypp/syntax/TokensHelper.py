@@ -63,19 +63,20 @@ class TokensHelper:
 	def getToken(self):
 		self.lastToken = self.tokens[self.index]
 		self.index += 1
-		if self.lastToken.content == "{" and self.tokens[self.index].content == "}":
-			self.tokens.insert(self.index,Token("empty","ε","unknown","unknown"))
-		if self.lastToken.type != TokenConstants.ID and self.getCurrentToken().content in ["++","--"]:
-			temporalToken = self.getCurrentToken()
-			self.tokens.pop(self.index)
-			if temporalToken.content == "++":
-				self.tokens.insert(self.index,Token("MAS","+",temporalToken.row,temporalToken.col))
-				temporalToken.col=str(int(temporalToken.col)+1)
-				self.tokens.insert(self.index,Token("MAS","+",temporalToken.row,temporalToken.col))
-			elif temporalToken.content == "--":
-				self.tokens.insert(self.index,Token("MENOS","-",temporalToken.row,temporalToken.col))
-				temporalToken.col=str(int(temporalToken.col)+1)
-				self.tokens.insert(self.index,Token("MENOS","-",temporalToken.row,temporalToken.col))
+		if self.index < len(self.tokens):
+			if self.lastToken.content == "{" and self.tokens[self.index].content == "}":
+				self.tokens.insert(self.index,Token("empty","ε","unknown","unknown"))
+			if self.lastToken.type != TokenConstants.ID and self.getCurrentToken().content in ["++","--"]:
+				temporalToken = self.getCurrentToken()
+				self.tokens.pop(self.index)
+				if temporalToken.content == "++":
+					self.tokens.insert(self.index,Token("MAS","+",temporalToken.row,temporalToken.col))
+					temporalToken.col=str(int(temporalToken.col)+1)
+					self.tokens.insert(self.index,Token("MAS","+",temporalToken.row,temporalToken.col))
+				elif temporalToken.content == "--":
+					self.tokens.insert(self.index,Token("MENOS","-",temporalToken.row,temporalToken.col))
+					temporalToken.col=str(int(temporalToken.col)+1)
+					self.tokens.insert(self.index,Token("MENOS","-",temporalToken.row,temporalToken.col))
 		
 		if self.index < len(self.tokens):
 			return self.tokens[self.index]
@@ -87,15 +88,35 @@ class TokensHelper:
 	def getCurrentToken(self):
 		return self.tokens[self.index]
 	
-	def scanto(self,synchset):
-		while not (self.getCurrentToken().content.lower() in synchset.union(["$"]) or self.getCurrentToken().type.lower() in synchset.union(["$"])):
-			self.getToken()
+	def getNextToken(self):
+		if self.index+1 < len(self.tokens):
+			return self.tokens[self.index+1]
+		else:
+			return None
 	
-	def checkInput(self,first,follow,complementaryset=set()):
-		if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or self.getCurrentToken().type.lower() in first.union(complementaryset)):
-			self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
-			self.scanto(first.union(follow).union(complementaryset))
-
+	def scanto(self,synchset,nextSet=None):
+		if nextSet == None:
+			while not (self.getCurrentToken().content.lower() in synchset.union(["$"]) \
+			or self.getCurrentToken().type.lower() in synchset.union(["$"])):
+				self.getToken()
+		else:
+			while not (self.getCurrentToken().content.lower() in synchset.union(["$"]) \
+			or self.getCurrentToken().type.lower() in synchset.union(["$"]) \
+			or self.getNextToken().content in nextSet):
+				self.getToken()
+	
+	def checkInput(self,first,follow,complementaryset=set(),nextSet=None):
+		if nextSet == None:
+			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
+			self.getCurrentToken().type.lower() in first.union(complementaryset)):
+				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
+				self.scanto(first.union(follow).union(complementaryset))
+		else:
+			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
+			self.getCurrentToken().type.lower() in first.union(complementaryset) or \
+			self.getNextToken().content in nextSet):
+				self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
+				self.scanto(first.union(follow).union(complementaryset),nextSet)
 class TokenConstants:
 	CHAR_SP = "CARACTER_ESPECIAL"
 	ID = "IDENTIFICADOR"

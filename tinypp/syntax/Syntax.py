@@ -9,6 +9,7 @@ _sentencia = ["if","while","do","cin","cout","{"]
 _relacion = ["<=", "<", ">" ,">=", "==", "!="]
 _suma_op = ["+","-"]
 _mult_op = ["*","/"]
+_next_id = [":=","++","--"]
 EMPTY = "ε";
 #############################
 #PRIMARY SETS
@@ -84,16 +85,20 @@ class Syntax:
 			self.tokensHelper.checkInput(sync,_p_programa)
 	#lista-declaración -> { declaración; }
 	def lista_declaracion(self,sync):
-		initialAcceptedSet = _p_lista_declaracion.union(_p_lista_sentencias)
-		self.tokensHelper.checkInput(initialAcceptedSet,sync)
+		initialAcceptedSet = _p_lista_declaracion.union(_p_lista_sentencias).difference(["identificador"])
+		self.tokensHelper.checkInput(initialAcceptedSet,sync,nextSet=_next_id)
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			decl = None
-			while self.tokensHelper.getCurrentToken().content in _tipo:
-				if decl == None:
-					decl = self.declaracion(_s_declaracion)
-				else:
-					decl.appendBro( self.declaracion(_s_declaracion) )
-				self.tokensHelper.match(";")
+			while (self.tokensHelper.getCurrentToken().content in _tipo \
+			or self.tokensHelper.getCurrentToken().type.lower() == TokenConstants.ID.lower()) \
+			and not self.tokensHelper.getNextToken().content in _next_id:
+				self.tokensHelper.checkInput(initialAcceptedSet,sync,nextSet=_next_id)
+				if self.tokensHelper.getCurrentToken().content in _tipo:
+					if decl == None:
+						decl = self.declaracion(_s_declaracion)
+					else:
+						decl.appendBro( self.declaracion(_s_declaracion) )
+					self.tokensHelper.match(";")
 			
 			if decl != None and len(decl.sons) > 0:
 				return decl
