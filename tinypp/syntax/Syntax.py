@@ -294,6 +294,7 @@ class Syntax:
 			return new
 			self.tokensHelper.checkInput(_p_iteracion,sync)
 	#repetición → do bloque until ( expresión ) ;
+	#TODO: repeat {}; //breaks the tree
 	def repeticion(self,sync):
 		self.tokensHelper.checkInput(_p_repeticion,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:
@@ -304,9 +305,9 @@ class Syntax:
 			self.tokensHelper.match("(")
 			new.addChild( self.expresion(_s_expresion) )
 			self.tokensHelper.match(")")
-			self.tokensHelper.match(";")
-			return new
+			self.tokensHelper.match(";")			
 			self.tokensHelper.checkInput(_p_repeticion,sync)
+			return new
 		else:
 			return None
 
