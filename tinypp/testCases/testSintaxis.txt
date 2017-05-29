@@ -1,9 +1,8 @@
 main
 {
-repeat {};
+  until
 int x,y,z;
 real a, b, c;
-
 x:=23;
 
 y:=2+3-1;

@@ -8,7 +8,7 @@ import ntpath
 #DISPLAY ALL ERRORS (TRUE)
 _withTraceErrors=False
 ################### ENDPOINTS
-_tipo = ["int","float","boolean"]
+_tipo = ["int","real","boolean"]
 _sentencia = ["if","while","repeat","cin","cout","{"]
 _relacion = ["<=", "<", ">" ,">=", "==", "!="]
 _suma_op = ["+","-"]
@@ -18,9 +18,9 @@ EMPTY = "ε";
 #############################
 #PRIMARY SETS
 _p_programa=set(["main"])
-_p_lista_declaracion=set(["int","float","boolean",EMPTY])
-_p_declaracion=set(["int","float","boolean"])
-_p_tipo=set(["int","float","boolean"])
+_p_lista_declaracion=set(["int","real","boolean",EMPTY])
+_p_declaracion=set(["int","real","boolean"])
+_p_tipo=set(["int","real","boolean"])
 _p_lista_variables=set(["identificador"])
 _p_lista_sentencias=set(["if","while","repeat","until","cin","cout","{","identificador",EMPTY])
 _p_sentencia=set(["if","while","repeat","cin","cout","{","identificador"])
@@ -91,7 +91,7 @@ class Syntax:
 				print("Invalid argument: "+self.outputType)
 	#lista-declaración -> { declaración; }
 	def lista_declaracion(self,sync):
-		initialAcceptedSet = _p_lista_declaracion.union(_p_lista_sentencias).difference(["identificador"])
+		initialAcceptedSet = _p_lista_declaracion.union(_p_lista_sentencias).difference(["identificador"]).union(["until"])
 		self.tokensHelper.checkInput(initialAcceptedSet,sync,nextSet=_next_id)
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			decl = None
@@ -99,7 +99,7 @@ class Syntax:
 			or self.tokensHelper.getCurrentToken().type.lower() == TokenConstants.ID.lower()) \
 			and not self.tokensHelper.getNextToken().content in _next_id \
 			and not self.tokensHelper.getCurrentToken().content in _sentencia:
-				self.tokensHelper.checkInput(initialAcceptedSet,sync,nextSet=_next_id)
+				self.tokensHelper.checkInput(initialAcceptedSet.difference(["until"]),sync,nextSet=_next_id)
 				if self.tokensHelper.getCurrentToken().content in _tipo:
 					if decl == None:
 						decl = self.declaracion(_s_declaracion)
