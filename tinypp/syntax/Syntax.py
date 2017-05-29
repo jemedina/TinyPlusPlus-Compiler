@@ -341,7 +341,7 @@ class Syntax:
 			self.tokensHelper.match("{")
 			new = self.lista_sentencias(_s_lista_sentencias)
 			self.tokensHelper.match("}")
-			#self.tokensHelper.checkInput(sync,_p_bloque)
+			self.tokensHelper.checkInput(sync,_p_bloque)
 			return new
 		else:
 			return None
