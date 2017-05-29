@@ -170,7 +170,7 @@ class Syntax:
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			exp = None
 			tmp = self.expresion_simple(_s_expresion_simple)
-			succesfulSimpleExpresion =  tmp.name in set().union(_suma_op).union(_mult_op)
+			succesfulSimpleExpresion = tmp != None and tmp.name in set().union(_suma_op).union(_mult_op)
 			notExpectedSet = set(["entero","flotante","identificador","numero"])
 			existsError = self.tokensHelper.checkInput(_p_relacion,sync,stillNotExpectedSet = notExpectedSet,displayErrors=not succesfulSimpleExpresion)
 			isStatement = self.tokensHelper.getCurrentToken().content in _sentencia
@@ -333,7 +333,7 @@ class Syntax:
 
 
 	def bloque(self,sync):
-		self.tokensHelper.checkInput(_p_bloque,sync)
+		self.tokensHelper.checkInput(_p_bloque,sync,displayErrors=False)
 		if not self.tokensHelper.getCurrentToken().content in sync.difference(["{"]):	
 			self.tokensHelper.match("{")
 			new = self.lista_sentencias(_s_lista_sentencias)

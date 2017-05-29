@@ -1,4 +1,6 @@
 main {
-	cout a b
-	cin b
+	cin a;
+	repeat
+	lol a, b, c;
+	cout a;
 }
