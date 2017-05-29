@@ -22,7 +22,7 @@ _p_lista_declaracion=set(["int","float","boolean",EMPTY])
 _p_declaracion=set(["int","float","boolean"])
 _p_tipo=set(["int","float","boolean"])
 _p_lista_variables=set(["identificador"])
-_p_lista_sentencias=set(["if","while","until","cin","cout","{","identificador",EMPTY])
+_p_lista_sentencias=set(["if","while","repeat","until","cin","cout","{","identificador",EMPTY])
 _p_sentencia=set(["if","while","repeat","cin","cout","{","identificador"])
 _p_seleccion=set(["if"])
 _p_iteracion=set(["while"])
@@ -79,6 +79,8 @@ class Syntax:
 			self.tokensHelper.checkInput(sync,_p_programa,displayErrors=False)
 			#print("INFO: Syntax Compilation finished. Tree:")
 			#TreeUtils.cliDisplay(root)
+			self.tokensHelper.manageErrors()
+			self.tokensHelper.printErrors()
 			if self.outputType == "json":
 				print(json.dumps(self.root.__dict__, indent=4, sort_keys=False))
 			elif self.outputType == "tree":

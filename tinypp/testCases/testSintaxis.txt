@@ -1,7 +1,6 @@
 main
 {
 repeat
-
 int x,y,z;
 real a, b, c;
 

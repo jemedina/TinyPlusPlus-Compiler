@@ -11,6 +11,7 @@ class Token:
 class TokensHelper:
 
 	def __init__(self,tokensFilePath):
+		self.errors = []
 		try:
 			self.tokensFile = open(tokensFilePath,"+r")
 			self.tokens = []
@@ -58,8 +59,22 @@ class TokensHelper:
 		print("Syntax error in row = "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+self.getCurrentToken().content,file=sys.stderr)
 	
 	def syntaxError(self,message):
-		print("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message,file=sys.stderr)
-		
+		self.errors.append("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message)
+		#print("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message)
+	def printErrors(self):
+		for i in self.errors:
+			print(i)
+	
+	def manageErrors(self):
+		known_links = set()
+		newlist = []
+		for d in self.errors:
+			link = d
+			if d in known_links: continue
+			newlist.append(d)
+			known_links.add(link)
+		self.errors[:] = newlist
+
 	def getToken(self):
 		self.lastToken = self.tokens[self.index]
 		self.index += 1

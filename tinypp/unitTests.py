@@ -55,7 +55,7 @@ def multipleTestCases():
     s=Syntax("testCases/target_test1/lex/out.lex","none")
     s.go()
     result = evaluator(s.root.getChild(0).getChild(1))
-    assertThat(5+1+1+1+1+1,result)
+    assertThat((5-3)*(8/2),result)
 
     s=Syntax("testCases/target_test2/lex/out.lex","none")
     s.go()
@@ -95,6 +95,6 @@ def testIsEOF():
     assertThat(endOfFile,t.isEOF())
 
 if __name__ == "__main__":
-    testEvaluator()
+   # testEvaluator()
     multipleTestCases()
     testTokensHelper()
