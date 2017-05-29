@@ -173,12 +173,12 @@ class Syntax:
 			succesfulSimpleExpresion =  tmp.name in set().union(_suma_op).union(_mult_op)
 			notExpectedSet = set(["entero","flotante","identificador","numero"])
 			existsError = self.tokensHelper.checkInput(_p_relacion,sync,stillNotExpectedSet = notExpectedSet,displayErrors=not succesfulSimpleExpresion)
-			isDotCommaError = existsError and self.tokensHelper.getCurrentToken().content != TokenConstants.DOT_COMMA
+			isStatement = self.tokensHelper.getCurrentToken().content in _sentencia
 			if( self.tokensHelper.getCurrentToken().content in _relacion ):
 				exp = self.relacion(_s_relacion)
 				exp.addChild(tmp)
 				exp.addChild( self.expresion_simple(_s_expresion_simple) )
-			elif existsError and not succesfulSimpleExpresion and not isDotCommaError:
+			elif existsError and not succesfulSimpleExpresion and not isStatement:
 				exp = Node("error")
 				exp.addChild(tmp)
 				exp.addChild( self.expresion_simple(_s_expresion_simple) )
@@ -317,7 +317,7 @@ class Syntax:
 			new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
 			self.tokensHelper.match(TokenConstants.ID,True)
 			self.tokensHelper.match(";")
-			self.tokensHelper.checkInput(_p_sent_cin,sync)	
+			self.tokensHelper.checkInput(_p_sent_cin,sync,displayErrors=False)	
 			return new
 	#sent-cout → cout expresión ;
 	def sent_cout(self,sync):

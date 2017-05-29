@@ -1,4 +1,4 @@
 main {
-	cout a
+	cout a b
 	cin b
 }
