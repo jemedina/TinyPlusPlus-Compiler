@@ -3,9 +3,13 @@ from syntax.TokensHelper import *
 import json
 import os
 import ntpath
+
+
+#DISPLAY ALL ERRORS (TRUE)
+_withTraceErrors=False
 ################### ENDPOINTS
 _tipo = ["int","float","boolean"]
-_sentencia = ["if","while","do","cin","cout","{"]
+_sentencia = ["if","while","repeat","cin","cout","{"]
 _relacion = ["<=", "<", ">" ,">=", "==", "!="]
 _suma_op = ["+","-"]
 _mult_op = ["*","/"]
@@ -72,7 +76,7 @@ class Syntax:
 			self.root.addChild( self.lista_declaracion(_s_lista_declaracion) )
 			self.root.addChild( self.lista_sentencias(_s_lista_sentencias) )
 			self.tokensHelper.match("}")
-			self.tokensHelper.checkInput(sync,_p_programa)
+			self.tokensHelper.checkInput(sync,_p_programa,displayErrors=False)
 			#print("INFO: Syntax Compilation finished. Tree:")
 			#TreeUtils.cliDisplay(root)
 			if self.outputType == "json":
@@ -91,7 +95,8 @@ class Syntax:
 			decl = None
 			while (self.tokensHelper.getCurrentToken().content in _tipo \
 			or self.tokensHelper.getCurrentToken().type.lower() == TokenConstants.ID.lower()) \
-			and not self.tokensHelper.getNextToken().content in _next_id:
+			and not self.tokensHelper.getNextToken().content in _next_id \
+			and not self.tokensHelper.getCurrentToken().content in _sentencia:
 				self.tokensHelper.checkInput(initialAcceptedSet,sync,nextSet=_next_id)
 				if self.tokensHelper.getCurrentToken().content in _tipo:
 					if decl == None:
@@ -112,8 +117,10 @@ class Syntax:
 		acceptedSet = _p_lista_sentencias.union("}")
 		self.tokensHelper.checkInput(acceptedSet,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:
-			tmp = new = None
-			while self.tokensHelper.getCurrentToken().content in _sentencia or self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
+			tmp = None
+			while self.tokensHelper.getCurrentToken().content in _sentencia or self.tokensHelper.getCurrentToken().type in [TokenConstants.ID] or self.tokensHelper.getCurrentToken().content in [TokenConstants.DOT_COMMA]:
+				new = None
+				self.tokensHelper.checkInput(acceptedSet,sync)
 				if self.tokensHelper.getCurrentToken().content == TokenConstants.IF:
 					new = self.seleccion(_s_seleccion)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
@@ -166,11 +173,12 @@ class Syntax:
 			succesfulSimpleExpresion =  tmp.name in set().union(_suma_op).union(_mult_op)
 			notExpectedSet = set(["entero","flotante","identificador","numero"])
 			existsError = self.tokensHelper.checkInput(_p_relacion,sync,stillNotExpectedSet = notExpectedSet,displayErrors=not succesfulSimpleExpresion)
+			isDotCommaError = existsError and self.tokensHelper.getCurrentToken().content != TokenConstants.DOT_COMMA
 			if( self.tokensHelper.getCurrentToken().content in _relacion ):
 				exp = self.relacion(_s_relacion)
 				exp.addChild(tmp)
 				exp.addChild( self.expresion_simple(_s_expresion_simple) )
-			elif existsError and not succesfulSimpleExpresion:
+			elif existsError and not succesfulSimpleExpresion and not isDotCommaError:
 				exp = Node("error")
 				exp.addChild(tmp)
 				exp.addChild( self.expresion_simple(_s_expresion_simple) )
@@ -193,10 +201,10 @@ class Syntax:
 		self.tokensHelper.checkInput(_p_expresion_simple,sync,set(["entero","flotante"]))
 		if not self.tokensHelper.getCurrentToken().content in sync.union(set(["entero","flotante"])):
 			tmp = self.termino(_s_termino)
-			while( self.tokensHelper.getCurrentToken().content[0] in _suma_op):
+			while( self.tokensHelper.getCurrentToken().content in _suma_op):
 				new = self.suma_op(_s_suma_op)
 				new.addChild(tmp)
-				comesFromALess = self.tokensHelper.getCurrentToken().content[0]=="-"
+				comesFromALess = self.tokensHelper.getCurrentToken().content=="-"
 				customSet = set(["numero","entero","flotante"])
 				term = self.termino(customSet,comesFromALess)
 				#new.addChild( termino() )
@@ -297,6 +305,8 @@ class Syntax:
 			self.tokensHelper.match(";")
 			return new
 			self.tokensHelper.checkInput(_p_repeticion,sync)
+		else:
+			return None
 
 	#sent-cin → cin identificador ;
 	def sent_cin(self,sync):
@@ -306,9 +316,9 @@ class Syntax:
 			self.tokensHelper.match("cin")
 			new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
 			self.tokensHelper.match(TokenConstants.ID,True)
-			self.tokensHelper.match(";")	
+			self.tokensHelper.match(";")
+			self.tokensHelper.checkInput(_p_sent_cin,sync)	
 			return new
-			self.tokensHelper.checkInput(_p_sent_cin,sync)
 	#sent-cout → cout expresión ;
 	def sent_cout(self,sync):
 		self.tokensHelper.checkInput(_p_sent_cout,sync)
@@ -317,9 +327,9 @@ class Syntax:
 			self.tokensHelper.match("cout")
 			exp = self.expresion(_s_expresion)
 			new.addChild( exp ) 
-			self.tokensHelper.match(";")	
+			self.tokensHelper.match(";")
 			return new
-			self.tokensHelper.checkInput(_p_sent_cout,sync)
+			
 
 
 	def bloque(self,sync):
@@ -328,37 +338,46 @@ class Syntax:
 			self.tokensHelper.match("{")
 			new = self.lista_sentencias(_s_lista_sentencias)
 			self.tokensHelper.match("}")
+			#self.tokensHelper.checkInput(sync,_p_bloque)
 			return new
-			self.tokensHelper.checkInput(_p_bloque,sync)
+		else:
+			return None
 
 	#asignación → identificador := expresión ;
 	def asignacion(self,sync):
 		self.tokensHelper.checkInput(_p_asignacion,sync)
-		if not self.tokensHelper.getCurrentToken().content in sync:	
-			new = Node(":=")
-			ide = Node(self.tokensHelper.getCurrentToken().content)
-			new.addChild(ide)
-			self.tokensHelper.match(TokenConstants.ID,True)
-			if self.tokensHelper.getCurrentToken().type == TokenConstants.INCREMENT:
-				plusNode = Node("+")
-				plusNode.addChild( ide )
-				self.tokensHelper.match(TokenConstants.INCREMENT,True)
-				plusNode.addChild(Node("1"))
-				new.addChild(plusNode)	
-			elif self.tokensHelper.getCurrentToken().type == TokenConstants.DECREMENT:
-				lessNode = Node("-")
-				lessNode.addChild( ide )
-				self.tokensHelper.match(TokenConstants.DECREMENT,True)
-				lessNode.addChild(Node("1"))
-				new.addChild(lessNode)
-			else:
-				self.tokensHelper.match(":=")
-				asignExp = self.expresion(_s_expresion)
-				new.addChild( asignExp )
-			self.tokensHelper.match(";")
-			self.tokensHelper.checkInput(_p_asignacion,sync,displayErrors=False)
-			return new
-
+		hasValidNextToken = self.tokensHelper.getNextToken().content in _next_id;
+		if hasValidNextToken:
+			if not self.tokensHelper.getCurrentToken().content in sync:	
+				new = Node(":=")
+				ide = Node(self.tokensHelper.getCurrentToken().content)
+				new.addChild(ide)
+				self.tokensHelper.match(TokenConstants.ID,True)
+				if self.tokensHelper.getCurrentToken().type == TokenConstants.INCREMENT:
+					plusNode = Node("+")
+					plusNode.addChild( ide )
+					self.tokensHelper.match(TokenConstants.INCREMENT,True)
+					plusNode.addChild(Node("1"))
+					new.addChild(plusNode)	
+				elif self.tokensHelper.getCurrentToken().type == TokenConstants.DECREMENT:
+					lessNode = Node("-")
+					lessNode.addChild( ide )
+					self.tokensHelper.match(TokenConstants.DECREMENT,True)
+					lessNode.addChild(Node("1"))
+					new.addChild(lessNode)
+				else:
+					self.tokensHelper.match(":=")
+					asignExp = self.expresion(_s_expresion)
+					new.addChild( asignExp )
+				self.tokensHelper.match(";")
+				self.tokensHelper.checkInput(_p_asignacion,sync,displayErrors=False)
+				return new
+		else:
+			acceptedSet = _p_lista_sentencias.difference(["identificador"])
+			#Optino 1, remove the id
+			#self.tokensHelper.checkInput(acceptedSet,sync.difference(["identificador"]),nextSet=_next_id)
+			#Option 2, remove this unknown token
+			self.tokensHelper.checkInput(acceptedSet,sync.difference(["identificador"]),nextSet=_next_id,traceErrors=_withTraceErrors)		
 	#declaración → tipo lista-variables
 	def declaracion(self,sync):
 		self.tokensHelper.checkInput(_p_declaracion,sync)

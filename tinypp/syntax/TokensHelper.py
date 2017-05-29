@@ -109,7 +109,7 @@ class TokensHelper:
 		or self.getCurrentToken().type.lower() in stillNotExpectedSet):
 			self.getToken()
 	
-	def checkInput(self,first,follow,complementaryset=set(),nextSet=None,stillNotExpectedSet=None,displayErrors=True):
+	def checkInput(self,first,follow,complementaryset=set(),nextSet=None,stillNotExpectedSet=None,displayErrors=True,traceErrors=False):
 		hasError = False
 		if nextSet == None and stillNotExpectedSet == None:
 			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
@@ -125,7 +125,10 @@ class TokensHelper:
 				hasError = True
 				if displayErrors:
 					self.syntaxError("unexpected token -> <"+self.getCurrentToken().content+">")
-				self.scantoNext(first.union(follow).union(complementaryset),nextSet)
+				if not traceErrors:
+					self.scantoNext(first.union(follow).union(complementaryset),nextSet)
+				else:
+					self.scantoNext(first.union(follow).union(complementaryset).union(set([self.getNextToken().content])),nextSet)
 		elif stillNotExpectedSet != None:
 			if not (self.getCurrentToken().content.lower() in first.union(complementaryset) or \
 			self.getCurrentToken().type.lower() in first.union(complementaryset) or \
@@ -156,8 +159,10 @@ class TokenConstants:
 	CIN = "cin"
 	COUT = "cout"
 	BRACKET_OPEN = "{"
+	BRACKET_CLOSE = "}"
 	TIMES = "*"
 	DIV = "/"
 	ELSE = "else"
 	EOF = "$"
 	REPEAT = "repeat"
+	DOT_COMMA = ";"
