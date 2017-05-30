@@ -63,7 +63,7 @@ class TokensHelper:
 		#print("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message)
 	def printErrors(self):
 		for i in self.errors:
-			print(i)
+			print(i,file=sys.stderr)
 	
 	def manageErrors(self):
 		known_links = set()

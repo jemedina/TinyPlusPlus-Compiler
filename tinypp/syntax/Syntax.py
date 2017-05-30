@@ -99,7 +99,7 @@ class Syntax:
 			or self.tokensHelper.getCurrentToken().type.lower() == TokenConstants.ID.lower()) \
 			and not self.tokensHelper.getNextToken().content in _next_id \
 			and not self.tokensHelper.getCurrentToken().content in _sentencia:
-				self.tokensHelper.checkInput(initialAcceptedSet.difference(["until"]),sync,nextSet=_next_id)
+				self.tokensHelper.checkInput(initialAcceptedSet ,sync,nextSet=_next_id)
 				if self.tokensHelper.getCurrentToken().content in _tipo:
 					if decl == None:
 						decl = self.declaracion(_s_declaracion)
@@ -294,7 +294,6 @@ class Syntax:
 			return new
 			self.tokensHelper.checkInput(_p_iteracion,sync)
 	#repetición → do bloque until ( expresión ) ;
-	#TODO: repeat {}; //breaks the tree
 	def repeticion(self,sync):
 		self.tokensHelper.checkInput(_p_repeticion,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:
@@ -306,7 +305,7 @@ class Syntax:
 			new.addChild( self.expresion(_s_expresion) )
 			self.tokensHelper.match(")")
 			self.tokensHelper.match(";")			
-			self.tokensHelper.checkInput(_p_repeticion,sync)
+			self.tokensHelper.checkInput(_p_repeticion.union(["while"]),sync)
 			return new
 		else:
 			return None

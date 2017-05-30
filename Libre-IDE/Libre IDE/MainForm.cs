@@ -363,6 +363,12 @@ namespace Libre_IDE
         private void runLexico(object sender, EventArgs e)
         {
             runLexico();
+            runSintactico();
+            sintaxTreeView.Nodes.Clear();
+            Node root = JsonConvert.DeserializeObject<Node>(sintaxJsonText);
+            TreeNode rootNode = populateSintaxTree(root);
+            sintaxTreeView.Nodes.Add(rootNode);
+            sintaxTreeView.ExpandAll();
         }
         private void runLexico()
         {
@@ -392,6 +398,7 @@ namespace Libre_IDE
         {
             CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
             Process process = new Process();
+            sintaxErrorTextBox.Text = "";
             CheckForIllegalCrossThreadCalls = false;
             process.StartInfo.FileName = @"cmd";
             process.StartInfo.Arguments = "/c tiny -s \"" + tabPage.getCodeEditor().getPath() + "\"";
@@ -401,7 +408,7 @@ namespace Libre_IDE
             process.StartInfo.RedirectStandardError = true;
 
 
-            process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+            process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandlerSintax);
             process.Start();
             //* Read one element asynchronously
             process.BeginErrorReadLine();
@@ -447,11 +454,7 @@ namespace Libre_IDE
 
         private void sintaxEvent(object sender, EventArgs e)
         {
-            runSintactico();
-            sintaxTreeView.Nodes.Clear();
-            Node root = JsonConvert.DeserializeObject<Node>(sintaxJsonText);
-            TreeNode rootNode = populateSintaxTree(root);
-            sintaxTreeView.Nodes.Add(rootNode);
+           
         }
 
     }

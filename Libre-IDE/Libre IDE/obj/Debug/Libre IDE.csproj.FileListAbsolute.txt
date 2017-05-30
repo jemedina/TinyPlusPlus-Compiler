@@ -58,3 +58,19 @@ C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre I
 C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe.config
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.exe
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.pdb
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.pdb
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Json.dll
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.dll
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Json.pdb
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.xml
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csprojResolveAssemblyReference.cache
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.MainForm.resources
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.Properties.Resources.resources
+C:\Users\Symb4d\Desktop\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csproj.GenerateResource.Cache

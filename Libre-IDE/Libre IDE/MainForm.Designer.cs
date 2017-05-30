@@ -52,10 +52,6 @@
             this.todoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ayudaToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -290,10 +286,6 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.panel1.Controls.Add(this.button5);
-            this.panel1.Controls.Add(this.button4);
-            this.panel1.Controls.Add(this.button3);
-            this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.pictureBox4);
             this.panel1.Controls.Add(this.pictureBox3);
@@ -304,54 +296,16 @@
             this.panel1.Size = new System.Drawing.Size(989, 29);
             this.panel1.TabIndex = 1;
             // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(817, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(106, 23);
-            this.button5.TabIndex = 1;
-            this.button5.Text = "Codigo Intermedio";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.showCompillingView);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(736, 3);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 1;
-            this.button4.Text = "Hash Table";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.showCompillingView);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(655, 3);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "Semantico";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.showCompillingView);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(574, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Sintactico";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.sintaxEvent);
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(493, 3);
+            this.button1.BackColor = System.Drawing.Color.LawnGreen;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button1.Location = new System.Drawing.Point(121, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
-            this.button1.Text = "Lexico";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Text = "Run";
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.runLexico);
             // 
             // pictureBox4
@@ -549,6 +503,9 @@
             // 
             // sintaxTreeView
             // 
+            this.sintaxTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sintaxTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sintaxTreeView.Location = new System.Drawing.Point(3, 6);
             this.sintaxTreeView.Name = "sintaxTreeView";
@@ -638,8 +595,15 @@
             // 
             // sintaxErrorTextBox
             // 
+            this.sintaxErrorTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sintaxErrorTextBox.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.sintaxErrorTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
+            this.sintaxErrorTextBox.ForeColor = System.Drawing.Color.Red;
             this.sintaxErrorTextBox.Location = new System.Drawing.Point(0, 0);
             this.sintaxErrorTextBox.Name = "sintaxErrorTextBox";
+            this.sintaxErrorTextBox.ReadOnly = true;
             this.sintaxErrorTextBox.Size = new System.Drawing.Size(981, 96);
             this.sintaxErrorTextBox.TabIndex = 0;
             this.sintaxErrorTextBox.Text = "";
@@ -806,10 +770,6 @@
         private System.Windows.Forms.ToolStripMenuItem codigoIntermedioToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem todoToolStripMenuItem;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.RichTextBox lexerOutTextBox;
         private System.Windows.Forms.RichTextBox lexerErrTextBox;

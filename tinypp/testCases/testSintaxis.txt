@@ -1,6 +1,5 @@
 main
 {
-  until
 int x,y,z;
 real a, b, c;
 x:=23;
@@ -21,7 +20,7 @@ if (2>3) then{
     }
     else
     {  
-     if(4  2) then
+     if(4 2) then
      {
   b:=3.2;
   }
@@ -43,7 +42,7 @@ repeat{
   if(a != 
   b then 
   {
-     a:=a+1;
+     a:=a+1
      b:=b-1;
   }
   else
