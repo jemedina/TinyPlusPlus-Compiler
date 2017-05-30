@@ -160,7 +160,7 @@ namespace Libre_IDE
             this.Styles[Style.Cpp.Operator].ForeColor = Color.Purple;
             this.Styles[Style.Cpp.Preprocessor].ForeColor = Color.Maroon;
             this.Lexer = Lexer.Cpp;
-            this.SetKeywords(0, "do main if then else end while repeat until cin cout real int boolean");
+            this.SetKeywords(0, "main if then else end while repeat until cin cout real int boolean");
         }    
         private void openFile()
         {
