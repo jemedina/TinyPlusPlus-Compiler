@@ -61,8 +61,9 @@ class TokensHelper:
 	def syntaxError(self,message):
 		self.errors.append("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message)
 		#print("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message)
-	def printErrors(self):
+	def printErrors(self,errorfile):
 		for i in self.errors:
+			print(i,file=errorfile)
 			print(i,file=sys.stderr)
 	
 	def manageErrors(self):

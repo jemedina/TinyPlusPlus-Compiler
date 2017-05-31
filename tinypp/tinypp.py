@@ -13,7 +13,7 @@ def lexic(file):
 
 def sintactic(lexFile,outputType):
     syntax= Syntax(lexFile,outputType)
-    syntax.go()
+    syntax.go(lexFile)
     
 if __name__ == "__main__":
     #sys.argv = ["tinypp.py","-s","testCases/target_test5/lex/out.lex","none"]

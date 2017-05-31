@@ -374,6 +374,7 @@ namespace Libre_IDE
         {
             CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
             Process process = new Process();
+            lexerErrTextBox.Text = "";
             CheckForIllegalCrossThreadCalls = false;
             process.StartInfo.FileName = @"cmd";
             process.StartInfo.Arguments = "/c tiny -l \"" + tabPage.getCodeEditor().getPath() + "\"";
