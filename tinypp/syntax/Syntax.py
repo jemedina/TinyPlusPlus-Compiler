@@ -64,6 +64,10 @@ _s_mult_op=set(["(","numero","identificaodr"])
 _s_factor=set([")",";","+","-","*","/","<","<=",">",">=","==","!="])
 
 class Syntax:
+	''' Static Syntax Constants '''
+	TYPE_JSON = "json"
+	TYPE_TREE = "tree"
+
 	#programa → main “{“ lista-declaración lista-sentencias “}”
 	def programa(self,path):
 		pathOfSouce = path

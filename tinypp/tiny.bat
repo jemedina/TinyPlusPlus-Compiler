@@ -1,2 +1,2 @@
 @echo off
-python "E:\TinyPlusPlus-Compiler\tinypp\tinypp.py" %1 %2 %3
+python3 "%TINY_HOME%/tinypp.py" %1 %2 %3

@@ -1,8 +1,13 @@
 import sys
 from lexer.Lexer import *
 from syntax.Syntax import *
-TAG_SINTAX = "-s"
-TAG_LEXIC = "-l"
+
+SINTAX_RUNMODE = "-s"
+LEXIC_RUNMODE = "-l"
+
+LEXIC_SECTION_LABEL = ("="*30)+" LEXIC "+("="*30)
+SINTAX_SECTION_LABEL =("="*30)+" SYNTAX "+("="*30)
+
 def error_cmd():
     print("Invalid tinypp command...")
 
@@ -16,23 +21,25 @@ def sintactic(lexFile,outputType):
     syntax.go(lexFile)
     
 if __name__ == "__main__":
-    #sys.argv = ["tinypp.py","-s","testCases/target_test5/lex/out.lex","none"]
     #Check if by less we have 'python tinypp.py <other_argument>
     if len(sys.argv) > 1:
+        ''' Get the command parameters '''
+        runmode = sys.argv[1] # -l (Lexic) | -s (Sintax) | <none> (All)
+        
         #Check for Lexic analysis
-        if sys.argv[1] == TAG_LEXIC and len(sys.argv) > 2:
+        if runmode == LEXIC_RUNMODE and len(sys.argv) > 2:
             lexic(sys.argv[2])
             
         #Check for Sintactic analysis
-        elif sys.argv[1] == TAG_SINTAX and len(sys.argv) > 2:
+        elif runmode == SINTAX_RUNMODE and len(sys.argv) > 2:
             if len(sys.argv) > 3:
                 sintactic(sys.argv[2],sys.argv[3])
             else:
-                sintactic(sys.argv[2],"json")
-        else:    
-            print("="*30,"LEXIC","="*30)
+                sintactic(sys.argv[2],Syntax.TYPE_JSON)
+        else: # Run all
+            print(LEXIC_SECTION_LABEL)
             lexic(sys.argv[1])
-            print("="*30,"SINTAX","="*30)
-            sintactic(sys.argv[1],"tree")
+            print(SINTAX_SECTION_LABEL)
+            sintactic(sys.argv[1],Syntax.TYPE_TREE)
     else:
         error_cmd()
