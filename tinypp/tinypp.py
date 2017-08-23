@@ -16,9 +16,9 @@ def lexic(file):
     lex.eval()
     lex.close()
 
-def sintactic(lexFile,outputType):
-    syntax= Syntax(lexFile,outputType)
-    syntax.go(lexFile)
+def sintactic(file,outputType):
+    syntax= Syntax(file,outputType)
+    syntax.go(file)
     
 if __name__ == "__main__":
     #Check if by less we have 'python tinypp.py <other_argument>
@@ -37,9 +37,10 @@ if __name__ == "__main__":
             else:
                 sintactic(sys.argv[2],Syntax.TYPE_JSON)
         else: # Run all
+            filename = sys.argv[1]
             print(LEXIC_SECTION_LABEL)
-            lexic(sys.argv[1])
+            lexic(filename)
             print(SINTAX_SECTION_LABEL)
-            sintactic(sys.argv[1],Syntax.TYPE_TREE)
+            sintactic(filename, Syntax.TYPE_TREE)
     else:
         error_cmd()

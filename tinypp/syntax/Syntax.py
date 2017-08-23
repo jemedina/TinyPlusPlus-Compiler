@@ -68,27 +68,34 @@ class Syntax:
 	TYPE_JSON = "json"
 	TYPE_TREE = "tree"
 
+	''' Syntax operations begin '''
 	#programa → main “{“ lista-declaración lista-sentencias “}”
 	def programa(self,path):
 		pathOfSouce = path
 		fileOpen = True
 		canonicalFileName = ntpath.basename(pathOfSouce)
 		withoutExtention = canonicalFileName[0:canonicalFileName.find(".")]
-		lexDirectory = "target_"+withoutExtention+"\\syn\\"
+		synDirectory = "target_"+withoutExtention+"\\syn\\"
 		basepath = ntpath.abspath(pathOfSouce)[0:len(ntpath.abspath(pathOfSouce))-len(canonicalFileName)]
 		if  platform.system() != 'Linux':
 			try: 
-				os.makedirs(basepath+lexDirectory)
+				os.makedirs(basepath+synDirectory)
 			except OSError:
 				pass
-			errFile = open(basepath+lexDirectory+"err.syn","+w")
+			errFile = open(basepath+synDirectory+"err.syn","+w")
+			outFile = open(basepath+synDirectory+"out.syn","+w",encoding='utf-8')
+			jsonFile = open(basepath+synDirectory+"out.json","+w",encoding='utf-8')
 		else:
-			lexDirectory = "target_"+withoutExtention+"/syn/"
+			synDirectory = "target_"+withoutExtention+"/syn/"
 			try: 
-				os.makedirs(lexDirectory)
+				os.makedirs(synDirectory)
 			except OSError:
 				pass
-			errFile = open(lexDirectory+"err.syn","+w")
+			errFile = open(synDirectory+"err.syn","+w")
+			outFile = open(synDirectory+"out.syn","+w",encoding='utf-8')
+			jsonFile = open(synDirectory+"out.json","+w",encoding='utf-8')
+
+		#PROGRAMA Statements
 		sync = _s_programa
 		firstToken = self.tokensHelper.getToken()
 		self.tokensHelper.checkInput(_p_programa,sync)
@@ -100,15 +107,15 @@ class Syntax:
 			self.root.addChild( self.lista_sentencias(_s_lista_sentencias) )
 			self.tokensHelper.match("}")
 			self.tokensHelper.checkInput(sync,_p_programa,displayErrors=False)
-			#print("INFO: Syntax Compilation finished. Tree:")
-			#TreeUtils.cliDisplay(root)
 			self.tokensHelper.manageErrors()
 			self.tokensHelper.printErrors(errFile)
+			jsonDumpString = json.dumps(self.root.__dict__, indent=4, sort_keys=False)
+			print(jsonDumpString,file = jsonFile)
 			if self.outputType == "json":
-				print(json.dumps(self.root.__dict__, indent=4, sort_keys=False))
-				TreeUtils.cliDisplay(self.root,pathOfSouce=path,std=False)
+				print(jsonDumpString)
+				TreeUtils.cliDisplay(self.root,pathOfSouce=path,std=False,outFile=outFile)
 			elif self.outputType == "tree":
-				TreeUtils.cliDisplay(self.root,pathOfSouce=path)
+				TreeUtils.cliDisplay(self.root,pathOfSouce=path,outFile=outFile)
 			elif self.outputType == "none":
 				print("== No output ==")
 			else:
@@ -138,7 +145,6 @@ class Syntax:
 			self.tokensHelper.checkInput(sync,_p_lista_declaracion)
 
 	#lista-sentencias → { sentencia }
-	#sentencia → selección | iteración | repetición | sent-cin |sent-out | bloque | asignación
 	def lista_sentencias(self,sync):
 		acceptedSet = _p_lista_sentencias.union("}")
 		self.tokensHelper.checkInput(acceptedSet,sync)
@@ -426,8 +432,9 @@ class Syntax:
 				parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
 				self.tokensHelper.match(TokenConstants.ID,True)
 			self.tokensHelper.checkInput(_p_lista_variables,sync,set([";"]))
+	''' Syntax operations ends here '''
 
-	def __init__(self,pathOfSouce,outputType="json"):
+	def __init__(self,pathOfSouce,outputType=TYPE_JSON):
 		canonicalFileName = ntpath.basename(pathOfSouce)
 		withoutExtention = canonicalFileName[0:canonicalFileName.find(".")]
 		lexDirectory = "target_"+withoutExtention+"\\lex\\"
@@ -444,6 +451,7 @@ class Syntax:
 					exit(1)
 		self.tokensHelper = TokensHelper(arg)
 		self.outputType = outputType
+
 	def go(self,path):
 		self.programa(path)
 		return self.root
