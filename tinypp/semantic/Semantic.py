@@ -1,4 +1,5 @@
 from semantic.HashTable import *
+from semantic.Analyzer import * 
 from semantic.DictionaryUtility import *
 import json
 import os
@@ -12,6 +13,8 @@ class Semantic:
 		#LOAD TREE
 		jsonFile = self.openSyntaxTree(path)
 		self.tree = DictionaryUtility.to_object(json.load(jsonFile))
+
+		self.analyzer = Analyzer(self.tree)
 
 		### TEST HASH TABLE ###
 		hashTable = HashTable()
