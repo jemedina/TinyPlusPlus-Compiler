@@ -1,11 +1,19 @@
+from semantic.HashTable import *
+
 class Analyzer:
     def __init__(self, tree):
         self.tree=tree
+        self.tabla=HashTable()
         self.preorder(self.tree.sons[0])
         TreeUtils.cliDisplay(self.tree)
+        self.tabla.cliDisplayTable()
+
+
     def preorder(self, node):
         for i in range(len(node.sons)):
             node.sons[i].type = node.name
+            #TODO: Pasar la linea donde esta el 0
+            self.tabla.add(node.sons[i].name,0,None,node.name)
         if node.bro != None:
             self.preorder(node.bro)
 

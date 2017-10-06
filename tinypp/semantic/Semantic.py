@@ -17,11 +17,11 @@ class Semantic:
 		self.analyzer = Analyzer(self.tree)
 
 		### TEST HASH TABLE ###
-		hashTable = HashTable()
+		'''hashTable = HashTable()
 		hashTable.add('x',1,None,'int')
 		hashTable.add('y',3,None,'int')
 		hashTable.add('y',5,None,'int')
-		hashTable.cliDisplayTable()
+		hashTable.cliDisplayTable()'''
 	def getTree(self):
 		return self.tree
 
