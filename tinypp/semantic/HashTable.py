@@ -31,6 +31,9 @@ class HashTable:
 			self.table[id] = HashTableRow(line,value,self.memoryIndex,type)
 			self.memoryIndex += 1
 			return False
+			
+	def hasKey(self, id):
+		return id in self.table
 
 	def cliDisplayTable(self):
 		print("┼"+("─"*8)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼")

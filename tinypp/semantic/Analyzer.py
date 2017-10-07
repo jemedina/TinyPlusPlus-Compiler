@@ -1,4 +1,5 @@
 from semantic.HashTable import *
+from os import sys
 
 class Analyzer:
     def __init__(self, tree):
@@ -12,10 +13,16 @@ class Analyzer:
     def preorder(self, node):
         for i in range(len(node.sons)):
             node.sons[i].type = node.name
-            self.tabla.add(node.sons[i].name,node.sons[i].line,None,node.name)
+            #Avoid variable redeclaration
+            if self.tabla.hasKey(node.sons[i].name):
+            	self.semanticError("Variable '"+node.sons[i].name+"' ya estaba declarada",line=node.sons[i].line)
+            else:
+            	self.tabla.add(node.sons[i].name,node.sons[i].line,None,node.name)
         if node.bro != None:
             self.preorder(node.bro)
-
+    def semanticError(self,message,line=None):
+    	errMsg = "Semantic Error [" + message +"]" + (" at line: "+line) if line != None else ""
+    	print(errMsg,file=sys.stderr)
 class TreeUtils:
 	@staticmethod
 	def cliDisplay(root,tabSpace="",hierarchy=0,isBrotherNode=False,lastSon=False,outFile=None,pathOfSouce=None,std=True):
