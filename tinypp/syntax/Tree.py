@@ -4,12 +4,15 @@ import os
 import ntpath
 import platform
 class Node(dict):
-	def __init__(self,name=None):
+	def __init__(self,name=None,line=None):
 		super().__init__()
 		self.__dict__=self
 		self.name = name
 		self.sons = []
 		self.bro = None
+		if(line != None):
+			self.line = line
+
 	def addChild(self,childNode):
 		if childNode != None:
 			self.sons.append(childNode)

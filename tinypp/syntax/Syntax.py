@@ -305,7 +305,7 @@ class Syntax:
 				new = Node(self.tokensHelper.getCurrentToken().content)
 				self.tokensHelper.match(TokenConstants.FLOAT,True)
 			else:
-				new = Node(self.tokensHelper.getCurrentToken().content)
+				new = Node(self.tokensHelper.getCurrentToken().content, line=self.tokensHelper.getCurrentToken().row)
 				self.tokensHelper.match(TokenConstants.ID,True)
 
 			return new
@@ -346,7 +346,7 @@ class Syntax:
 		if not self.tokensHelper.getCurrentToken().content in sync.difference(["cin"]):
 			new = Node("cin")
 			self.tokensHelper.match("cin")
-			new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
+			new.addChild( Node(self.tokensHelper.getCurrentToken().content, line=self.tokensHelper.getCurrentToken().row ) )
 			self.tokensHelper.match(TokenConstants.ID,True)
 			self.tokensHelper.match(";")
 			self.tokensHelper.checkInput(_p_sent_cin,sync,displayErrors=False)	
@@ -425,11 +425,11 @@ class Syntax:
 	def lista_variables(self,parent,sync):
 		self.tokensHelper.checkInput(_p_lista_variables,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:
-			parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
+			parent.addChild(Node(self.tokensHelper.getCurrentToken().content,line=self.tokensHelper.getCurrentToken().row))
 			self.tokensHelper.match(TokenConstants.ID,True)
 			while self.tokensHelper.getCurrentToken().content == ",":
 				self.tokensHelper.match(",")
-				parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
+				parent.addChild(Node(self.tokensHelper.getCurrentToken().content,line=self.tokensHelper.getCurrentToken().row))
 				self.tokensHelper.match(TokenConstants.ID,True)
 			self.tokensHelper.checkInput(_p_lista_variables,sync,set([";"]))
 	''' Syntax operations ends here '''
