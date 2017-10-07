@@ -12,7 +12,6 @@ class Analyzer:
     def preorder(self, node):
         for i in range(len(node.sons)):
             node.sons[i].type = node.name
-            #TODO: Pasar la linea donde esta el 0
             self.tabla.add(node.sons[i].name,node.sons[i].line,None,node.name)
         if node.bro != None:
             self.preorder(node.bro)
