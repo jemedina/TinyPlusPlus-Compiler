@@ -109,7 +109,7 @@ class Syntax:
 			self.tokensHelper.checkInput(sync,_p_programa,displayErrors=False)
 			self.tokensHelper.manageErrors()
 			self.tokensHelper.printErrors(errFile)
-			jsonDumpString = json.dumps(self.root.__dict__, indent=4, sort_keys=False)
+			jsonDumpString = json.dumps(self.root.__dict__, indent=2, sort_keys=False)
 			print(jsonDumpString,file = jsonFile)
 			if self.outputType == "json":
 				print(jsonDumpString)
