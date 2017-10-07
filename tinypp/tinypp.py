@@ -9,6 +9,7 @@ SEMANTIC_RUNMODE = "-c"
 
 LEXIC_SECTION_LABEL = ("="*30)+" LEXIC "+("="*30)
 SINTAX_SECTION_LABEL =("="*30)+" SYNTAX "+("="*30)
+SEMANTIC_SECTION_LABEL =("="*30)+" SEMANTIC "+("="*30)
 
 def error_cmd():
     print("Invalid tinypp command...")
@@ -49,5 +50,8 @@ if __name__ == "__main__":
             lexic(filename)
             print(SINTAX_SECTION_LABEL)
             sintactic(filename, Syntax.TYPE_TREE)
+            print(SEMANTIC_SECTION_LABEL)
+            semantic(filename)
+
     else:
         error_cmd()

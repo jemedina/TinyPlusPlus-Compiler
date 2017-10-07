@@ -335,7 +335,7 @@ class Syntax:
 			new.addChild( self.expresion(_s_expresion) )
 			self.tokensHelper.match(")")
 			self.tokensHelper.match(";")			
-			self.tokensHelper.checkInput(_p_repeticion.union(["while"]),sync)
+			self.tokensHelper.checkInput(_p_repeticion.union(_sentencia),sync)
 			return new
 		else:
 			return None

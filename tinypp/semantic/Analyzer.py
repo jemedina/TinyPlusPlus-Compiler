@@ -15,7 +15,7 @@ class Analyzer:
             node.sons[i].type = node.name
             #Avoid variable redeclaration
             if self.tabla.hasKey(node.sons[i].name):
-            	self.semanticError("Variable '"+node.sons[i].name+"' ya estaba declarada",line=node.sons[i].line)
+            	self.semanticError("Variable '"+node.sons[i].name+"' was already declared",line=node.sons[i].line)
             else:
             	self.tabla.add(node.sons[i].name,node.sons[i].line,None,node.name)
         if node.bro != None:
