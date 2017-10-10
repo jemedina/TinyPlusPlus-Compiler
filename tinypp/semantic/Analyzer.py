@@ -1,11 +1,17 @@
 from semantic.HashTable import *
 from os import sys
 
+STATEMENTS = [':=', 'if', 'repeat', 'while']
+BOOL_OPERATORS = ['>', '<', '>=', '<=', '==']
+MATH_OPERATORS = ['+', '-', '*', '/']
+ERR = 'ERR'
+
 class Analyzer:
     def __init__(self, tree):
         self.tree=tree
         self.tabla=HashTable()
         self.preorder(self.tree.sons[0])
+        self.posorder(self.tree.sons[1])
         TreeUtils.cliDisplay(self.tree)
         self.tabla.cliDisplayTable()
 
@@ -20,9 +26,99 @@ class Analyzer:
             	self.tabla.add(node.sons[i].name,node.sons[i].line,None,node.name)
         if node.bro != None:
             self.preorder(node.bro)
+
+    def posorder(self, node):
+        for son in node.sons:
+            self.posorder(son)
+        #Leer el nombre del nodo
+        ''' Dependiendo del nombre del nodo puede pasar lo siguiente:
+            Si es "==, !=, <=, >=, < ó >": 
+                Si los dos hijos son identificadores entonces:
+                    *Verificar tipos iguales
+                Si un hijo es identificador:
+                    *Verificar que el no-identificador sea compatible con el tipo de dato
+                Si los dos hijos son no-identificadores:
+                    *Verificar que sean compatibles entre si
+                    *Asignar node.value = el resultado del operador logico
+ 
+            Si es "+, -, *, /":
+                Si los dos hijos son identificadores entonces:
+                    *Verificar tipos iguales
+                Si un hijo es identificador:
+                    *Verificar que el no-identificador sea compatible con el tipo de dato
+                Si los dos hijos son no-identificadores:
+                    *Verificar que sean compatibles entre si
+                    *Asignar node.value = el resultado del operador aritmetico
+        NOTA: Si se encuentra el uso de alguna variable no 
+        definida dentreo de este recorrido, lanzar un error
+        de variable no definida
+
+        '''
+
+        '''for son in node.sons:
+            if self.isStatement(son):
+                self.posorder(son)
+            else:
+                self.assignAttrs(son)'''
+
+        if self.isStatement(node):
+            if node.name == ':=':
+                self.evalAssign(node.sons[0], node.sons[1])
+        else:
+            self.assignAttrs(node)
+
+        #Rama completada, ir con el hermano
+        if(node.bro != None):
+            self.posorder(node.bro)
+
     def semanticError(self,message,line=None):
-    	errMsg = "Semantic Error [" + message +"]" + (" at line: "+line) if line != None else ""
+    	errMsg = "Semantic Error [" + message +"]" + ((" at line: "+line) if line != None else "")
     	print(errMsg,file=sys.stderr)
+
+    def isStatement(self, node):
+        return node.name != None and node.name != "" and \
+            node.name in STATEMENTS or \
+            node.name in BOOL_OPERATORS or \
+            node.name in MATH_OPERATORS
+
+    def assignAttrs(self, node):
+        if node.name == 'true' or node.name == 'false':
+            node.type = 'boolean'
+            node.val = node.name
+        elif node.name == 'error':
+            node.type = 'syntax error'
+            node.val = 'syntax error'
+        elif node.name.isalpha():
+            if self.tabla.hasKey(node.name):
+                self.tabla.addLine(node.name, node.line)
+                var = self.tabla.getKey(node.name)
+                if var.getValue() != '<none>':
+                    node.val = var.getValue()
+                    node.type = var.type
+                else:
+                    node.type = var.type
+                    node.val = 'null'
+            else:
+                self.semanticError("Use of undefined variable '" + node.name + "'",line=node.line)
+                node.val = ERR
+                node.type = ERR
+
+        elif self.isFloat(node.name):
+            node.type = 'real'
+            node.val = node.name
+        elif node.name.isdigit():
+            node.type = 'int'
+            node.val = node.name
+
+    def isFloat(self, strs):
+        try:
+            return float(strs) and '.' in strs
+        except ValueError:
+            return False
+    def evalAssign(self, node1, node2):
+        if node1.type == node2.type:
+            node1.val = node2.val
+
 class TreeUtils:
 	@staticmethod
 	def cliDisplay(root,tabSpace="",hierarchy=0,isBrotherNode=False,lastSon=False,outFile=None,pathOfSouce=None,std=True):
@@ -39,7 +135,10 @@ class TreeUtils:
 			if std:
                             attrs=''
                             if hasattr(root,'type'):
-                                attrs = " (type="+root.type+")"
+                                attrs = " (type="+root.type
+                            if hasattr(root,'val'):
+                                attrs += ", val="+str(root.val)
+                            attrs = (attrs + ")") if attrs != '' else ''
                             print(tabSpace+root.name + attrs)
 			outFile.write(tabSpace+root.name)
 			outFile.write("\n")

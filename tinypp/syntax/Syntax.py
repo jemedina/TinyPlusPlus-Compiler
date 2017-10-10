@@ -382,7 +382,7 @@ class Syntax:
 		if hasValidNextToken:
 			if not self.tokensHelper.getCurrentToken().content in sync:	
 				new = Node(":=")
-				ide = Node(self.tokensHelper.getCurrentToken().content)
+				ide = Node(self.tokensHelper.getCurrentToken().content, line=self.tokensHelper.getCurrentToken().row)
 				new.addChild(ide)
 				self.tokensHelper.match(TokenConstants.ID,True)
 				if self.tokensHelper.getCurrentToken().type == TokenConstants.INCREMENT:
@@ -414,7 +414,7 @@ class Syntax:
 	def declaracion(self,sync):
 		self.tokensHelper.checkInput(_p_declaracion,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:	
-			tmp = Node(self.tokensHelper.getCurrentToken().content)
+			tmp = Node(self.tokensHelper.getCurrentToken().content, line=self.tokensHelper.getCurrentToken().row)
 			self.tokensHelper.match(TokenConstants.ID,True)
 			self.lista_variables(tmp,_s_lista_variables)
 			self.tokensHelper.checkInput(_p_declaracion,sync,set([";"]))

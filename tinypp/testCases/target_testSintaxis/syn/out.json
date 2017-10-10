@@ -1,0 +1,839 @@
+{
+  "name": "main",
+  "sons": [
+    {
+      "name": "int",
+      "sons": [
+        {
+          "name": "x",
+          "sons": [],
+          "bro": null,
+          "line": "3"
+        },
+        {
+          "name": "y",
+          "sons": [],
+          "bro": null,
+          "line": "3"
+        },
+        {
+          "name": "z",
+          "sons": [],
+          "bro": null,
+          "line": "3"
+        }
+      ],
+      "bro": {
+        "name": "real",
+        "sons": [
+          {
+            "name": "a",
+            "sons": [],
+            "bro": null,
+            "line": "4"
+          },
+          {
+            "name": "b",
+            "sons": [],
+            "bro": null,
+            "line": "4"
+          },
+          {
+            "name": "c",
+            "sons": [],
+            "bro": null,
+            "line": "4"
+          }
+        ],
+        "bro": null,
+        "line": "4"
+      },
+      "line": "3"
+    },
+    {
+      "name": ":=",
+      "sons": [
+        {
+          "name": "x",
+          "sons": [],
+          "bro": null,
+          "line": "5"
+        },
+        {
+          "name": "23",
+          "sons": [],
+          "bro": null
+        }
+      ],
+      "bro": {
+        "name": ":=",
+        "sons": [
+          {
+            "name": "y",
+            "sons": [],
+            "bro": null,
+            "line": "7"
+          },
+          {
+            "name": "-",
+            "sons": [
+              {
+                "name": "+",
+                "sons": [
+                  {
+                    "name": "2",
+                    "sons": [],
+                    "bro": null
+                  },
+                  {
+                    "name": "3",
+                    "sons": [],
+                    "bro": null
+                  }
+                ],
+                "bro": null
+              },
+              {
+                "name": "1",
+                "sons": [],
+                "bro": null
+              }
+            ],
+            "bro": null
+          }
+        ],
+        "bro": {
+          "name": ":=",
+          "sons": [
+            {
+              "name": "z",
+              "sons": [],
+              "bro": null,
+              "line": "9"
+            },
+            {
+              "name": "+",
+              "sons": [
+                {
+                  "name": "y",
+                  "sons": [],
+                  "bro": null,
+                  "line": "9"
+                },
+                {
+                  "name": "7",
+                  "sons": [],
+                  "bro": null
+                }
+              ],
+              "bro": null
+            }
+          ],
+          "bro": {
+            "name": ":=",
+            "sons": [
+              {
+                "name": "x",
+                "sons": [],
+                "bro": null,
+                "line": "11"
+              },
+              {
+                "name": "*",
+                "sons": [
+                  {
+                    "name": "-",
+                    "sons": [
+                      {
+                        "name": "5",
+                        "sons": [],
+                        "bro": null
+                      },
+                      {
+                        "name": "3",
+                        "sons": [],
+                        "bro": null
+                      }
+                    ],
+                    "bro": null
+                  },
+                  {
+                    "name": "/",
+                    "sons": [
+                      {
+                        "name": "8",
+                        "sons": [],
+                        "bro": null
+                      },
+                      {
+                        "name": "2",
+                        "sons": [],
+                        "bro": null
+                      }
+                    ],
+                    "bro": null
+                  }
+                ],
+                "bro": null
+              }
+            ],
+            "bro": {
+              "name": ":=",
+              "sons": [
+                {
+                  "name": "y",
+                  "sons": [],
+                  "bro": null,
+                  "line": "12"
+                },
+                {
+                  "name": "-",
+                  "sons": [
+                    {
+                      "name": "-",
+                      "sons": [
+                        {
+                          "name": "+",
+                          "sons": [
+                            {
+                              "name": "5",
+                              "sons": [],
+                              "bro": null
+                            },
+                            {
+                              "name": "3",
+                              "sons": [],
+                              "bro": null
+                            }
+                          ],
+                          "bro": null
+                        },
+                        {
+                          "name": "/",
+                          "sons": [
+                            {
+                              "name": "*",
+                              "sons": [
+                                {
+                                  "name": "2",
+                                  "sons": [],
+                                  "bro": null
+                                },
+                                {
+                                  "name": "4",
+                                  "sons": [],
+                                  "bro": null
+                                }
+                              ],
+                              "bro": null
+                            },
+                            {
+                              "name": "7",
+                              "sons": [],
+                              "bro": null
+                            }
+                          ],
+                          "bro": null
+                        }
+                      ],
+                      "bro": null
+                    },
+                    {
+                      "name": "9",
+                      "sons": [],
+                      "bro": null
+                    }
+                  ],
+                  "bro": null
+                }
+              ],
+              "bro": {
+                "name": ":=",
+                "sons": [
+                  {
+                    "name": "z",
+                    "sons": [],
+                    "bro": null,
+                    "line": "13"
+                  },
+                  {
+                    "name": "+",
+                    "sons": [
+                      {
+                        "name": "/",
+                        "sons": [
+                          {
+                            "name": "8",
+                            "sons": [],
+                            "bro": null
+                          },
+                          {
+                            "name": "2",
+                            "sons": [],
+                            "bro": null
+                          }
+                        ],
+                        "bro": null
+                      },
+                      {
+                        "name": "*",
+                        "sons": [
+                          {
+                            "name": "15",
+                            "sons": [],
+                            "bro": null
+                          },
+                          {
+                            "name": "4",
+                            "sons": [],
+                            "bro": null
+                          }
+                        ],
+                        "bro": null
+                      }
+                    ],
+                    "bro": null
+                  }
+                ],
+                "bro": {
+                  "name": ":=",
+                  "sons": [
+                    {
+                      "name": "y",
+                      "sons": [],
+                      "bro": null,
+                      "line": "14"
+                    },
+                    {
+                      "name": "14.54",
+                      "sons": [],
+                      "bro": null
+                    }
+                  ],
+                  "bro": {
+                    "name": ":=",
+                    "sons": [
+                      {
+                        "name": "a",
+                        "sons": [],
+                        "bro": null,
+                        "line": "15"
+                      },
+                      {
+                        "name": "-",
+                        "sons": [
+                          {
+                            "name": "+",
+                            "sons": [
+                              {
+                                "name": "-",
+                                "sons": [
+                                  {
+                                    "name": "+",
+                                    "sons": [
+                                      {
+                                        "name": "24.0",
+                                        "sons": [],
+                                        "bro": null
+                                      },
+                                      {
+                                        "name": "4",
+                                        "sons": [],
+                                        "bro": null
+                                      }
+                                    ],
+                                    "bro": null
+                                  },
+                                  {
+                                    "name": "/",
+                                    "sons": [
+                                      {
+                                        "name": "*",
+                                        "sons": [
+                                          {
+                                            "name": "1",
+                                            "sons": [],
+                                            "bro": null
+                                          },
+                                          {
+                                            "name": "3",
+                                            "sons": [],
+                                            "bro": null
+                                          }
+                                        ],
+                                        "bro": null
+                                      },
+                                      {
+                                        "name": "2",
+                                        "sons": [],
+                                        "bro": null
+                                      }
+                                    ],
+                                    "bro": null
+                                  }
+                                ],
+                                "bro": null
+                              },
+                              {
+                                "name": "34",
+                                "sons": [],
+                                "bro": null
+                              }
+                            ],
+                            "bro": null
+                          },
+                          {
+                            "name": "1",
+                            "sons": [],
+                            "bro": null
+                          }
+                        ],
+                        "bro": null
+                      }
+                    ],
+                    "bro": {
+                      "name": "if",
+                      "sons": [
+                        {
+                          "name": ">",
+                          "sons": [
+                            {
+                              "name": "2",
+                              "sons": [],
+                              "bro": null
+                            },
+                            {
+                              "name": "3",
+                              "sons": [],
+                              "bro": null
+                            }
+                          ],
+                          "bro": null
+                        },
+                        {
+                          "name": ":=",
+                          "sons": [
+                            {
+                              "name": "y",
+                              "sons": [],
+                              "bro": null,
+                              "line": "19"
+                            },
+                            {
+                              "name": "+",
+                              "sons": [
+                                {
+                                  "name": "a",
+                                  "sons": [],
+                                  "bro": null,
+                                  "line": "19"
+                                },
+                                {
+                                  "name": "3",
+                                  "sons": [],
+                                  "bro": null
+                                }
+                              ],
+                              "bro": null
+                            }
+                          ],
+                          "bro": null
+                        },
+                        {
+                          "name": "if",
+                          "sons": [
+                            {
+                              "name": "error",
+                              "sons": [
+                                {
+                                  "name": "4",
+                                  "sons": [],
+                                  "bro": null
+                                },
+                                {
+                                  "name": "2",
+                                  "sons": [],
+                                  "bro": null
+                                }
+                              ],
+                              "bro": null
+                            },
+                            {
+                              "name": ":=",
+                              "sons": [
+                                {
+                                  "name": "b",
+                                  "sons": [],
+                                  "bro": null,
+                                  "line": "25"
+                                },
+                                {
+                                  "name": "3.2",
+                                  "sons": [],
+                                  "bro": null
+                                }
+                              ],
+                              "bro": null
+                            },
+                            {
+                              "name": ":=",
+                              "sons": [
+                                {
+                                  "name": "b",
+                                  "sons": [],
+                                  "bro": null,
+                                  "line": "29"
+                                },
+                                {
+                                  "name": "5.0",
+                                  "sons": [],
+                                  "bro": null
+                                }
+                              ],
+                              "bro": null
+                            }
+                          ],
+                          "bro": {
+                            "name": ":=",
+                            "sons": [
+                              {
+                                "name": "y",
+                                "sons": [],
+                                "bro": null,
+                                "line": "33"
+                              },
+                              {
+                                "name": "+",
+                                "sons": [
+                                  {
+                                    "name": "y",
+                                    "sons": [],
+                                    "bro": null,
+                                    "line": "33"
+                                  },
+                                  {
+                                    "name": "1",
+                                    "sons": [],
+                                    "bro": null
+                                  }
+                                ],
+                                "bro": null
+                              }
+                            ],
+                            "bro": null
+                          }
+                        }
+                      ],
+                      "bro": {
+                        "name": ":=",
+                        "sons": [
+                          {
+                            "name": "a",
+                            "sons": [],
+                            "bro": null,
+                            "line": "37"
+                          },
+                          {
+                            "name": "+",
+                            "sons": [
+                              {
+                                "name": "a",
+                                "sons": [],
+                                "bro": null,
+                                "line": "37"
+                              },
+                              {
+                                "name": "1",
+                                "sons": [],
+                                "bro": null
+                              }
+                            ],
+                            "bro": null
+                          }
+                        ],
+                        "bro": {
+                          "name": ":=",
+                          "sons": [
+                            {
+                              "name": "b",
+                              "sons": [],
+                              "bro": null,
+                              "line": "38"
+                            },
+                            {
+                              "name": "-",
+                              "sons": [
+                                {
+                                  "name": "b",
+                                  "sons": [],
+                                  "bro": null,
+                                  "line": "38"
+                                },
+                                {
+                                  "name": "1",
+                                  "sons": [],
+                                  "bro": null
+                                }
+                              ],
+                              "bro": null
+                            }
+                          ],
+                          "bro": {
+                            "name": "repeat",
+                            "sons": [
+                              {
+                                "name": ":=",
+                                "sons": [
+                                  {
+                                    "name": "y",
+                                    "sons": [],
+                                    "bro": null,
+                                    "line": "41"
+                                  },
+                                  {
+                                    "name": "+",
+                                    "sons": [
+                                      {
+                                        "name": "*",
+                                        "sons": [
+                                          {
+                                            "name": "+",
+                                            "sons": [
+                                              {
+                                                "name": "y",
+                                                "sons": [],
+                                                "bro": null,
+                                                "line": "41"
+                                              },
+                                              {
+                                                "name": "1",
+                                                "sons": [],
+                                                "bro": null
+                                              }
+                                            ],
+                                            "bro": null
+                                          },
+                                          {
+                                            "name": "2",
+                                            "sons": [],
+                                            "bro": null
+                                          }
+                                        ],
+                                        "bro": null
+                                      },
+                                      {
+                                        "name": "1",
+                                        "sons": [],
+                                        "bro": null
+                                      }
+                                    ],
+                                    "bro": null
+                                  }
+                                ],
+                                "bro": {
+                                  "name": "if",
+                                  "sons": [
+                                    {
+                                      "name": "!=",
+                                      "sons": [
+                                        {
+                                          "name": "a",
+                                          "sons": [],
+                                          "bro": null,
+                                          "line": "42"
+                                        },
+                                        {
+                                          "name": "b",
+                                          "sons": [],
+                                          "bro": null,
+                                          "line": "43"
+                                        }
+                                      ],
+                                      "bro": null
+                                    },
+                                    {
+                                      "name": ":=",
+                                      "sons": [
+                                        {
+                                          "name": "a",
+                                          "sons": [],
+                                          "bro": null,
+                                          "line": "45"
+                                        },
+                                        {
+                                          "name": "+",
+                                          "sons": [
+                                            {
+                                              "name": "a",
+                                              "sons": [],
+                                              "bro": null,
+                                              "line": "45"
+                                            },
+                                            {
+                                              "name": "1",
+                                              "sons": [],
+                                              "bro": null
+                                            }
+                                          ],
+                                          "bro": null
+                                        }
+                                      ],
+                                      "bro": {
+                                        "name": ":=",
+                                        "sons": [
+                                          {
+                                            "name": "b",
+                                            "sons": [],
+                                            "bro": null,
+                                            "line": "46"
+                                          },
+                                          {
+                                            "name": "-",
+                                            "sons": [
+                                              {
+                                                "name": "b",
+                                                "sons": [],
+                                                "bro": null,
+                                                "line": "46"
+                                              },
+                                              {
+                                                "name": "1",
+                                                "sons": [],
+                                                "bro": null
+                                              }
+                                            ],
+                                            "bro": null
+                                          }
+                                        ],
+                                        "bro": null
+                                      }
+                                    },
+                                    {
+                                      "name": ":=",
+                                      "sons": [
+                                        {
+                                          "name": "b",
+                                          "sons": [],
+                                          "bro": null,
+                                          "line": "50"
+                                        },
+                                        {
+                                          "name": "+",
+                                          "sons": [
+                                            {
+                                              "name": "b",
+                                              "sons": [],
+                                              "bro": null,
+                                              "line": "50"
+                                            },
+                                            {
+                                              "name": "1",
+                                              "sons": [],
+                                              "bro": null
+                                            }
+                                          ],
+                                          "bro": null
+                                        }
+                                      ],
+                                      "bro": null
+                                    }
+                                  ],
+                                  "bro": null
+                                }
+                              },
+                              {
+                                "name": "==",
+                                "sons": [
+                                  {
+                                    "name": "y",
+                                    "sons": [],
+                                    "bro": null,
+                                    "line": "56"
+                                  },
+                                  {
+                                    "name": "5",
+                                    "sons": [],
+                                    "bro": null
+                                  }
+                                ],
+                                "bro": null
+                              }
+                            ],
+                            "bro": {
+                              "name": "while",
+                              "sons": [
+                                {
+                                  "name": "==",
+                                  "sons": [
+                                    {
+                                      "name": "y",
+                                      "sons": [],
+                                      "bro": null,
+                                      "line": "58"
+                                    },
+                                    {
+                                      "name": "0",
+                                      "sons": [],
+                                      "bro": null
+                                    }
+                                  ],
+                                  "bro": null
+                                },
+                                {
+                                  "name": "if",
+                                  "sons": [
+                                    {
+                                      "name": "!=",
+                                      "sons": [
+                                        {
+                                          "name": "6",
+                                          "sons": [],
+                                          "bro": null
+                                        },
+                                        {
+                                          "name": "a",
+                                          "sons": [],
+                                          "bro": null,
+                                          "line": "65"
+                                        }
+                                      ],
+                                      "bro": null
+                                    },
+                                    {
+                                      "name": ":=",
+                                      "sons": [
+                                        {
+                                          "name": "a",
+                                          "sons": [],
+                                          "bro": null,
+                                          "line": "71"
+                                        },
+                                        {
+                                          "name": "5",
+                                          "sons": [],
+                                          "bro": null
+                                        }
+                                      ],
+                                      "bro": null
+                                    }
+                                  ],
+                                  "bro": null
+                                }
+                              ],
+                              "bro": null
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "bro": null
+}
