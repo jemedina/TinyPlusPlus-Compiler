@@ -5,7 +5,9 @@ STATEMENTS = [':=', 'if', 'repeat', 'while']
 BOOL_OPERATORS = ['>', '<', '>=', '<=', '==']
 MATH_OPERATORS = ['+', '-', '*', '/']
 ERR = 'ERR'
-
+KIND_REAL = 'real'
+KIND_INT = 'int'
+KIND_BOOL = 'boolean'
 class Analyzer:
     def __init__(self, tree):
         self.tree=tree
@@ -64,6 +66,16 @@ class Analyzer:
         if self.isStatement(node):
             if node.name == ':=':
                 self.evalAssign(node.sons[0], node.sons[1])
+            elif node.name in MATH_OPERATORS:
+                mathVal = str(self.evalMath(node.sons[0], node.sons[1], node.name, node.line))
+                node.val = mathVal
+                if mathVal == ERR:
+                    node.type = ERR
+                elif self.isFloat(mathVal):
+                    node.type = KIND_REAL
+                else:
+                    node.type = KIND_INT
+                
         else:
             self.assignAttrs(node)
 
@@ -82,10 +94,7 @@ class Analyzer:
             node.name in MATH_OPERATORS
 
     def assignAttrs(self, node):
-        if node.name == 'true' or node.name == 'false':
-            node.type = 'boolean'
-            node.val = node.name
-        elif node.name == 'error':
+        if node.name == 'error':
             node.type = 'syntax error'
             node.val = 'syntax error'
         elif node.name.isalpha():
@@ -97,7 +106,7 @@ class Analyzer:
                     node.type = var.type
                 else:
                     node.type = var.type
-                    node.val = 'null'
+                    node.val = '0'
             else:
                 self.semanticError("Use of undefined variable '" + node.name + "'",line=node.line)
                 node.val = ERR
@@ -115,9 +124,78 @@ class Analyzer:
             return float(strs) and '.' in strs
         except ValueError:
             return False
+
     def evalAssign(self, node1, node2):
         if node1.type == node2.type:
             node1.val = node2.val
+            self.tabla.setValue(node1.name, node2.val)
+        elif node1.type == KIND_INT and node2.type == KIND_REAL:
+            intVal = self.getInt(node2.val)
+            node1.val = intVal
+            self.tabla.setValue(node1.name, intVal)
+            if intVal == ERR:
+                self.semanticError("Can't cast <real> to <int>", line=node1.line)
+        elif node1.type == KIND_REAL and node2.type == KIND_INT:
+            realVal = self.getReal(node2.val)
+            node1.val = realVal
+            self.tabla.setValue(node1.name, realVal)
+        elif node1.type == KIND_BOOL and node2.type == KIND_INT:
+            boolVal = self.getBoolean(node2.val)
+            node1.val = boolVal
+            self.tabla.setValue(node1.name, boolVal)
+        else:
+            node1.val = ERR
+            self.tabla.setValue(node1.name, ERR)
+
+            self.semanticError('<'+ node1.type + "> is not compatible with <" + node2.type+">",line=node1.line)
+    
+    def evalMath(self, node1, node2, op, opline):
+        if node1.type != KIND_BOOL and node2.type != KIND_BOOL:
+            if node1.val != ERR and node2.val != ERR:
+                strA = str(node1.val)
+                strB = str(node2.val)
+                a = float(self.getReal(strA)) if self.isFloat(strA) else int(self.getInt(strA))
+                b = float(self.getReal(strB)) if self.isFloat(strB) else int(self.getInt(strB))
+
+                if op == '+':
+                    return a+b
+                elif op == '-':
+                    return a-b
+                elif op == '*':
+                    return a*b
+                elif op == '/':
+                    if b == 0:
+                        self.semanticError("Can't divide by zero!", line=opline)
+                        return ERR
+                    return a/b
+                else:
+                    return ERR
+            else:
+                return ERR
+        else:
+            self.semanticError("Unable to operate with booleans", line=opline)
+            return ERR
+
+    def getInt(self, value):
+        strVal = str(value)
+        if '.' in strVal:
+            return ERR
+        else:
+            return strVal
+
+    def getReal(self, value):
+        strVal = str(value)
+        if '.' in strVal:
+            return strVal
+        else:
+            return strVal+".0"
+
+    def getBoolean(self, value):
+        strVal = str(value)
+        if not strVal in ['1', '0']:
+            return ERR
+        else:
+            return strVal 
 
 class TreeUtils:
 	@staticmethod

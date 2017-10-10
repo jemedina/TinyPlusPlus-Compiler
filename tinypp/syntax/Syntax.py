@@ -259,7 +259,7 @@ class Syntax:
 				self.tokensHelper.match(TokenConstants.PLUS,True)
 			elif (self.tokensHelper.getCurrentToken().type == TokenConstants.LESS):
 				self.tokensHelper.match(TokenConstants.LESS,True)
-			return Node(rel)
+			return Node(rel,line=self.tokensHelper.getCurrentToken().row)
 			self.tokensHelper.checkInput(sync,_p_suma_op)
 	#termino → factor { mult-op factor }
 	def termino(self,sync,comesFromALess=False):
@@ -284,7 +284,7 @@ class Syntax:
 				self.tokensHelper.match(TokenConstants.TIMES)
 			elif (self.tokensHelper.getCurrentToken().content == TokenConstants.DIV):
 				self.tokensHelper.match(TokenConstants.DIV)
-			return Node(rel)
+			return Node(rel,line=self.tokensHelper.getCurrentToken().row)
 			self.tokensHelper.checkInput(sync,_p_mult_op)
 
 	#factor → ( expresión ) | numero | identificador
@@ -386,13 +386,13 @@ class Syntax:
 				new.addChild(ide)
 				self.tokensHelper.match(TokenConstants.ID,True)
 				if self.tokensHelper.getCurrentToken().type == TokenConstants.INCREMENT:
-					plusNode = Node("+")
+					plusNode = Node("+",line=self.tokensHelper.getCurrentToken().row)
 					plusNode.addChild( ide )
 					self.tokensHelper.match(TokenConstants.INCREMENT,True)
 					plusNode.addChild(Node("1"))
 					new.addChild(plusNode)	
 				elif self.tokensHelper.getCurrentToken().type == TokenConstants.DECREMENT:
-					lessNode = Node("-")
+					lessNode = Node("-",line=self.tokensHelper.getCurrentToken().row)
 					lessNode.addChild( ide )
 					self.tokensHelper.match(TokenConstants.DECREMENT,True)
 					lessNode.addChild(Node("1"))

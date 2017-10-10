@@ -38,6 +38,9 @@ class HashTable:
 	def hasKey(self, id):
 		return id in self.table
 
+	def setValue(self, id, value):
+		self.table[id].value = value
+
 	def getKey(self, id):
 		return self.table[id]
 
