@@ -360,13 +360,31 @@ namespace Libre_IDE
             return treeNode;
         }
 
+        private void populateTreeV2(TreeNode root, Node tree)
+        {
+            for (int i = 0; i < tree.sons.Count; i++)
+            {
+                TreeNode newNode = new TreeNode(tree.sons[i].name);
+                root.Nodes.Add(newNode);
+                populateTreeV2(newNode, tree.sons[i]);
+            }
+            if (tree.bro != null)
+            {
+                TreeNode newNode = new TreeNode(tree.bro.name);
+                root.Parent.Nodes.Add(newNode);
+                populateTreeV2(newNode, tree.bro);
+            }
+        }
+
         private void runLexico(object sender, EventArgs e)
         {
             runLexico();
             runSintactico();
             sintaxTreeView.Nodes.Clear();
             Node root = JsonConvert.DeserializeObject<Node>(sintaxJsonText);
-            TreeNode rootNode = populateSintaxTree(root);
+            //TreeNode rootNode = populateSintaxTree(root);
+            TreeNode rootNode = new TreeNode(root.name);
+            populateTreeV2(rootNode, root);
             sintaxTreeView.Nodes.Add(rootNode);
             sintaxTreeView.ExpandAll();
         }

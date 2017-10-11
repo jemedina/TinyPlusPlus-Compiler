@@ -83,6 +83,7 @@
             this.toolStripSpacement1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.semanticTreeView = new System.Windows.Forms.TreeView();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -104,6 +105,7 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -514,6 +516,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.semanticTreeView);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -671,6 +674,17 @@
             this.contextMenuStrip1.ShowImageMargin = false;
             this.contextMenuStrip1.Size = new System.Drawing.Size(36, 4);
             // 
+            // semanticTreeView
+            // 
+            this.semanticTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.semanticTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.semanticTreeView.Location = new System.Drawing.Point(4, 5);
+            this.semanticTreeView.Name = "semanticTreeView";
+            this.semanticTreeView.Size = new System.Drawing.Size(326, 331);
+            this.semanticTreeView.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -709,6 +723,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
@@ -775,6 +790,7 @@
         private System.Windows.Forms.RichTextBox lexerErrTextBox;
         private System.Windows.Forms.RichTextBox sintaxErrorTextBox;
         private System.Windows.Forms.TreeView sintaxTreeView;
+        private System.Windows.Forms.TreeView semanticTreeView;
     }
 }
 
