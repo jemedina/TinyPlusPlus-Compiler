@@ -225,7 +225,7 @@ class Syntax:
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			rel = self.tokensHelper.getCurrentToken().content
 			self.tokensHelper.match(TokenConstants.RELATION,True)
-			return Node(rel)
+			return Node(rel, line=self.tokensHelper.getCurrentToken().row)
 			self.tokensHelper.checkInput(sync,_p_relacion)
 
 	#expresión-simple → termino { suma-op termino }

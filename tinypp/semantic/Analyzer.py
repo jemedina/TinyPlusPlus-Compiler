@@ -2,7 +2,7 @@ from semantic.HashTable import *
 from os import sys
 
 STATEMENTS = [':=', 'if', 'repeat', 'while']
-BOOL_OPERATORS = ['>', '<', '>=', '<=', '==']
+BOOL_OPERATORS = ['>', '<', '>=', '<=', '==', '!=']
 MATH_OPERATORS = ['+', '-', '*', '/']
 ERR = 'ERR'
 KIND_REAL = 'real'
@@ -64,8 +64,10 @@ class Analyzer:
                 self.assignAttrs(son)'''
 
         if self.isStatement(node):
+            #ASIGNACIONES
             if node.name == ':=':
                 self.evalAssign(node.sons[0], node.sons[1])
+            #MATH OPERADORES
             elif node.name in MATH_OPERATORS:
                 mathVal = str(self.evalMath(node.sons[0], node.sons[1], node.name, node.line))
                 node.val = mathVal
@@ -75,7 +77,15 @@ class Analyzer:
                     node.type = KIND_REAL
                 else:
                     node.type = KIND_INT
-                
+            #BOOL OPERADORES
+            elif node.name in BOOL_OPERATORS:
+                boolVal = str(self.evalBool(node.sons[0], node.sons[1], node.name, node.line))
+                node.type = KIND_BOOL
+                node.val = boolVal
+            elif node.name in ['if', 'while']:
+                self.verifyBooleanExpresion(node.sons[0])
+            elif node.name in ['repeat']:
+                self.verifyBooleanExpresion(node.sons[1])
         else:
             self.assignAttrs(node)
 
@@ -83,9 +93,13 @@ class Analyzer:
         if(node.bro != None):
             self.posorder(node.bro)
 
+    def verifyBooleanExpresion(self, node):
+        if node.type != KIND_BOOL:
+            node.val = ERR
+
     def semanticError(self,message,line=None):
     	errMsg = "Semantic Error [" + message +"]" + ((" at line: "+line) if line != None else "")
-    	print(errMsg,file=sys.stderr)
+    	print(errMsg, file=sys.stderr)
 
     def isStatement(self, node):
         return node.name != None and node.name != "" and \
@@ -141,12 +155,15 @@ class Analyzer:
             self.tabla.setValue(node1.name, realVal)
         elif node1.type == KIND_BOOL and node2.type == KIND_INT:
             boolVal = self.getBoolean(node2.val)
-            node1.val = boolVal
-            self.tabla.setValue(node1.name, boolVal)
+            if boolVal != '0' and boolVal != '1':
+                self.semanticError("Unable to cast <int> to <boolean>",line=node1.line)
+                node1.val = ERR
+            else:
+                node1.val = boolVal
+                self.tabla.setValue(node1.name, boolVal)
         else:
             node1.val = ERR
             self.tabla.setValue(node1.name, ERR)
-
             self.semanticError('<'+ node1.type + "> is not compatible with <" + node2.type+">",line=node1.line)
     
     def evalMath(self, node1, node2, op, opline):
@@ -176,6 +193,25 @@ class Analyzer:
             self.semanticError("Unable to operate with booleans", line=opline)
             return ERR
 
+    def evalBool(self, node1, node2, op, opline):
+        if op != '==' and (node1.type == KIND_BOOL or node2.type == KIND_BOOL):
+            self.semanticError("The operator '"+op+"' can't be used with booleans",line=opline)
+            return ERR
+        elif op == '==':
+            return '1' if node1.val == node2.val else '0'
+        else: #<, >, <=, >= para numeros:
+            strA = str(node1.val)
+            strB = str(node2.val)
+            a = float(self.getReal(strA)) if self.isFloat(strA) else int(self.getInt(strA))
+            b = float(self.getReal(strB)) if self.isFloat(strB) else int(self.getInt(strB))
+            if op == '>':
+                return '1' if a > b else '0'
+            elif op == '<':
+                return '1' if a < b else '0'
+            elif op == '>=':
+                return '1' if a >= b else '0'
+            elif op == '<=':
+                return '1' if a <= b else '0'
     def getInt(self, value):
         strVal = str(value)
         if '.' in strVal:
