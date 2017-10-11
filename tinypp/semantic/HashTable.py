@@ -5,7 +5,7 @@ class HashTableRow:
 		self.memory = memory
 		self.type = type
 	def __str__(self):
-		return "│{:<15}│{:<15}│{:<15}│{:<10}│".format(self.getLines(),self.getValue(),self.memory,self.type)
+		return "│{:<50}│{:<15}│{:<15}│{:<10}│".format(self.getLines(),self.getValue(),self.memory,self.type)
 
 	def getLines(self):
 		linesStr = ""
@@ -45,12 +45,12 @@ class HashTable:
 		return self.table[id]
 
 	def cliDisplayTable(self):
-		print("┼"+("─"*8)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼")
-		print("│{:<8}│{:<15}│{:<15}│{:<15}│{:<10}│".format('ID','Lines','Value','Mem','Type'))
+		print("┼"+("─"*8)+"┼"+("─"*50)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼")
+		print("│{:<8}│{:<50}│{:<15}│{:<15}│{:<10}│".format('ID','Lines','Value','Mem','Type'))
 		
-		print("┼"+("─"*8)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼")
+		print("┼"+("─"*8)+"┼"+("─"*50)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼")
 		for item in self.table.items():
-			#print("{:<8} {:<15} {:<10}".format(k, label, num))
+			#print("{:<8} {:<50} {:<10}".format(k, label, num))
 			print("│{:<8}".format(item[0]) + str(item[1]))
-			print("┼"+("─"*8)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼")
+			print("┼"+("─"*8)+"┼"+("─"*50)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼")
 		

@@ -28,7 +28,7 @@ def semantic(file):
 
 if __name__ == "__main__":
     #Check if by less we have 'python tinypp.py <other_argument>
-    sys.argv = ['C:\\Users\\Eduardo\\Dev\\TinyPlusPlus-Compiler\\tinypp/tinypp.py',"C:\\Users\\Eduardo\\Desktop\\test.txt"]
+    #sys.argv = ['C:\\Users\\Eduardo\\Dev\\TinyPlusPlus-Compiler\\tinypp/tinypp.py',"C:\\Users\\Eduardo\\Desktop\\test.txt"]
     if len(sys.argv) > 1:
         ''' Get the command parameters '''
         runmode = sys.argv[1] # -l (Lexic) | -s (Sintax) | <none> (All)
