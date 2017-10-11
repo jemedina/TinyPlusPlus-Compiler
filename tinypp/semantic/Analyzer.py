@@ -194,11 +194,13 @@ class Analyzer:
             return ERR
 
     def evalBool(self, node1, node2, op, opline):
-        if op != '==' and (node1.type == KIND_BOOL or node2.type == KIND_BOOL):
+        if op != '==' and op != '!=' and (node1.type == KIND_BOOL or node2.type == KIND_BOOL):
             self.semanticError("The operator '"+op+"' can't be used with booleans",line=opline)
             return ERR
         elif op == '==':
             return '1' if node1.val == node2.val else '0'
+        elif op == '!=':
+            return '1' if node1.val != node2.val else '0'
         else: #<, >, <=, >= para numeros:
             strA = str(node1.val)
             strB = str(node2.val)
@@ -231,7 +233,7 @@ class Analyzer:
         if not strVal in ['1', '0']:
             return ERR
         else:
-            return strVal 
+            return strVal
 
 class TreeUtils:
 	@staticmethod
