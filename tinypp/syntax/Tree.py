@@ -28,6 +28,7 @@ class Node(dict):
 			while tmp.bro != None:
 				tmp = tmp.bro
 			tmp.bro = broNode
+
 class TreeUtils:
 	
 	@staticmethod

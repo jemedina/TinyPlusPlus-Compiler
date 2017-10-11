@@ -334,7 +334,7 @@ namespace Libre_IDE
             progresoDeCompilacionToolStripMenuItem.Checked = true;
         }
 
-        private TreeNode populateSintaxTree(Node root, Boolean brotherAttched=false)
+        private TreeNode populateSintaxTree(Node root, Boolean brotherAttched=false, TreeNode parent=null)
         {
             TreeNode treeNode = null;
 
@@ -343,16 +343,21 @@ namespace Libre_IDE
                 treeNode = new TreeNode(root.name);
                 for (int i = 0; i < root.sons.Count; i++)
                 {
-                    TreeNode tmpNode = populateSintaxTree(root.sons[i]);
+                    TreeNode tmpNode = populateSintaxTree(root.sons[i],false,treeNode);
+                    if(parent == null) {
+                       parent = treeNode;
+                    }
+
                     treeNode.Nodes.Add(tmpNode);
                 }
-                if (root.bro != null && brotherAttched == false)
+               
+               if (root.bro != null && brotherAttched == false)
                 {
                     Node tmp = root;
                     while (tmp.bro != null)
                     {
-                        TreeNode tmpNode = populateSintaxTree(tmp.bro, true);
-                        treeNode.Nodes.Add(tmpNode);
+                        TreeNode tmpNode = populateSintaxTree(tmp.bro, true, parent);
+                        parent.Nodes.Add(tmpNode);
                         tmp = tmp.bro;
                     }
                 }
