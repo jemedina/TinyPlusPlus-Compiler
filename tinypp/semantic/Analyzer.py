@@ -1,7 +1,7 @@
 from semantic.HashTable import *
 from os import sys
 
-STATEMENTS = [':=', 'if', 'repeat', 'while']
+STATEMENTS = [':=', 'if', 'repeat', 'while','cout','cin']
 BOOL_OPERATORS = ['>', '<', '>=', '<=', '==', '!=']
 MATH_OPERATORS = ['+', '-', '*', '/']
 ERR = 'ERR'
