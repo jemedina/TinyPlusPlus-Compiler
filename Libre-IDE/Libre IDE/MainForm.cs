@@ -379,7 +379,6 @@ namespace Libre_IDE
 
         private void populateTreeV2Semantic(TreeNode root, Node2 tree)
         {
-            Console.WriteLine(tree.name);
             for (int i = 0; i < tree.sons.Count; i++)
             {
                 string nName = tree.sons[i].name;
@@ -449,7 +448,27 @@ namespace Libre_IDE
             populateTreeV2Semantic(semanticRootNode, rootSemantic);
             semanticTreeView.Nodes.Add(semanticRootNode);
             semanticTreeView.ExpandAll();
+            //Leer hash table: hashTableTextBox
+            CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
+            Char delimiter = '.';
+            String fName = tabPage.getCodeEditor().getName().Split(delimiter)[0];
+            String fullName = tabPage.getCodeEditor().getName();
+            String path = tabPage.getCodeEditor().getPath();
+            String okPath = path.Substring(0, path.Length - fullName.Length);
+            String filePath = okPath + "/target_" + fName + "/sem/tabla.sem";
+            cargarTabla(filePath);
             
+        }
+
+        private void cargarTabla(String path)
+        {
+            hashTableTextBox.Text = "";
+            string[] lines = System.IO.File.ReadAllLines(path);
+            foreach (string line in lines)
+            {
+                //Console.WriteLine(line);
+                hashTableTextBox.AppendText(line + "\r\n");
+            }
         }
         private void runLexico()
         {
@@ -522,14 +541,13 @@ namespace Libre_IDE
             //* Read the other one synchronously
             semanticJsonText = "";
             string output = process.StandardOutput.ReadToEnd();
-            Console.Write(output);
+            //Console.Write(output);
             semanticJsonText += output;
             process.Close();
         }
         void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             string line = outLine.Data;
-            Console.WriteLine(line);
             this.BeginInvoke(new MethodInvoker(() =>
             {
                 lexerErrTextBox.AppendText(outLine.Data + "\n" ?? string.Empty);
@@ -539,7 +557,6 @@ namespace Libre_IDE
         void OutputHandlerSintax(object sendingProcess, DataReceivedEventArgs outLine)
         {
             string line = outLine.Data;
-            Console.WriteLine(line);
             this.BeginInvoke(new MethodInvoker(() =>
             {
                 sintaxErrorTextBox.AppendText(outLine.Data + "\n" ?? string.Empty);
@@ -550,7 +567,6 @@ namespace Libre_IDE
         void OutputHandlerSemantic(object sendingProcess, DataReceivedEventArgs outLine)
         {
             string line = outLine.Data;
-            Console.WriteLine(line);
             this.BeginInvoke(new MethodInvoker(() =>
             {
                 semanticErrorTextBox.AppendText(outLine.Data + "\n" ?? string.Empty);

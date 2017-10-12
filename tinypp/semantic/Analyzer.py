@@ -93,6 +93,7 @@ class Analyzer:
             #MATH OPERADORES
             elif node['name'] in MATH_OPERATORS:
                 mathVal = str(self.evalMath(node['sons'][0], node['sons'][1], node['name'], node['line']))
+                #print(mathVal + node['sons'][0],file=sys.stderr)
                 node['val'] = mathVal
                 if mathVal == ERR:
                     node['type'] = ERR
@@ -166,17 +167,28 @@ class Analyzer:
     def evalAssign(self, node1, node2):
         if node1['type'] == node2['type']:
             node1['val'] = node2['val']
-            self.tabla.setValue(node1['name'], node2['val'])
+            if self.tabla.hasKey(node1['name']):
+                self.tabla.setValue(node1['name'], node2['val'])
+            else:
+                self.semanticError("Use of undefined variable '" + node1['name'] + "'",line=node1['line'])
+
         elif node1['type'] == KIND_INT and node2['type'] == KIND_REAL:
             intVal = self.getInt(node2['val'])
             node1['val'] = intVal
-            self.tabla.setValue(node1['name'], intVal)
+            if self.tabla.hasKey(node1['name']):
+                self.tabla.setValue(node1['name'], intVal)
+            else:
+                self.semanticError("Use of undefined variable '" + node1['name'] + "'",line=node1['line'])
             if intVal == ERR:
                 self.semanticError("Can't cast <real> to <int>", line=node1['line'])
         elif node1['type'] == KIND_REAL and node2['type'] == KIND_INT:
             realVal = self.getReal(node2['val'])
             node1['val'] = realVal
-            self.tabla.setValue(node1['name'], realVal)
+            if self.tabla.hasKey(node1['name']):
+                self.tabla.setValue(node1['name'], realVal)
+            else:
+                self.semanticError("Use of undefined variable '" + node1['name'] + "'",line=node1['line'])
+
         elif node1['type'] == KIND_BOOL and node2['type'] == KIND_INT:
             boolVal = self.getBoolean(node2['val'])
             if boolVal != '0' and boolVal != '1':
@@ -187,8 +199,12 @@ class Analyzer:
                 self.tabla.setValue(node1['name'], boolVal)
         else:
             node1['val'] = ERR
-            self.tabla.setValue(node1['name'], ERR)
-            self.semanticError('<'+ node1['type'] + "> is not compatible with <" + node2['type']+">",line=node1['line'])
+            if self.tabla.hasKey(node1['name']):
+                self.tabla.setValue(node1['name'], ERR)
+                self.semanticError('<'+ node1['type'] + "> is not compatible with <" + node2['type']+">",line=node1['line'])
+            #else:
+            #    self.semanticError("Use of undefined variable '" + node1['name'] + "'",line=node1['line'])
+
     
     def evalMath(self, node1, node2, op, opline):
         if node1['type'] != KIND_BOOL and node2['type'] != KIND_BOOL:
@@ -199,18 +215,28 @@ class Analyzer:
                 b = float(self.getReal(strB)) if self.isFloat(strB) else int(self.getInt(strB))
 
                 if op == '+':
-                    return a+b
+                    if node1['type'] == KIND_INT and node2['type'] == KIND_INT:
+                        return self.parseInt(a+b)
+                    else:
+                        return a+b
                 elif op == '-':
-                    return a-b
+                    if node1['type'] == KIND_INT and node2['type'] == KIND_INT:
+                        return self.parseInt(a-b)
+                    else:
+                        return a-b
                 elif op == '*':
-                    return a*b
+                    if node1['type'] == KIND_INT and node2['type'] == KIND_INT:
+                        return self.parseInt(a*b)
+                    else:
+                        return a*b
                 elif op == '/':
                     if b == 0:
                         self.semanticError("Can't divide by zero!", line=opline)
                         return ERR
-                    return a/b
-                else:
-                    return ERR
+                    if node1['type'] == KIND_INT and node2['type'] == KIND_INT:
+                        return self.parseInt(a/b)
+                    else:
+                        return a/b
             else:
                 return ERR
         else:
@@ -228,6 +254,8 @@ class Analyzer:
         else: #<, >, <=, >= para numeros:
             strA = str(node1['val'])
             strB = str(node2['val'])
+            if strA==ERR or strB ==ERR:
+                return ERR
             a = float(self.getReal(strA)) if self.isFloat(strA) else int(self.getInt(strA))
             b = float(self.getReal(strB)) if self.isFloat(strB) else int(self.getInt(strB))
             if op == '>':
@@ -242,6 +270,12 @@ class Analyzer:
         strVal = str(value)
         if '.' in strVal:
             return ERR
+        else:
+            return strVal
+    def parseInt(self, value):
+        strVal = str(value)
+        if '.' in strVal:
+            return strVal.split(".")[0]
         else:
             return strVal
 
