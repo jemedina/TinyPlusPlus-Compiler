@@ -20,6 +20,7 @@ namespace Libre_IDE
         private Point _imgHitArea = new Point(13, 2);
         private const string BASE_PATH = "C:\\Users\\";
         private String sintaxJsonText;
+        private String semanticJsonText;
         public MainForm()
         {
             InitializeComponent();
@@ -376,17 +377,79 @@ namespace Libre_IDE
             }
         }
 
+        private void populateTreeV2Semantic(TreeNode root, Node2 tree)
+        {
+            Console.WriteLine(tree.name);
+            for (int i = 0; i < tree.sons.Count; i++)
+            {
+                string nName = tree.sons[i].name;
+                String attrs = "";
+                if (tree.sons[i].type != null)
+                {
+                    attrs += " (type=" + tree.sons[i].type;
+                    
+                }
+                if (tree.sons[i].val != null)
+                {
+                    attrs += ", val=" + tree.sons[i].val;
+                }
+                if (attrs != "")
+                {
+                    attrs += ")";
+                }
+
+                TreeNode newNode = new TreeNode(nName+attrs);
+                root.Nodes.Add(newNode);
+                populateTreeV2Semantic(newNode, tree.sons[i]);
+            }
+            if (tree.bro != null)
+            {
+                string nName = tree.bro.name;
+                String attrs = "";
+                if (tree.bro.type != null)
+                {
+                    attrs += " (type=" + tree.bro.type;
+                    
+                }
+                if (tree.bro.val != null)
+                {
+                    attrs += ", val=" + tree.bro.val;
+                }
+                if (attrs != "")
+                {
+                    attrs += ")";
+                }
+
+                TreeNode newNode = new TreeNode(nName + attrs);
+
+                root.Parent.Nodes.Add(newNode);
+                populateTreeV2Semantic(newNode, tree.bro);
+            }
+        }
+
         private void runLexico(object sender, EventArgs e)
         {
             runLexico();
             runSintactico();
+            runSemantico();
+
             sintaxTreeView.Nodes.Clear();
+            semanticTreeView.Nodes.Clear();
+            //READ SINTAX TREE
             Node root = JsonConvert.DeserializeObject<Node>(sintaxJsonText);
             //TreeNode rootNode = populateSintaxTree(root);
             TreeNode rootNode = new TreeNode(root.name);
             populateTreeV2(rootNode, root);
             sintaxTreeView.Nodes.Add(rootNode);
             sintaxTreeView.ExpandAll();
+            //READ SEMANTIC TREE
+            Node2 rootSemantic = JsonConvert.DeserializeObject<Node2>(semanticJsonText);
+            //TreeNode rootNode = populateSintaxTree(root);
+            TreeNode semanticRootNode = new TreeNode(rootSemantic.name);
+            populateTreeV2Semantic(semanticRootNode, rootSemantic);
+            semanticTreeView.Nodes.Add(semanticRootNode);
+            semanticTreeView.ExpandAll();
+            
         }
         private void runLexico()
         {
@@ -437,6 +500,32 @@ namespace Libre_IDE
             sintaxJsonText += output;
             process.Close();
         }
+
+        private void runSemantico()
+        {
+            CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
+            Process process = new Process();
+            semanticErrorTextBox.Text = "";
+            CheckForIllegalCrossThreadCalls = false;
+            process.StartInfo.FileName = @"cmd";
+            process.StartInfo.Arguments = "/c tiny -c \"" + tabPage.getCodeEditor().getPath() + "\"";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+
+
+            process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandlerSemantic);
+            process.Start();
+            //* Read one element asynchronously
+            process.BeginErrorReadLine();
+            //* Read the other one synchronously
+            semanticJsonText = "";
+            string output = process.StandardOutput.ReadToEnd();
+            Console.Write(output);
+            semanticJsonText += output;
+            process.Close();
+        }
         void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             string line = outLine.Data;
@@ -454,6 +543,17 @@ namespace Libre_IDE
             this.BeginInvoke(new MethodInvoker(() =>
             {
                 sintaxErrorTextBox.AppendText(outLine.Data + "\n" ?? string.Empty);
+            }));
+
+        }
+
+        void OutputHandlerSemantic(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            string line = outLine.Data;
+            Console.WriteLine(line);
+            this.BeginInvoke(new MethodInvoker(() =>
+            {
+                semanticErrorTextBox.AppendText(outLine.Data + "\n" ?? string.Empty);
             }));
 
         }
@@ -480,8 +580,17 @@ namespace Libre_IDE
 
     class Node : object
     {
-        public String name {get ; set;}
+        public String name { get; set; }
         public Node bro { get; set; }
-        public List<Node> sons {get;set;}
+        public List<Node> sons { get; set; }
+    }
+    class Node2 : object
+    {
+        public String name { get; set; }
+        public Node2 bro { get; set; }
+        public List<Node2> sons { get; set; }
+        public string type { get; set; }
+        public string line { get; set; }
+        public string val { get; set; }
     }
 }

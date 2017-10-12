@@ -84,6 +84,7 @@
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.semanticTreeView = new System.Windows.Forms.TreeView();
+            this.semanticErrorTextBox = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -109,6 +110,7 @@
             this.tabControl2.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.tabPage8.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -613,6 +615,7 @@
             // 
             // tabPage8
             // 
+            this.tabPage8.Controls.Add(this.semanticErrorTextBox);
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
@@ -680,10 +683,25 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.semanticTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.semanticTreeView.Location = new System.Drawing.Point(4, 5);
+            this.semanticTreeView.Location = new System.Drawing.Point(3, 6);
             this.semanticTreeView.Name = "semanticTreeView";
             this.semanticTreeView.Size = new System.Drawing.Size(326, 331);
             this.semanticTreeView.TabIndex = 2;
+            // 
+            // semanticErrorTextBox
+            // 
+            this.semanticErrorTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.semanticErrorTextBox.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.semanticErrorTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
+            this.semanticErrorTextBox.ForeColor = System.Drawing.Color.Red;
+            this.semanticErrorTextBox.Location = new System.Drawing.Point(3, 1);
+            this.semanticErrorTextBox.Name = "semanticErrorTextBox";
+            this.semanticErrorTextBox.ReadOnly = true;
+            this.semanticErrorTextBox.Size = new System.Drawing.Size(981, 96);
+            this.semanticErrorTextBox.TabIndex = 1;
+            this.semanticErrorTextBox.Text = "";
             // 
             // MainForm
             // 
@@ -727,6 +745,7 @@
             this.tabControl2.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
+            this.tabPage8.ResumeLayout(false);
             this.statusBar.ResumeLayout(false);
             this.statusBar.PerformLayout();
             this.ResumeLayout(false);
@@ -791,6 +810,7 @@
         private System.Windows.Forms.RichTextBox sintaxErrorTextBox;
         private System.Windows.Forms.TreeView sintaxTreeView;
         private System.Windows.Forms.TreeView semanticTreeView;
+        private System.Windows.Forms.RichTextBox semanticErrorTextBox;
     }
 }
 

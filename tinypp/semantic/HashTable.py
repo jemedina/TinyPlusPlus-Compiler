@@ -53,4 +53,14 @@ class HashTable:
 			#print("{:<8} {:<50} {:<10}".format(k, label, num))
 			print("│{:<8}".format(item[0]) + str(item[1]))
 			print("┼"+("─"*8)+"┼"+("─"*50)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼")
+
+	def fileDisplayTable(self,fil):
+		print("┼"+("─"*8)+"┼"+("─"*50)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼",file=fil)
+		print("│{:<8}│{:<50}│{:<15}│{:<15}│{:<10}│".format('ID','Lines','Value','Mem','Type'),file=fil)
+		
+		print("┼"+("─"*8)+"┼"+("─"*50)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼",file=fil)
+		for item in self.table.items():
+			#print("{:<8} {:<50} {:<10}".format(k, label, num),file=fil)
+			print("│{:<8}".format(item[0]) + str(item[1]),file=fil)
+			print("┼"+("─"*8)+"┼"+("─"*50)+"┼"+("─"*15)+"┼"+("─"*15)+"┼"+("─"*10)+"┼",file=fil)
 		
