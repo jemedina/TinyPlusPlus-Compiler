@@ -1,7 +1,8 @@
 from semantic.HashTable import *
 from os import sys
+import json
 
-STATEMENTS = [':=', 'if', 'repeat', 'while']
+STATEMENTS = [':=', 'if', 'repeat', 'while','cout','cin']
 BOOL_OPERATORS = ['>', '<', '>=', '<=', '==', '!=']
 MATH_OPERATORS = ['+', '-', '*', '/']
 ERR = 'ERR'
@@ -12,25 +13,47 @@ class Analyzer:
     def __init__(self, tree):
         self.tree=tree
         self.tabla=HashTable()
-        self.preorder(self.tree.sons[0])
-        self.posorder(self.tree.sons[1])
-        TreeUtils.cliDisplay(self.tree)
-        self.tabla.cliDisplayTable()
+        self.err = ""
+        self.std = ""
+        if len(self.tree['sons']) > 1:
+            self.preorder(self.tree['sons'][0])
+            self.posorder(self.tree['sons'][1])
+        else:
+            if self.tree['sons'][0]['name'] in [KIND_REAL,KIND_BOOL,KIND_INT]:
+                self.preorder(self.tree['sons'][0])
+            else:
+                self.posorder(self.tree['sons'][0])
+                
+        #self.tabla.cliDisplayTable()
 
+    def mockTree(self):
+        self.mock(self.tree)
+
+    def mock(self,root):
+        if not 'type' in root:
+            root['type'] = None
+        if not 'val' in root:
+            root['val'] = None
+        if not 'line' in root:
+            root['line'] = None
+        for son in root['sons']:
+            self.mock(son)
+        if root['bro'] != None:
+            self.mock(root['bro'])
 
     def preorder(self, node):
-        for i in range(len(node.sons)):
-            node.sons[i].type = node.name
+        for i in range(len(node['sons'])):
+            node['sons'][i]['type'] = node['name']
             #Avoid variable redeclaration
-            if self.tabla.hasKey(node.sons[i].name):
-            	self.semanticError("Variable '"+node.sons[i].name+"' was already declared",line=node.sons[i].line)
+            if self.tabla.hasKey(node['sons'][i]['name']):
+            	self.semanticError("Variable '"+node['sons'][i]['name']+"' was already declared",line=node['sons'][i]['line'])
             else:
-            	self.tabla.add(node.sons[i].name,node.sons[i].line,None,node.name)
-        if node.bro != None:
-            self.preorder(node.bro)
+            	self.tabla.add(node['sons'][i]['name'],node['sons'][i]['line'],None,node['name'])
+        if node['bro'] != None:
+            self.preorder(node['bro'])
 
     def posorder(self, node):
-        for son in node.sons:
+        for son in node['sons']:
             self.posorder(son)
         #Leer el nombre del nodo
         ''' Dependiendo del nombre del nodo puede pasar lo siguiente:
@@ -41,7 +64,7 @@ class Analyzer:
                     *Verificar que el no-identificador sea compatible con el tipo de dato
                 Si los dos hijos son no-identificadores:
                     *Verificar que sean compatibles entre si
-                    *Asignar node.value = el resultado del operador logico
+                    *Asignar node['val']ue = el resultado del operador logico
  
             Si es "+, -, *, /":
                 Si los dos hijos son identificadores entonces:
@@ -50,14 +73,14 @@ class Analyzer:
                     *Verificar que el no-identificador sea compatible con el tipo de dato
                 Si los dos hijos son no-identificadores:
                     *Verificar que sean compatibles entre si
-                    *Asignar node.value = el resultado del operador aritmetico
+                    *Asignar node['val']ue = el resultado del operador aritmetico
         NOTA: Si se encuentra el uso de alguna variable no 
         definida dentreo de este recorrido, lanzar un error
         de variable no definida
 
         '''
 
-        '''for son in node.sons:
+        '''for son in node['sons']:
             if self.isStatement(son):
                 self.posorder(son)
             else:
@@ -65,73 +88,75 @@ class Analyzer:
 
         if self.isStatement(node):
             #ASIGNACIONES
-            if node.name == ':=':
-                self.evalAssign(node.sons[0], node.sons[1])
+            if node['name'] == ':=':
+                self.evalAssign(node['sons'][0], node['sons'][1])
             #MATH OPERADORES
-            elif node.name in MATH_OPERATORS:
-                mathVal = str(self.evalMath(node.sons[0], node.sons[1], node.name, node.line))
-                node.val = mathVal
+            elif node['name'] in MATH_OPERATORS:
+                mathVal = str(self.evalMath(node['sons'][0], node['sons'][1], node['name'], node['line']))
+                #print(mathVal + node['sons'][0],file=sys.stderr)
+                node['val'] = mathVal
                 if mathVal == ERR:
-                    node.type = ERR
+                    node['type'] = ERR
                 elif self.isFloat(mathVal):
-                    node.type = KIND_REAL
+                    node['type'] = KIND_REAL
                 else:
-                    node.type = KIND_INT
+                    node['type'] = KIND_INT
             #BOOL OPERADORES
-            elif node.name in BOOL_OPERATORS:
-                boolVal = str(self.evalBool(node.sons[0], node.sons[1], node.name, node.line))
-                node.type = KIND_BOOL
-                node.val = boolVal
-            elif node.name in ['if', 'while']:
-                self.verifyBooleanExpresion(node.sons[0])
-            elif node.name in ['repeat']:
-                self.verifyBooleanExpresion(node.sons[1])
+            elif node['name'] in BOOL_OPERATORS:
+                boolVal = str(self.evalBool(node['sons'][0], node['sons'][1], node['name'], node['line']))
+                node['type'] = KIND_BOOL
+                node['val'] = boolVal
+            elif node['name'] in ['if', 'while']:
+                self.verifyBooleanExpresion(node['sons'][0])
+            elif node['name'] in ['repeat']:
+                self.verifyBooleanExpresion(node['sons'][1])
         else:
             self.assignAttrs(node)
 
         #Rama completada, ir con el hermano
-        if(node.bro != None):
-            self.posorder(node.bro)
+        if(node['bro'] != None):
+            self.posorder(node['bro'])
 
     def verifyBooleanExpresion(self, node):
-        if node.type != KIND_BOOL:
-            node.val = ERR
+        if node['type'] != KIND_BOOL:
+            node['val'] = ERR
 
     def semanticError(self,message,line=None):
-    	errMsg = "Semantic Error [" + message +"]" + ((" at line: "+line) if line != None else "")
-    	print(errMsg, file=sys.stderr)
+        errMsg = "Semantic Error [" + message +"]" + ((" at line: "+line) if line != None else "")
+        self.err += errMsg+"\n"
+        print(errMsg, file=sys.stderr)
 
     def isStatement(self, node):
-        return node.name != None and node.name != "" and \
-            node.name in STATEMENTS or \
-            node.name in BOOL_OPERATORS or \
-            node.name in MATH_OPERATORS
+        return node['name'] != None and node['name'] != "" and \
+            node['name'] in STATEMENTS or \
+            node['name'] in BOOL_OPERATORS or \
+            node['name'] in MATH_OPERATORS
 
     def assignAttrs(self, node):
-        if node.name == 'error':
-            node.type = 'syntax error'
-            node.val = 'syntax error'
-        elif node.name.isalpha():
-            if self.tabla.hasKey(node.name):
-                self.tabla.addLine(node.name, node.line)
-                var = self.tabla.getKey(node.name)
+        if node['name'] == 'error':
+            node['type'] = 'syntax error'
+            node['val'] = 'syntax error'
+        elif node['name'].isalpha():
+            if self.tabla.hasKey(node['name']):
+                self.tabla.addLine(node['name'], node['line'])
+                var = self.tabla.getKey(node['name'])
                 if var.getValue() != '<none>':
-                    node.val = var.getValue()
-                    node.type = var.type
+                    node['val'] = var.getValue()
+                    node['type'] = var.type
                 else:
-                    node.type = var.type
-                    node.val = '0'
+                    node['type'] = var.type
+                    node['val'] = '0'
             else:
-                self.semanticError("Use of undefined variable '" + node.name + "'",line=node.line)
-                node.val = ERR
-                node.type = ERR
+                self.semanticError("Use of undefined variable '" + node['name'] + "'",line=node['line'])
+                node['val'] = ERR
+                node['type'] = ERR
 
-        elif self.isFloat(node.name):
-            node.type = 'real'
-            node.val = node.name
-        elif node.name.isdigit():
-            node.type = 'int'
-            node.val = node.name
+        elif self.isFloat(node['name']):
+            node['type'] = 'real'
+            node['val'] = node['name']
+        elif node['name'].isdigit():
+            node['type'] = 'int'
+            node['val'] = node['name']
 
     def isFloat(self, strs):
         try:
@@ -140,53 +165,78 @@ class Analyzer:
             return False
 
     def evalAssign(self, node1, node2):
-        if node1.type == node2.type:
-            node1.val = node2.val
-            self.tabla.setValue(node1.name, node2.val)
-        elif node1.type == KIND_INT and node2.type == KIND_REAL:
-            intVal = self.getInt(node2.val)
-            node1.val = intVal
-            self.tabla.setValue(node1.name, intVal)
-            if intVal == ERR:
-                self.semanticError("Can't cast <real> to <int>", line=node1.line)
-        elif node1.type == KIND_REAL and node2.type == KIND_INT:
-            realVal = self.getReal(node2.val)
-            node1.val = realVal
-            self.tabla.setValue(node1.name, realVal)
-        elif node1.type == KIND_BOOL and node2.type == KIND_INT:
-            boolVal = self.getBoolean(node2.val)
-            if boolVal != '0' and boolVal != '1':
-                self.semanticError("Unable to cast <int> to <boolean>",line=node1.line)
-                node1.val = ERR
+        if node1['type'] == node2['type']:
+            node1['val'] = node2['val']
+            if self.tabla.hasKey(node1['name']):
+                self.tabla.setValue(node1['name'], node2['val'])
             else:
-                node1.val = boolVal
-                self.tabla.setValue(node1.name, boolVal)
+                self.semanticError("Use of undefined variable '" + node1['name'] + "'",line=node1['line'])
+
+        elif node1['type'] == KIND_INT and node2['type'] == KIND_REAL:
+            intVal = self.getInt(node2['val'])
+            node1['val'] = intVal
+            if self.tabla.hasKey(node1['name']):
+                self.tabla.setValue(node1['name'], intVal)
+            else:
+                self.semanticError("Use of undefined variable '" + node1['name'] + "'",line=node1['line'])
+            if intVal == ERR:
+                self.semanticError("Can't cast <real> to <int>", line=node1['line'])
+        elif node1['type'] == KIND_REAL and node2['type'] == KIND_INT:
+            realVal = self.getReal(node2['val'])
+            node1['val'] = realVal
+            if self.tabla.hasKey(node1['name']):
+                self.tabla.setValue(node1['name'], realVal)
+            else:
+                self.semanticError("Use of undefined variable '" + node1['name'] + "'",line=node1['line'])
+
+        elif node1['type'] == KIND_BOOL and node2['type'] == KIND_INT:
+            boolVal = self.getBoolean(node2['val'])
+            if boolVal != '0' and boolVal != '1':
+                self.semanticError("Unable to cast <int> to <boolean>",line=node1['line'])
+                node1['val'] = ERR
+            else:
+                node1['val'] = boolVal
+                self.tabla.setValue(node1['name'], boolVal)
         else:
-            node1.val = ERR
-            self.tabla.setValue(node1.name, ERR)
-            self.semanticError('<'+ node1.type + "> is not compatible with <" + node2.type+">",line=node1.line)
+            node1['val'] = ERR
+            if self.tabla.hasKey(node1['name']):
+                self.tabla.setValue(node1['name'], ERR)
+                self.semanticError('<'+ node1['type'] + "> is not compatible with <" + node2['type']+">",line=node1['line'])
+            #else:
+            #    self.semanticError("Use of undefined variable '" + node1['name'] + "'",line=node1['line'])
+
     
     def evalMath(self, node1, node2, op, opline):
-        if node1.type != KIND_BOOL and node2.type != KIND_BOOL:
-            if node1.val != ERR and node2.val != ERR:
-                strA = str(node1.val)
-                strB = str(node2.val)
+        if node1['type'] != KIND_BOOL and node2['type'] != KIND_BOOL:
+            if node1['val'] != ERR and node2['val'] != ERR:
+                strA = str(node1['val'])
+                strB = str(node2['val'])
                 a = float(self.getReal(strA)) if self.isFloat(strA) else int(self.getInt(strA))
                 b = float(self.getReal(strB)) if self.isFloat(strB) else int(self.getInt(strB))
 
                 if op == '+':
-                    return a+b
+                    if node1['type'] == KIND_INT and node2['type'] == KIND_INT:
+                        return self.parseInt(a+b)
+                    else:
+                        return a+b
                 elif op == '-':
-                    return a-b
+                    if node1['type'] == KIND_INT and node2['type'] == KIND_INT:
+                        return self.parseInt(a-b)
+                    else:
+                        return a-b
                 elif op == '*':
-                    return a*b
+                    if node1['type'] == KIND_INT and node2['type'] == KIND_INT:
+                        return self.parseInt(a*b)
+                    else:
+                        return a*b
                 elif op == '/':
                     if b == 0:
                         self.semanticError("Can't divide by zero!", line=opline)
                         return ERR
-                    return a/b
-                else:
-                    return ERR
+                    if node1['type'] == KIND_INT and node2['type'] == KIND_INT:
+                        return self.parseInt(a/b)
+                    else:
+                        return a/b
             else:
                 return ERR
         else:
@@ -194,16 +244,18 @@ class Analyzer:
             return ERR
 
     def evalBool(self, node1, node2, op, opline):
-        if op != '==' and op != '!=' and (node1.type == KIND_BOOL or node2.type == KIND_BOOL):
+        if op != '==' and op != '!=' and (node1['type'] == KIND_BOOL or node2['type'] == KIND_BOOL):
             self.semanticError("The operator '"+op+"' can't be used with booleans",line=opline)
             return ERR
         elif op == '==':
-            return '1' if node1.val == node2.val else '0'
+            return '1' if node1['val'] == node2['val'] else '0'
         elif op == '!=':
-            return '1' if node1.val != node2.val else '0'
+            return '1' if node1['val'] != node2['val'] else '0'
         else: #<, >, <=, >= para numeros:
-            strA = str(node1.val)
-            strB = str(node2.val)
+            strA = str(node1['val'])
+            strB = str(node2['val'])
+            if strA==ERR or strB ==ERR:
+                return ERR
             a = float(self.getReal(strA)) if self.isFloat(strA) else int(self.getInt(strA))
             b = float(self.getReal(strB)) if self.isFloat(strB) else int(self.getInt(strB))
             if op == '>':
@@ -218,6 +270,12 @@ class Analyzer:
         strVal = str(value)
         if '.' in strVal:
             return ERR
+        else:
+            return strVal
+    def parseInt(self, value):
+        strVal = str(value)
+        if '.' in strVal:
+            return strVal.split(".")[0]
         else:
             return strVal
 
@@ -250,15 +308,15 @@ class TreeUtils:
 					tabSpace=(hierarchy*"│")+"└"
 			if std:
                             attrs=''
-                            if hasattr(root,'type'):
-                                attrs = " (type="+root.type
-                            if hasattr(root,'val'):
-                                attrs += ", val="+str(root.val)
+                            if 'type' in root:
+                                attrs = " (type="+root['type']
+                            if 'val' in root:
+                                attrs += ", val="+str(root['val'])
                             attrs = (attrs + ")") if attrs != '' else ''
-                            print(tabSpace+root.name + attrs)
-			outFile.write(tabSpace+root.name)
+                            print(tabSpace+root['name'] + attrs)
+			outFile.write(tabSpace+root['name'])
 			outFile.write("\n")
-			for i in range(len(root.sons)):
-				TreeUtils.cliDisplay(root.sons[i],tabSpace,hierarchy+1,lastSon=(i==len(root.sons)-1),outFile=outFile,std=std)
-			if root.bro != None:
-				TreeUtils.cliDisplay(root.bro,tabSpace,hierarchy,isBrotherNode=True,outFile=outFile,std=std)
+			for i in range(len(root['sons'])):
+				TreeUtils.cliDisplay(root['sons'][i],tabSpace,hierarchy+1,lastSon=(i==len(root['sons'])-1),outFile=outFile,std=std)
+			if root['bro'] != None:
+				TreeUtils.cliDisplay(root['bro'],tabSpace,hierarchy,isBrotherNode=True,outFile=outFile,std=std)

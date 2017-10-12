@@ -23,8 +23,8 @@ def sintactic(file,outputType):
     syntax= Syntax(file,outputType)
     syntax.go(file)
     
-def semantic(file):
-    semantic = Semantic(file)
+def semantic(file,isCli=False):
+    semantic = Semantic(file,isCli)
 
 if __name__ == "__main__":
     #Check if by less we have 'python tinypp.py <other_argument>
@@ -52,7 +52,7 @@ if __name__ == "__main__":
             print(SINTAX_SECTION_LABEL)
             sintactic(filename, Syntax.TYPE_TREE)
             print(SEMANTIC_SECTION_LABEL)
-            semantic(filename)
+            semantic(filename,True)
 
     else:
         error_cmd()
