@@ -78,13 +78,13 @@
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.semanticErrorTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.hashTableTextBox = new System.Windows.Forms.RichTextBox();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.statusLinesLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusColsLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSpacement1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.hashTableTextBox = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -651,6 +651,22 @@
             this.tabPage9.Text = "Tabla Hash";
             this.tabPage9.UseVisualStyleBackColor = true;
             // 
+            // hashTableTextBox
+            // 
+            this.hashTableTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.hashTableTextBox.BackColor = System.Drawing.SystemColors.MenuText;
+            this.hashTableTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hashTableTextBox.ForeColor = System.Drawing.SystemColors.Menu;
+            this.hashTableTextBox.Location = new System.Drawing.Point(3, 0);
+            this.hashTableTextBox.Name = "hashTableTextBox";
+            this.hashTableTextBox.ReadOnly = true;
+            this.hashTableTextBox.Size = new System.Drawing.Size(972, 96);
+            this.hashTableTextBox.TabIndex = 0;
+            this.hashTableTextBox.Text = "";
+            this.hashTableTextBox.WordWrap = false;
+            // 
             // statusBar
             // 
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -693,21 +709,6 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.ShowImageMargin = false;
             this.contextMenuStrip1.Size = new System.Drawing.Size(36, 4);
-            // 
-            // hashTableTextBox
-            // 
-            this.hashTableTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.hashTableTextBox.BackColor = System.Drawing.SystemColors.MenuText;
-            this.hashTableTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hashTableTextBox.ForeColor = System.Drawing.SystemColors.Menu;
-            this.hashTableTextBox.Location = new System.Drawing.Point(3, 0);
-            this.hashTableTextBox.Name = "hashTableTextBox";
-            this.hashTableTextBox.ReadOnly = true;
-            this.hashTableTextBox.Size = new System.Drawing.Size(972, 96);
-            this.hashTableTextBox.TabIndex = 0;
-            this.hashTableTextBox.Text = "";
             // 
             // MainForm
             // 
