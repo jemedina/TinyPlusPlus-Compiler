@@ -19,10 +19,11 @@ class Analyzer:
             self.preorder(self.tree['sons'][0])
             self.posorder(self.tree['sons'][1])
         else:
-            if self.tree['sons'][0]['name'] in [KIND_REAL,KIND_BOOL,KIND_INT]:
-                self.preorder(self.tree['sons'][0])
-            else:
-                self.posorder(self.tree['sons'][0])
+            if len(self.tree['sons']) == 1:
+                if self.tree['sons'][0]['name'] in [KIND_REAL,KIND_BOOL,KIND_INT]:
+                    self.preorder(self.tree['sons'][0])
+                else:
+                    self.posorder(self.tree['sons'][0])
                 
         #self.tabla.cliDisplayTable()
 
