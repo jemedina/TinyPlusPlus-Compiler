@@ -248,9 +248,15 @@ class Analyzer:
             self.semanticError("The operator '"+op+"' can't be used with booleans",line=opline)
             return ERR
         elif op == '==':
-            return '1' if node1['val'] == node2['val'] else '0'
+            if node1['val'] == ERR or node2['val'] == ERR:
+                return ERR
+            else:
+                return '1' if node1['val'] == node2['val'] else '0'
         elif op == '!=':
-            return '1' if node1['val'] != node2['val'] else '0'
+            if node1['val'] == ERR or node2['val'] == ERR:
+                return ERR
+            else:
+                return '1' if node1['val'] != node2['val'] else '0'
         else: #<, >, <=, >= para numeros:
             strA = str(node1['val'])
             strB = str(node2['val'])
@@ -259,13 +265,25 @@ class Analyzer:
             a = float(self.getReal(strA)) if self.isFloat(strA) else int(self.getInt(strA))
             b = float(self.getReal(strB)) if self.isFloat(strB) else int(self.getInt(strB))
             if op == '>':
-                return '1' if a > b else '0'
+                if node1['val'] == ERR or node2['val'] == ERR:
+                    return ERR
+                else:
+                    return '1' if a > b else '0'
             elif op == '<':
-                return '1' if a < b else '0'
+                if node1['val'] == ERR or node2['val'] == ERR:
+                    return ERR
+                else:
+                    return '1' if a < b else '0'
             elif op == '>=':
-                return '1' if a >= b else '0'
+                if node1['val'] == ERR or node2['val'] == ERR:
+                    return ERR
+                else:    
+                    return '1' if a >= b else '0'
             elif op == '<=':
-                return '1' if a <= b else '0'
+                if node1['val'] == ERR or node2['val'] == ERR:
+                    return ERR
+                else: 
+                    return '1' if a <= b else '0'
     def getInt(self, value):
         strVal = str(value)
         if '.' in strVal:
