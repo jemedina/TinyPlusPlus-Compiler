@@ -68,7 +68,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.sintaxTreeView = new System.Windows.Forms.TreeView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.semanticTreeView = new System.Windows.Forms.TreeView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -76,7 +76,9 @@
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.sintaxErrorTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.semanticErrorTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.hashTableTextBox = new System.Windows.Forms.RichTextBox();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.statusLinesLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusColsLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -104,9 +106,12 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.tabPage9.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -458,7 +463,6 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Location = new System.Drawing.Point(2, 3);
             this.tabControl1.Name = "tabControl1";
@@ -514,6 +518,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.semanticTreeView);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -522,15 +527,16 @@
             this.tabPage3.Text = "Semantico";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // tabPage4
+            // semanticTreeView
             // 
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(335, 340);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Hash Table";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.semanticTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.semanticTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.semanticTreeView.Location = new System.Drawing.Point(3, 6);
+            this.semanticTreeView.Name = "semanticTreeView";
+            this.semanticTreeView.Size = new System.Drawing.Size(326, 331);
+            this.semanticTreeView.TabIndex = 2;
             // 
             // tabPage5
             // 
@@ -610,6 +616,7 @@
             // 
             // tabPage8
             // 
+            this.tabPage8.Controls.Add(this.semanticErrorTextBox);
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
@@ -618,15 +625,47 @@
             this.tabPage8.Text = "Errores Semanticos";
             this.tabPage8.UseVisualStyleBackColor = true;
             // 
+            // semanticErrorTextBox
+            // 
+            this.semanticErrorTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.semanticErrorTextBox.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.semanticErrorTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
+            this.semanticErrorTextBox.ForeColor = System.Drawing.Color.Red;
+            this.semanticErrorTextBox.Location = new System.Drawing.Point(3, 1);
+            this.semanticErrorTextBox.Name = "semanticErrorTextBox";
+            this.semanticErrorTextBox.ReadOnly = true;
+            this.semanticErrorTextBox.Size = new System.Drawing.Size(981, 96);
+            this.semanticErrorTextBox.TabIndex = 1;
+            this.semanticErrorTextBox.Text = "";
+            // 
             // tabPage9
             // 
+            this.tabPage9.Controls.Add(this.hashTableTextBox);
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage9.Size = new System.Drawing.Size(981, 93);
             this.tabPage9.TabIndex = 3;
-            this.tabPage9.Text = "Resultados";
+            this.tabPage9.Text = "Tabla Hash";
             this.tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // hashTableTextBox
+            // 
+            this.hashTableTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.hashTableTextBox.BackColor = System.Drawing.SystemColors.MenuText;
+            this.hashTableTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hashTableTextBox.ForeColor = System.Drawing.SystemColors.Menu;
+            this.hashTableTextBox.Location = new System.Drawing.Point(3, 0);
+            this.hashTableTextBox.Name = "hashTableTextBox";
+            this.hashTableTextBox.ReadOnly = true;
+            this.hashTableTextBox.Size = new System.Drawing.Size(972, 96);
+            this.hashTableTextBox.TabIndex = 0;
+            this.hashTableTextBox.Text = "";
+            this.hashTableTextBox.WordWrap = false;
             // 
             // statusBar
             // 
@@ -709,9 +748,12 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
+            this.tabPage8.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
             this.statusBar.ResumeLayout(false);
             this.statusBar.PerformLayout();
             this.ResumeLayout(false);
@@ -748,7 +790,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripSpacement1;
         private System.Windows.Forms.ToolStripStatusLabel statusLinesLabel;
         private System.Windows.Forms.ToolStripStatusLabel statusColsLabel;
-        private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage6;
@@ -775,6 +816,9 @@
         private System.Windows.Forms.RichTextBox lexerErrTextBox;
         private System.Windows.Forms.RichTextBox sintaxErrorTextBox;
         private System.Windows.Forms.TreeView sintaxTreeView;
+        private System.Windows.Forms.TreeView semanticTreeView;
+        private System.Windows.Forms.RichTextBox semanticErrorTextBox;
+        private System.Windows.Forms.RichTextBox hashTableTextBox;
     }
 }
 

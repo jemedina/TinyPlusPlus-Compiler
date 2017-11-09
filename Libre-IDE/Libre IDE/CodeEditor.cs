@@ -167,6 +167,7 @@ namespace Libre_IDE
             StreamReader reader = new StreamReader(path);
             this.Text = reader.ReadToEnd();
             this.fileName = Path.GetFileName(path);
+            
             reader.Close();
 
         }

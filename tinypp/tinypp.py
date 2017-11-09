@@ -1,12 +1,15 @@
 import sys
 from lexer.Lexer import *
 from syntax.Syntax import *
+from semantic.Semantic import *
 
 SINTAX_RUNMODE = "-s"
 LEXIC_RUNMODE = "-l"
+SEMANTIC_RUNMODE = "-c"
 
 LEXIC_SECTION_LABEL = ("="*30)+" LEXIC "+("="*30)
 SINTAX_SECTION_LABEL =("="*30)+" SYNTAX "+("="*30)
+SEMANTIC_SECTION_LABEL =("="*30)+" SEMANTIC "+("="*30)
 
 def error_cmd():
     print("Invalid tinypp command...")
@@ -20,8 +23,12 @@ def sintactic(file,outputType):
     syntax= Syntax(file,outputType)
     syntax.go(file)
     
+def semantic(file,isCli=False):
+    semantic = Semantic(file,isCli)
+
 if __name__ == "__main__":
     #Check if by less we have 'python tinypp.py <other_argument>
+    #sys.argv = ['C:\\Users\\Eduardo\\Dev\\TinyPlusPlus-Compiler\\tinypp/tinypp.py',"C:\\Users\\Eduardo\\Desktop\\test.txt"]
     if len(sys.argv) > 1:
         ''' Get the command parameters '''
         runmode = sys.argv[1] # -l (Lexic) | -s (Sintax) | <none> (All)
@@ -36,11 +43,16 @@ if __name__ == "__main__":
                 sintactic(sys.argv[2],sys.argv[3])
             else:
                 sintactic(sys.argv[2],Syntax.TYPE_JSON)
+        elif runmode == SEMANTIC_RUNMODE and len(sys.argv) > 2:
+            semantic(sys.argv[2])
         else: # Run all
             filename = sys.argv[1]
             print(LEXIC_SECTION_LABEL)
             lexic(filename)
             print(SINTAX_SECTION_LABEL)
             sintactic(filename, Syntax.TYPE_TREE)
+            print(SEMANTIC_SECTION_LABEL)
+            semantic(filename,True)
+
     else:
         error_cmd()

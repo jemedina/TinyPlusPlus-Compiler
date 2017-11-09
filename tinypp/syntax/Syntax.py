@@ -109,7 +109,7 @@ class Syntax:
 			self.tokensHelper.checkInput(sync,_p_programa,displayErrors=False)
 			self.tokensHelper.manageErrors()
 			self.tokensHelper.printErrors(errFile)
-			jsonDumpString = json.dumps(self.root.__dict__, indent=4, sort_keys=False)
+			jsonDumpString = json.dumps(self.root.__dict__, indent=2, sort_keys=False)
 			print(jsonDumpString,file = jsonFile)
 			if self.outputType == "json":
 				print(jsonDumpString)
@@ -225,7 +225,7 @@ class Syntax:
 		if not self.tokensHelper.getCurrentToken().content in sync:
 			rel = self.tokensHelper.getCurrentToken().content
 			self.tokensHelper.match(TokenConstants.RELATION,True)
-			return Node(rel)
+			return Node(rel, line=self.tokensHelper.getCurrentToken().row)
 			self.tokensHelper.checkInput(sync,_p_relacion)
 
 	#expresión-simple → termino { suma-op termino }
@@ -259,7 +259,7 @@ class Syntax:
 				self.tokensHelper.match(TokenConstants.PLUS,True)
 			elif (self.tokensHelper.getCurrentToken().type == TokenConstants.LESS):
 				self.tokensHelper.match(TokenConstants.LESS,True)
-			return Node(rel)
+			return Node(rel,line=self.tokensHelper.getCurrentToken().row)
 			self.tokensHelper.checkInput(sync,_p_suma_op)
 	#termino → factor { mult-op factor }
 	def termino(self,sync,comesFromALess=False):
@@ -284,7 +284,7 @@ class Syntax:
 				self.tokensHelper.match(TokenConstants.TIMES)
 			elif (self.tokensHelper.getCurrentToken().content == TokenConstants.DIV):
 				self.tokensHelper.match(TokenConstants.DIV)
-			return Node(rel)
+			return Node(rel,line=self.tokensHelper.getCurrentToken().row)
 			self.tokensHelper.checkInput(sync,_p_mult_op)
 
 	#factor → ( expresión ) | numero | identificador
@@ -305,7 +305,7 @@ class Syntax:
 				new = Node(self.tokensHelper.getCurrentToken().content)
 				self.tokensHelper.match(TokenConstants.FLOAT,True)
 			else:
-				new = Node(self.tokensHelper.getCurrentToken().content)
+				new = Node(self.tokensHelper.getCurrentToken().content, line=self.tokensHelper.getCurrentToken().row)
 				self.tokensHelper.match(TokenConstants.ID,True)
 
 			return new
@@ -335,7 +335,7 @@ class Syntax:
 			new.addChild( self.expresion(_s_expresion) )
 			self.tokensHelper.match(")")
 			self.tokensHelper.match(";")			
-			self.tokensHelper.checkInput(_p_repeticion.union(["while"]),sync)
+			self.tokensHelper.checkInput(_p_repeticion.union(_sentencia),sync)
 			return new
 		else:
 			return None
@@ -346,7 +346,7 @@ class Syntax:
 		if not self.tokensHelper.getCurrentToken().content in sync.difference(["cin"]):
 			new = Node("cin")
 			self.tokensHelper.match("cin")
-			new.addChild( Node(self.tokensHelper.getCurrentToken().content ) )
+			new.addChild( Node(self.tokensHelper.getCurrentToken().content, line=self.tokensHelper.getCurrentToken().row ) )
 			self.tokensHelper.match(TokenConstants.ID,True)
 			self.tokensHelper.match(";")
 			self.tokensHelper.checkInput(_p_sent_cin,sync,displayErrors=False)	
@@ -382,17 +382,17 @@ class Syntax:
 		if hasValidNextToken:
 			if not self.tokensHelper.getCurrentToken().content in sync:	
 				new = Node(":=")
-				ide = Node(self.tokensHelper.getCurrentToken().content)
+				ide = Node(self.tokensHelper.getCurrentToken().content, line=self.tokensHelper.getCurrentToken().row)
 				new.addChild(ide)
 				self.tokensHelper.match(TokenConstants.ID,True)
 				if self.tokensHelper.getCurrentToken().type == TokenConstants.INCREMENT:
-					plusNode = Node("+")
+					plusNode = Node("+",line=self.tokensHelper.getCurrentToken().row)
 					plusNode.addChild( ide )
 					self.tokensHelper.match(TokenConstants.INCREMENT,True)
 					plusNode.addChild(Node("1"))
 					new.addChild(plusNode)	
 				elif self.tokensHelper.getCurrentToken().type == TokenConstants.DECREMENT:
-					lessNode = Node("-")
+					lessNode = Node("-",line=self.tokensHelper.getCurrentToken().row)
 					lessNode.addChild( ide )
 					self.tokensHelper.match(TokenConstants.DECREMENT,True)
 					lessNode.addChild(Node("1"))
@@ -414,7 +414,7 @@ class Syntax:
 	def declaracion(self,sync):
 		self.tokensHelper.checkInput(_p_declaracion,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:	
-			tmp = Node(self.tokensHelper.getCurrentToken().content)
+			tmp = Node(self.tokensHelper.getCurrentToken().content, line=self.tokensHelper.getCurrentToken().row)
 			self.tokensHelper.match(TokenConstants.ID,True)
 			self.lista_variables(tmp,_s_lista_variables)
 			self.tokensHelper.checkInput(_p_declaracion,sync,set([";"]))
@@ -425,11 +425,11 @@ class Syntax:
 	def lista_variables(self,parent,sync):
 		self.tokensHelper.checkInput(_p_lista_variables,sync)
 		if not self.tokensHelper.getCurrentToken().content in sync:
-			parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
+			parent.addChild(Node(self.tokensHelper.getCurrentToken().content,line=self.tokensHelper.getCurrentToken().row))
 			self.tokensHelper.match(TokenConstants.ID,True)
 			while self.tokensHelper.getCurrentToken().content == ",":
 				self.tokensHelper.match(",")
-				parent.addChild(Node(self.tokensHelper.getCurrentToken().content))
+				parent.addChild(Node(self.tokensHelper.getCurrentToken().content,line=self.tokensHelper.getCurrentToken().row))
 				self.tokensHelper.match(TokenConstants.ID,True)
 			self.tokensHelper.checkInput(_p_lista_variables,sync,set([";"]))
 	''' Syntax operations ends here '''

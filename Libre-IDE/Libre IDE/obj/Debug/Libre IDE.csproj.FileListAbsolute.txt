@@ -90,3 +90,20 @@ E:\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csprojResolveAs
 E:\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.MainForm.resources
 E:\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.Properties.Resources.resources
 E:\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csproj.GenerateResource.Cache
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe.config
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.exe
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Libre IDE.pdb
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Json.dll
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.dll
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Json.pdb
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ScintillaNET.xml
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csprojResolveAssemblyReference.cache
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.MainForm.resources
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre_IDE.Properties.Resources.resources
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csproj.GenerateResource.Cache
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.csproj.CoreCompileInputs.cache
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.exe
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\obj\Debug\Libre IDE.pdb
