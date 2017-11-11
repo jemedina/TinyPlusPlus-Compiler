@@ -7,6 +7,7 @@ import ntpath
 
 #DISPLAY ALL ERRORS (TRUE)
 _withTraceErrors=False
+RESERVED_WORDS = ["if","while","repeat","until","cin","cout", "int", "real","boolean","main"]
 ################### ENDPOINTS
 _tipo = ["int","real","boolean"]
 _sentencia = ["if","while","repeat","cin","cout","{"]
@@ -173,9 +174,11 @@ class Syntax:
 					new = self.bloque(_s_bloque)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.BREAK:
 					new = self.buildBreak()
-				elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
+				elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID and self.tokensHelper.getCurrentToken().content not in RESERVED_WORDS:
 					new = self.asignacion(_s_asignacion)
-				
+				else:
+					return tmp
+
 				if tmp == None:
 					tmp = new
 				else:
