@@ -165,7 +165,7 @@ class Syntax:
 					new = self.sent_cout(_s_sent_cout)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
 					new = self.bloque(_s_bloque)
-				elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
+				elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID and self.tokensHelper.getCurrentToken().content != TokenConstants.BREAK:
 					new = self.asignacion(_s_asignacion)
 				
 				if tmp == None:

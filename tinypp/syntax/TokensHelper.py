@@ -182,3 +182,4 @@ class TokenConstants:
 	EOF = "$"
 	REPEAT = "repeat"
 	DOT_COMMA = ";"
+	BREAK = "break"
