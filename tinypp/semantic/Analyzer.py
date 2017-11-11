@@ -2,7 +2,7 @@ from semantic.HashTable import *
 from os import sys
 import json
 #Declaramos diccionario de palabras
-STATEMENTS = [':=', 'if', 'repeat', 'while','cout','cin']
+STATEMENTS = [':=', 'if', 'repeat', 'while','cout','cin','break']
 BOOL_OPERATORS = ['>', '<', '>=', '<=', '==', '!=']
 MATH_OPERATORS = ['+', '-', '*', '/']
 ERR = 'ERR'
