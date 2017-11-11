@@ -165,7 +165,10 @@ class Syntax:
 					new = self.sent_cout(_s_sent_cout)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
 					new = self.bloque(_s_bloque)
-				elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID and self.tokensHelper.getCurrentToken().content != TokenConstants.BREAK:
+				elif self.tokensHelper.getCurrentToken().content == TokenConstants.BREAK:
+					#Break Statement
+					new = self.buildBreak()
+				elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
 					new = self.asignacion(_s_asignacion)
 				
 				if tmp == None:
@@ -178,6 +181,12 @@ class Syntax:
 				return None
 			self.tokensHelper.checkInput(sync,_p_lista_sentencias)
 			
+	def buildBreak(self):
+		node = Node( TokenConstants.BREAK )
+		self.tokensHelper.match( TokenConstants.BREAK )
+		self.tokensHelper.match( TokenConstants.DOT_COMMA )
+		return node
+
 	#selección → if ( expresión ) then bloque | if ( expresión ) then bloque else bloque
 	def seleccion(self,sync):
 		self.tokensHelper.checkInput(_p_seleccion,sync)
