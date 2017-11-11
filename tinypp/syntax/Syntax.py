@@ -15,6 +15,7 @@ _suma_op = ["+","-"]
 _mult_op = ["*","/"]
 _next_id = [":=","++","--"]
 EMPTY = "ε";
+
 #############################
 #PRIMARY SETS
 _p_programa=set(["main"])
@@ -62,6 +63,7 @@ _s_suma_op=set(["(","numero","identificaodr"])
 _s_termino=set([")",";","+","-","*","/","<","<=",">",">=","==","!="])
 _s_mult_op=set(["(","numero","identificaodr"])
 _s_factor=set([")",";","+","-","*","/","<","<=",">",">=","==","!="])
+
 
 class Syntax:
 	''' Static Syntax Constants '''
@@ -156,9 +158,13 @@ class Syntax:
 				if self.tokensHelper.getCurrentToken().content == TokenConstants.IF:
 					new = self.seleccion(_s_seleccion)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.WHILE:
+					self.IN_LOOP_FLAG=True
 					new = self.iteracion(_s_iteracion.difference([TokenConstants.WHILE]))
+					self.IN_LOOP_FLAG=False
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.REPEAT:
+					self.IN_LOOP_FLAG=True
 					new = self.repeticion(_s_repeticion.difference([TokenConstants.REPEAT]))
+					self.IN_LOOP_FLAG=False
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.CIN:
 					new = self.sent_cin(_s_sent_cin)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.COUT:
@@ -166,7 +172,6 @@ class Syntax:
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
 					new = self.bloque(_s_bloque)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.BREAK:
-					#Break Statement
 					new = self.buildBreak()
 				elif self.tokensHelper.getCurrentToken().type == TokenConstants.ID:
 					new = self.asignacion(_s_asignacion)
@@ -177,12 +182,18 @@ class Syntax:
 					tmp.appendBro( new )
 			if tmp != None and len(tmp.sons) > 0:
 				return tmp
+			elif tmp.name == TokenConstants.BREAK:
+				return tmp
 			else:
 				return None
 			self.tokensHelper.checkInput(sync,_p_lista_sentencias)
 			
 	def buildBreak(self):
-		node = Node( TokenConstants.BREAK )
+		if self.IN_LOOP_FLAG:
+			node = Node( TokenConstants.BREAK )
+		else:
+			self.tokensHelper.syntaxError("[break] statment must be inside loops like while or repeat")
+			node = None
 		self.tokensHelper.match( TokenConstants.BREAK )
 		self.tokensHelper.match( TokenConstants.DOT_COMMA )
 		return node
@@ -444,6 +455,8 @@ class Syntax:
 	''' Syntax operations ends here '''
 
 	def __init__(self,pathOfSouce,outputType=TYPE_JSON):
+		
+		self.IN_LOOP_FLAG=False
 		canonicalFileName = ntpath.basename(pathOfSouce)
 		withoutExtention = canonicalFileName[0:canonicalFileName.find(".")]
 		lexDirectory = "target_"+withoutExtention+"\\lex\\"
