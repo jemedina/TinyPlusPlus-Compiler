@@ -1,0 +1,7 @@
+DEFINE x int
+START
+PUSH 0
+ASSIGN @x
+PUSH @x
+WR
+END

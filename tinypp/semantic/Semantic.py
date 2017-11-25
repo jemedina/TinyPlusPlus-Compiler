@@ -54,6 +54,8 @@ class Semantic:
 		print(self.analyzer.err,file=errFile)
 		self.analyzer.tabla.fileDisplayTable(tablaFile)
 
+	def getHashTable(self):
+		return self.analyzer.tabla
 
 
 

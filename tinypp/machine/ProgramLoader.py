@@ -54,10 +54,8 @@ class ProgramLoader:
 			self.memory.set(command.getPureArgument(),val)
 
 		elif command.name == Command.WR:
-			if self.isVariable(command.argument):
-				print(command.getPureArgument() + ": " + str(self.memory.get(command.getPureArgument())))
-			else:
-				print(command.argument)
+			val = self.stack.pop()
+			print(val)
 
 		elif command.name == Command.DEFINE:
 			self.memory.define(command.argument,command.type)
@@ -67,7 +65,7 @@ class ProgramLoader:
 			self.stack.push(val)
 
 		elif command.name == Command.LT:
-			val = self.stack.pop() < self.stack.pop()
+			val = float(self.stack.pop()) < float(self.stack.pop())
 			self.stack.push(val)
 
 		elif command.name == Command.EQ:
@@ -84,13 +82,13 @@ class ProgramLoader:
 
 		elif command.name == Command.JT:
 			val = str(self.stack.last())
-			if val == 'True':
+			if val == 'True' or val == '1':
 				self.stack.pop()
 				self.movePointerToTag(command.argument)
 
 		elif command.name == Command.JF:
-			val = self.stack.last()
-			if val == 'False':
+			val = str(self.stack.last())
+			if val == 'False' or val == '0':
 				self.stack.pop()
 				self.movePointerToTag(command.argument)
 

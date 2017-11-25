@@ -2,14 +2,16 @@ import sys
 from lexer.Lexer import *
 from syntax.Syntax import *
 from semantic.Semantic import *
-
+from codegen.CodeGen import *
 SINTAX_RUNMODE = "-s"
 LEXIC_RUNMODE = "-l"
 SEMANTIC_RUNMODE = "-c"
+CODEGEN_RUNMODE = "-g"
 
 LEXIC_SECTION_LABEL = ("="*30)+" LEXIC "+("="*30)
 SINTAX_SECTION_LABEL =("="*30)+" SYNTAX "+("="*30)
 SEMANTIC_SECTION_LABEL =("="*30)+" SEMANTIC "+("="*30)
+CODEGEN_SECTION_LABEL =("="*30)+" CODE GEN "+("="*30)
 
 def error_cmd():
     print("Invalid tinypp command...")
@@ -21,10 +23,15 @@ def lexic(file):
 
 def sintactic(file,outputType):
     syntax= Syntax(file,outputType)
-    syntax.go(file)
+    global syntaxTree
+    syntaxTree = syntax.go(file)
     
 def semantic(file,isCli=False):
+    global hashTable
     semantic = Semantic(file,isCli)
+    hashTable = semantic.getHashTable()
+def codegen(file):
+    codegen = CodeGen(syntaxTree,hashTable,file)
 
 if __name__ == "__main__":
     #Check if by less we have 'python tinypp.py <other_argument>
@@ -45,6 +52,8 @@ if __name__ == "__main__":
                 sintactic(sys.argv[2],Syntax.TYPE_JSON)
         elif runmode == SEMANTIC_RUNMODE and len(sys.argv) > 2:
             semantic(sys.argv[2])
+        elif runmode == CODEGEN_RUNMODE and len(sys.argv) > 2:
+            codegen(sys.argv[2])
         else: # Run all
             filename = sys.argv[1]
             print(LEXIC_SECTION_LABEL)
@@ -53,6 +62,8 @@ if __name__ == "__main__":
             sintactic(filename, Syntax.TYPE_TREE)
             print(SEMANTIC_SECTION_LABEL)
             semantic(filename,True)
-
+            print(CODEGEN_SECTION_LABEL)
+            codegen(filename)
+            os.system("tinym.bat code.ox")            
     else:
         error_cmd()

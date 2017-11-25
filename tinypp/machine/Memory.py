@@ -12,7 +12,7 @@ class Memory:
 				self.memory[register].value = int(str(value).split('.')[0])
 			else:
 				self.memory[register].value = int(value)
-		elif ty == 'float':
+		elif ty == 'real':
 			self.memory[register].value = float(value)
 		elif ty == 'boolean':
 			self.memory[register].value = value
