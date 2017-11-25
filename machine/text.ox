@@ -1,0 +1,20 @@
+DEFINE x int
+DEFINE y int
+START
+RD @x
+PUSH 3
+PUSH @x
+GT
+JT #TRUE
+JF #FALSE
+#TRUE:
+PUSH 2
+PUSH 2
+ADD
+ASSIGN @x
+WR @x
+J #END
+#FALSE:
+RD @y
+#END:
+END
