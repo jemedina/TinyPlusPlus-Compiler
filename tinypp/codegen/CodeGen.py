@@ -13,6 +13,7 @@ class CodeGen:
 		self.syntaxTree = syntaxTree
 		self.hashTable = hashTable
 		self.buffer = ""
+		self.lastEndTag = None
 		#hashTable.cliDisplayTable()
 		self.buildDefinitions()
 		self.writeCommand("START")
@@ -87,7 +88,7 @@ class CodeGen:
 			tagEval = self.genTag()
 			tagBody = self.genTag()
 			tagEnd = self.genTag()
-
+			self.lastEndTag = tagEnd
 			self.writeCommand(tagEval+":")
 			self.eval(r.sons[0])
 			self.writeCommand("JT "+tagBody)
@@ -98,11 +99,11 @@ class CodeGen:
 			self.writeCommand("J "+tagEval)
 			
 			self.writeCommand(tagEnd+":")
-
+			self.lastEndTag = None
 		elif r.name == 'repeat':
 			tagBody = self.genTag()
 			tagEnd = self.genTag()
-
+			self.lastEndTag = tagEnd
 
 			self.writeCommand(tagBody+":")
 			self.eval(r.sons[0])
@@ -112,6 +113,11 @@ class CodeGen:
 			self.writeCommand("JT "+tagEnd)
 			
 			self.writeCommand(tagEnd+":")
+			
+			self.lastEndTag = None
+		elif r.name == 'break':
+			if self.lastEndTag != None:
+				self.writeCommand("J " + self.lastEndTag)
 
 		elif r.name == ':=':
 			self.eval(r.sons[1])
