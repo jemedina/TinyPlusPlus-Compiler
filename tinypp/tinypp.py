@@ -2,7 +2,7 @@ import sys
 from lexer.Lexer import *
 from syntax.Syntax import *
 from semantic.Semantic import *
-from codegen.CodeGen import *
+from codegen2.CodeGen import *
 SINTAX_RUNMODE = "-s"
 LEXIC_RUNMODE = "-l"
 SEMANTIC_RUNMODE = "-c"
@@ -29,9 +29,11 @@ def sintactic(file,outputType):
 def semantic(file,isCli=False):
     global hashTable
     semantic = Semantic(file,isCli)
+    global semanticTree
     hashTable = semantic.getHashTable()
+    semanticTree = semantic.getSemanticTree()
 def codegen(file):
-    codegen = CodeGen(syntaxTree,hashTable,file)
+    codegen = CodeGen(semanticTree,hashTable,file)
 
 if __name__ == "__main__":
     #Check if by less we have 'python tinypp.py <other_argument>
@@ -64,6 +66,7 @@ if __name__ == "__main__":
             semantic(filename,True)
             print(CODEGEN_SECTION_LABEL)
             codegen(filename)
-            os.system("tinym.bat code.ox")            
+            print("Ejecucion==============:")
+            os.system("tinym.bat code.tm")            
     else:
         error_cmd()

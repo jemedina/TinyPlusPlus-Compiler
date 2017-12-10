@@ -1,3 +1,3 @@
 @echo off
-py "%TINY_HOME%/machine/machine.py" %1
+py "%TINY_HOME%/machine2/main.py" %1
 

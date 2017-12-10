@@ -57,6 +57,9 @@ class Semantic:
 	def getHashTable(self):
 		return self.analyzer.tabla
 
+	def getSemanticTree(self):
+		return self.tree
+
 
 
 	def getTree(self):

@@ -16,6 +16,7 @@ class Mnemonics:
 	JGE = "JGE"
 	JEQ = "JEQ"
 	JNE = "JNE"
+	DEFINE = "DEFINE"
 
 	#Esta constante es para validar que estamos usando mnemonicos validos
-	ALL_MNEMONICS = ["HALT","IN","OUT","ADD","SUB","MUL","DIV","LD","ST","LDA","LDC","JLT","JLE","JGT","JGE","JEQ","JNE"]
+	ALL_MNEMONICS = ["DEFINE","HALT","IN","OUT","ADD","SUB","MUL","DIV","LD","ST","LDA","LDC","JLT","JLE","JGT","JGE","JEQ","JNE"]

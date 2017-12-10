@@ -29,6 +29,8 @@ class Machine:
 		#Instrucciones de memoria (diccionario)
 		self.iMem = dict()
 
+		self.hashTable = dict()
+
 
 		self.readInstructions()
 
@@ -52,7 +54,10 @@ class Machine:
 
 		for line in self.pgm:
 			instruction = Instruction(line)
-			self.iMem[instruction.lineNo] = instruction
+			if instruction.iop == Mnemonics.DEFINE:
+				self.hashTable[instruction.arg3] = instruction
+			else:
+				self.iMem[instruction.lineNo] = instruction
 	
 	#Metodo para comenzar la ejecucion de las instrucciones
 	'''
@@ -76,9 +81,10 @@ class Machine:
 			stepResult = self.stepTM()
 
 	def stepTM(self):
-
 		
 		pc = self.reg[PC_REG]
+
+		#print(pc)
 		self.reg[PC_REG] = pc+1
 
 		currentinstruction = self.iMem[ pc ]
@@ -98,10 +104,9 @@ class Machine:
 			return STEPRESULT.HALT
 		elif currentinstruction.iop == Mnemonics.IN:
 			in_Line=input("Enter value for IN instruction: ")
-			try:
-				self.reg[r] = int(in_Line)
-			except:
-				print("TM Error: Illegal value",file=sys.stderr)
+			
+			self.reg[r] = in_Line
+			#print("TM Error: Illegal value",file=sys.stderr)
 		elif currentinstruction.iop == Mnemonics.OUT:
 			print("OUT instruction prints: "+ str(self.reg[r]))
 		elif currentinstruction.iop == Mnemonics.ADD:
@@ -118,7 +123,22 @@ class Machine:
 		elif currentinstruction.iop == Mnemonics.LD:
 			self.reg[r] = self.dMem[m]
 		elif currentinstruction.iop == Mnemonics.ST:
-			self.dMem[m] = self.reg[r]
+			if m in self.hashTable:
+				if self.isFloat(str(self.reg[r])):
+					if self.hashTable[m].arg2 == 'int':
+						self.dMem[m] = int(self.reg[r].split(".")[0])
+					elif self.hashTable[m].arg2 == 'real':
+						self.dMem[memoria] = float(self.reg[r])
+					else:
+						return STEPRESULT.DMEM_ERR
+				elif self.isInt(str(self.reg[r])):
+					if self.hashTable[m].arg2 == 'real':
+						self.dMem[m] = float(self.reg[r])
+					else:
+						self.dMem[m] = int(self.reg[r])
+			else:
+				self.dMem[m] = self.reg[r]
+
 		elif currentinstruction.iop == Mnemonics.LDA:
 			self.reg[r] = m
 		elif currentinstruction.iop == Mnemonics.LDC:
@@ -142,3 +162,22 @@ class Machine:
 			if self.reg[r] != 0 :
 				self.reg[PC_REG] = m
 		return STEPRESULT.OKAY
+
+	def isFloat(self,line):
+		if '.' in line:
+			try:
+				line=float(line)
+				return True
+			except:
+				return False
+		else:
+			return False
+	def isInt(self,line):
+		if not '.' in line:
+			try:
+				line=int(line)
+				return True
+			except:
+				return False			
+		else:
+			return False 
