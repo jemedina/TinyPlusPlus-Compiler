@@ -9,11 +9,9 @@ class CodeGen:
 	"""docstring for CodeGen"""
 	def __init__(self,syntaxTree,hashTable,filename):
 		self.filename = filename
-		self.tagindex = 1000
 		self.syntaxTree = syntaxTree
 		self.hashTable = hashTable
 		self.buffer = ""
-		self.lastEndTag = None
 		#hashTable.cliDisplayTable()
 		self.buildDefinitions()
 		self.writeCommand("START")
