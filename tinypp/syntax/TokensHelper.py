@@ -10,8 +10,9 @@ class Token:
 
 class TokensHelper:
 
-	def __init__(self,tokensFilePath):
+	def __init__(self,tokensFilePath,selfParent):
 		self.errors = []
+		self.selfParent = selfParent
 		try:
 			self.tokensFile = open(tokensFilePath,"+r")
 			self.tokens = []
@@ -56,9 +57,11 @@ class TokensHelper:
 		for t in self.tokens:
 			print(t)
 	def error(self):
+		self.selfParent.hasErrors = True
 		print("Syntax error in row = "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+self.getCurrentToken().content,file=sys.stderr)
 	
 	def syntaxError(self,message):
+		self.selfParent.hasErrors = True
 		self.errors.append("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message)
 		#print("Syntax error at line "+self.getCurrentToken().row+", col = "+self.getCurrentToken().col+": "+message)
 	def printErrors(self,errorfile):
@@ -174,6 +177,7 @@ class TokenConstants:
 	DO = "do"
 	CIN = "cin"
 	COUT = "cout"
+	COUTLN = "coutln"
 	BRACKET_OPEN = "{"
 	BRACKET_CLOSE = "}"
 	TIMES = "*"

@@ -2,7 +2,7 @@ from semantic.HashTable import *
 from os import sys
 import json
 #Declaramos diccionario de palabras
-STATEMENTS = [':=', 'if', 'repeat', 'while','cout','cin','break']
+STATEMENTS = [':=', 'if', 'coutln', 'repeat', 'while','cout','cin','break']
 BOOL_OPERATORS = ['>', '<', '>=', '<=', '==', '!=']
 MATH_OPERATORS = ['+', '-', '*', '/']
 ERR = 'ERR'
@@ -15,6 +15,7 @@ class Analyzer:
     def __init__(self, tree):
         self.tree=tree
         self.tabla=HashTable()
+        self.hasErrors = False
         self.err = ""
         self.std = ""
         #Verificamos que existan los dos nodos principales
@@ -138,6 +139,7 @@ class Analyzer:
             node['val'] = ERR
     #Esta funcion manda el mensaje de error dependiendo de donde se le llame y con el concepto del error
     def semanticError(self,message,line=None):
+        self.hasErrors = True
         errMsg = "Semantic Error [" + message +"]" + ((" at line: "+line) if line != None else "")
         self.err += errMsg+"\n"
         print(errMsg, file=sys.stderr)

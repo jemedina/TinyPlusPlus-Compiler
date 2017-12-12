@@ -1,7 +1,10 @@
 class Mnemonics:
 	HALT = "HALT"
 	IN = "IN"
+	INR = "INR"
+	INB = "INB"
 	OUT = "OUT"
+	OUTLN = "OUTLN"
 	ADD = "ADD"
 	SUB = "SUB"
 	MUL = "MUL"
@@ -19,4 +22,4 @@ class Mnemonics:
 	DEFINE = "DEFINE"
 
 	#Esta constante es para validar que estamos usando mnemonicos validos
-	ALL_MNEMONICS = ["DEFINE","HALT","IN","OUT","ADD","SUB","MUL","DIV","LD","ST","LDA","LDC","JLT","JLE","JGT","JGE","JEQ","JNE"]
+	ALL_MNEMONICS = ["INR","OUTLN","INB","DEFINE","HALT","IN","OUT","ADD","SUB","MUL","DIV","LD","ST","LDA","LDC","JLT","JLE","JGT","JGE","JEQ","JNE"]

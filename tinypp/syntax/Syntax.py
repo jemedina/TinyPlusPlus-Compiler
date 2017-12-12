@@ -10,7 +10,7 @@ _withTraceErrors=False
 RESERVED_WORDS = ["if","while","repeat","until","cin","cout", "int", "real","boolean","main"]
 ################### ENDPOINTS
 _tipo = ["int","real","boolean"]
-_sentencia = ["if","while","repeat","cin","cout","{"]
+_sentencia = ["if","while","repeat","cin","cout","{","coutln"]
 _relacion = ["<=", "<", ">" ,">=", "==", "!="]
 _suma_op = ["+","-"]
 _mult_op = ["*","/"]
@@ -24,13 +24,14 @@ _p_lista_declaracion=set(["int","real","boolean",EMPTY])
 _p_declaracion=set(["int","real","boolean"])
 _p_tipo=set(["int","real","boolean"])
 _p_lista_variables=set(["identificador"])
-_p_lista_sentencias=set(["if","while","repeat","until","cin","cout","{","identificador",EMPTY])
-_p_sentencia=set(["if","while","repeat","cin","cout","{","identificador"])
+_p_lista_sentencias=set(["if","while","repeat","until","cin","cout","coutln","{","identificador",EMPTY])
+_p_sentencia=set(["if","while","repeat","cin","cout","coutln","{","identificador"])
 _p_seleccion=set(["if"])
 _p_iteracion=set(["while"])
 _p_repeticion=set(["repeat"])
 _p_sent_cin=set(["cin"])
 _p_sent_cout=set(["cout"])
+_p_sent_coutln=set(["coutln"])
 _p_bloque=set(["{"])
 _p_asignacion=set(["identificador"])
 _p_expresion=set(["(","numero","identificador"])
@@ -44,19 +45,20 @@ _p_factor=set(['(', 'numero', 'identificador'])
 #NEXT SETS
 _s_programa=set(["$"])
 #TODO: Verify is this set needs the EMPTY item
-_s_lista_declaracion=set(["$","if","while","repeat","cin","cout","{"])
+_s_lista_declaracion=set(["$","if","while","repeat","cin","coutln","cout","{"])
 _s_declaracion=set([";"])
 _s_tipo=set(["identificador"])
 _s_lista_variables=set([";"])
 _s_lista_sentencias=set(["}"])
-_s_sentencia=set(["if","while","repeat","cin","cout","{","identificador","}"])
-_s_seleccion=set(["if","while","repeat","cin","cout","{","identificador","}"])
-_s_iteracion=set(["if","while","repeat","cin","cout","{","identificador","}"])
-_s_repeticion=set(["if","while","repeat","cin","cout","{","identificador","}"])
-_s_sent_cin=set(["if","while","repeat","cin","cout","{","identificador","}"])
-_s_sent_cout=set(["if","while","repeat","cin","cout","{","identificador","}"])
-_s_bloque=set(["if","while","repeat","cin","cout","{","identificador","}","until","else"])
-_s_asignacion=set(["if","while","repeat","cin","cout","{","identificador","}"])
+_s_sentencia=set(["if","while","repeat","cin","cout","coutln","{","identificador","}"])
+_s_seleccion=set(["if","while","repeat","cin","cout","coutln","{","identificador","}"])
+_s_iteracion=set(["if","while","repeat","cin","cout","coutln","{","identificador","}"])
+_s_repeticion=set(["if","while","repeat","cin","cout","coutln","{","identificador","}"])
+_s_sent_cin=set(["if","while","repeat","cin","cout","coutln","{","identificador","}"])
+_s_sent_cout=set(["if","while","repeat","cin","cout","coutln","{","identificador","}"])
+_s_sent_coutln=set(["if","while","repeat","cin","cout","coutln","{","identificador","}"])
+_s_bloque=set(["if","while","repeat","cin","cout","coutln","{","identificador","}","until","else"])
+_s_asignacion=set(["if","while","repeat","cin","cout","coutln","{","identificador","}"])
 _s_expresion=set([")",";"])
 _s_relacion=set(["(","numero","identificaodr"])
 _s_expresion_simple=set([")",";","+","-","<","<=",">",">=","==","!="])
@@ -74,6 +76,7 @@ class Syntax:
 	''' Syntax operations begin '''
 	#programa → main “{“ lista-declaración lista-sentencias “}”
 	def programa(self,path):
+		self.hasErrors = False
 		pathOfSouce = path
 		fileOpen = True
 		canonicalFileName = ntpath.basename(pathOfSouce)
@@ -170,6 +173,8 @@ class Syntax:
 					new = self.sent_cin(_s_sent_cin)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.COUT:
 					new = self.sent_cout(_s_sent_cout)
+				elif self.tokensHelper.getCurrentToken().content == TokenConstants.COUTLN:
+					new = self.sent_coutln(_s_sent_coutln)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.BRACKET_OPEN:
 					new = self.bloque(_s_bloque)
 				elif self.tokensHelper.getCurrentToken().content == TokenConstants.BREAK:
@@ -384,6 +389,19 @@ class Syntax:
 			new.addChild( exp ) 
 			self.tokensHelper.match(";")
 			return new
+	#sent-cout → cout expresión ; | cout ;	
+	def sent_coutln(self,sync):
+		self.tokensHelper.checkInput(_p_sent_coutln,sync)
+		if not self.tokensHelper.getCurrentToken().content in sync.difference(["coutln"]):	
+			new = Node("coutln")
+			self.tokensHelper.match("coutln")
+			if self.tokensHelper.getCurrentToken().content == ";":
+				self.tokensHelper.match(";")
+			else:
+				exp = self.expresion(_s_expresion)
+				new.addChild( exp )
+				self.tokensHelper.match(";")
+			return new
 			
 
 
@@ -474,7 +492,7 @@ class Syntax:
 				if not os.path.exists(arg):
 					print("Error, analisis lexico aun no ejecutado",file=sys.stderr)
 					exit(1)
-		self.tokensHelper = TokensHelper(arg)
+		self.tokensHelper = TokensHelper(arg,self)
 		self.outputType = outputType
 
 	def go(self,path):

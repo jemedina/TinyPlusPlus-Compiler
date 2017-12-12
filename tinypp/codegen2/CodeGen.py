@@ -64,9 +64,22 @@ class CodeGen:
 		if r["name"] == 'cout':
 			self.eval(r["sons"][0])
 			self.emitRO("OUT",self.ac,0,0)
+		
+		elif r["name"] == 'coutln':
+			if len(r["sons"]) > 0:
+				self.eval(r["sons"][0])
+			else:
+				self.emitRM("LDC",self.ac,"*",self.ac)
+			self.emitRO("OUTLN",self.ac,0,0)
 
 		elif r["name"] == 'cin':
-			self.emitRO("IN",self.ac,0,0)
+			dataType = self.hashTable.getKey(r["sons"][0]["name"]).type
+			if dataType == None or dataType == 'int':
+				self.emitRO("IN",self.ac,0,0)
+			elif dataType == 'real':
+				self.emitRO("INR",self.ac,0,0)
+			elif dataType == 'boolean':
+				self.emitRO("INB",self.ac,0,0)
 			loc = self.hashTable.getKey(r["sons"][0]["name"]).memory
 			self.emitRM("ST",self.ac,loc,self.gp)
 

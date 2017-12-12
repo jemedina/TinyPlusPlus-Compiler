@@ -12,6 +12,8 @@ class Lexer:
 	tokens = []
 
 	def __init__(self,pathOfSouce):
+
+		self.hasErrors = False
 		canonicalFileName = ntpath.basename(pathOfSouce)
 		withoutExtention = canonicalFileName[0:canonicalFileName.find(".")]
 		lexDirectory = "target_"+withoutExtention+"\\lex\\"
@@ -224,6 +226,7 @@ class Lexer:
 					else:
 						strd = self.lexFileHandler.getCurrentValue()
 					errLine = "ERROR UNEXPECTED CHARACTER IN row="+str(self.lexFileHandler.row+1)+", col="+str(self.lexFileHandler.col+1)+": '"+str(strd)+"'"
+					self.hasErrors = True
 					print(errLine,file=sys.stderr)
 					self.errFile.write(errLine+'\n')
 					self.stateManager.setState("INICIO")

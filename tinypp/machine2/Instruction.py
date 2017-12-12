@@ -1,5 +1,6 @@
 from os import sys
 from Mnemonics import Mnemonics
+from Utils import Utils
 #Clase para guardar las instrucciones
 class Instruction:
 	'''
@@ -14,7 +15,7 @@ class Instruction:
 		self.arg1 = None
 		self.arg2 = None
 		self.arg3 = None
-
+		self.isSpecial = False
 		self.lineNo = 0
 		if line != None:
 			#Separar en partes la instruccion
@@ -73,16 +74,27 @@ class Instruction:
 					parenthesisPart = commaSeparated[1]
 					parenthesisSeparated = parenthesisPart.split("(")
 					
-					#Almacenar el argumento 2
-					self.arg2 = int(parenthesisSeparated[0].strip())
-					
+					#Almacenar el argumento 2					
+					narg2 = parenthesisSeparated[0].strip()
+					if narg2 != '*':
+						if Utils.isFloat(narg2):
+							self.arg2 = float(narg2)
+						else:
+							self.arg2 = int(narg2)
+					else:
+						self.isSpecial = True
+						self.arg2 = narg2
 					#Almacenar el argumento 3
 					self.arg3 = int(parenthesisSeparated[1].split(")")[0].strip())
 
 				else: #Es RM (Solo separado por commas)
 					commaSeparated = params.split(",")
 					self.arg1 = int(commaSeparated[0].strip())
-					self.arg2 = int(commaSeparated[1].strip())
+					narg2 = commaSeparated[1].strip()
+					if Utils.isFloat(narg2):
+						self.arg2 = float(narg2)
+					else:
+						self.arg2 = int(narg2)
 					self.arg3 = int(commaSeparated[2].strip())
 
 	def __str__(self):

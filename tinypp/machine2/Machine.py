@@ -2,7 +2,7 @@ from os import sys
 from enum import Enum
 from Instruction import Instruction 
 from Mnemonics import Mnemonics
-
+from Utils import Utils
 #Constantes globales:
 IADDR_SIZE = 1024 #Variable depreciada ya que usamos diccionados B)
 DADDR_SIZE = 1024
@@ -15,6 +15,7 @@ class STEPRESULT(Enum):
 	IMEM_ERR = 3
 	DMEM_ERR = 4
 	ZERODIVIDE = 5
+	ILLEGAL_ASSIGN = 6
 
 
 
@@ -96,19 +97,47 @@ class Machine:
 		else: #isRMorRA
 			r = currentinstruction.arg1
 			s = currentinstruction.arg3
-			m = currentinstruction.arg2 + self.reg[s]
+			if self.reg[s] != '*' and currentinstruction.arg2 != '*':
+				m = currentinstruction.arg2 + int(self.reg[s])
+			else:
+				m = currentinstruction.arg2
 
 		#Evaluar cada mnemonico
 		if currentinstruction.iop == Mnemonics.HALT:
-			print("HALT: "+str(r)+","+str(s)+","+str(t))
+			print("\nHALT: "+str(r)+","+str(s)+","+str(t))
 			return STEPRESULT.HALT
 		elif currentinstruction.iop == Mnemonics.IN:
 			in_Line=input("Enter value for IN instruction: ")
-			
-			self.reg[r] = in_Line
-			#print("TM Error: Illegal value",file=sys.stderr)
+			try:
+				self.reg[r] = int(float(in_Line))
+			except:
+
+				print("TM Error: Entrada de datos ilegal",file=sys.stderr)
+				return STEPRESULT.ILLEGAL_ASSIGN
+
+		elif currentinstruction.iop == Mnemonics.INR:
+			in_Line=input("Enter value for IN (real) instruction: ")
+			try:
+				self.reg[r] = float(in_Line)
+			except:
+				print("TM Error: Entrada de datos ilegal",file=sys.stderr)
+				return STEPRESULT.ILLEGAL_ASSIGN			
+		elif currentinstruction.iop == Mnemonics.INB:
+			in_Line=input("Enter value for IN (boolean) instruction: ")
+			try:
+				self.reg[r] = int(in_Line)
+			except:
+				print("TM Error: Entrada de datos ilegal",file=sys.stderr)
+				return STEPRESULT.ILLEGAL_ASSIGN		#print("TM Error: Illegal value",file=sys.stderr)
 		elif currentinstruction.iop == Mnemonics.OUT:
-			print("OUT instruction prints: "+ str(self.reg[r]))
+			print(str(self.reg[r]),end='')
+
+		elif currentinstruction.iop == Mnemonics.OUTLN:
+			if self.reg[r] != "*":
+				print("OUT instruction prints: "+ str(self.reg[r]))
+			else:
+				print("")
+			
 		elif currentinstruction.iop == Mnemonics.ADD:
 			self.reg[r] = self.reg[s] + self.reg[t]
 		elif currentinstruction.iop == Mnemonics.SUB:
@@ -123,20 +152,24 @@ class Machine:
 		elif currentinstruction.iop == Mnemonics.LD:
 			self.reg[r] = self.dMem[m]
 		elif currentinstruction.iop == Mnemonics.ST:
-			if m in self.hashTable:
-				if self.isFloat(str(self.reg[r])):
-					if self.hashTable[m].arg2 == 'int':
-						self.dMem[m] = int(self.reg[r].split(".")[0])
-					elif self.hashTable[m].arg2 == 'real':
-						self.dMem[memoria] = float(self.reg[r])
-					else:
-						return STEPRESULT.DMEM_ERR
-				elif self.isInt(str(self.reg[r])):
-					if self.hashTable[m].arg2 == 'real':
-						self.dMem[m] = float(self.reg[r])
-					else:
-						self.dMem[m] = int(self.reg[r])
-			else:
+			try:
+				dataType = self.hashTable[str(m)].arg2
+				if dataType == 'real' and Utils.isInt(self.reg[r]):
+					self.dMem[m] = Utils.intToFloat(self.reg[r])
+				elif dataType == 'int' and Utils.isFloat(self.reg[r]):
+					print("Entro de float a int")
+					print(self.reg[r])
+					print(Utils.floatToInt(self.reg[r]))
+					self.dMem[m] = Utils.floatToInt(self.reg[r])
+				elif dataType == 'boolean' and Utils.isFloat(self.reg[r]):
+					print("TM Error: Asignacion ilegal a un boolean",file=sys.stderr)
+					return STEPRESULT.ILLEGAL_ASSIGN
+				elif dataType == 'boolean' and Utils.isInt(self.reg[r]) and self.reg[r] != 0 and self.reg[r] != 1:
+					print("TM Error: Asignacion ilegal a un boolean",file=sys.stderr)				
+					return STEPRESULT.ILLEGAL_ASSIGN
+				else:	
+					self.dMem[m] = self.reg[r]
+			except:
 				self.dMem[m] = self.reg[r]
 
 		elif currentinstruction.iop == Mnemonics.LDA:
@@ -163,7 +196,7 @@ class Machine:
 				self.reg[PC_REG] = m
 		return STEPRESULT.OKAY
 
-	def isFloat(self,line):
+	'''def isFloat(self,line):
 		if '.' in line:
 			try:
 				line=float(line)
@@ -181,3 +214,4 @@ class Machine:
 				return False			
 		else:
 			return False 
+	'''

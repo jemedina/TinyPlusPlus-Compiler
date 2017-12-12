@@ -49,7 +49,7 @@ class Semantic:
 			outFile = open(synDirectory+"out.sem","+w",encoding='utf-8')
 			tablaFile = open(basepath+synDirectory+"tabla.sem","+w",encoding='utf-8')
 			jsonFile = open(synDirectory+"out.json","+w",encoding='utf-8')
-
+		self.hasErrors = self.analyzer.hasErrors
 		print(json.dumps(self.analyzer.tree, indent=2, sort_keys=False),file=jsonFile)
 		print(self.analyzer.err,file=errFile)
 		self.analyzer.tabla.fileDisplayTable(tablaFile)
