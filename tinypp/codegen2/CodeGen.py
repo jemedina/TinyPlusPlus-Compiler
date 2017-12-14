@@ -29,7 +29,11 @@ class CodeGen:
 
 		#hashTable.cliDisplayTable()
 		self.buildDefinitions()
+		
+		self.emitRM("LD",self.mp,0,self.ac)# * load maxaddress from location 0
+		self.emitRM("ST",self.ac,0,self.ac)# * clear location 0"
 		self.buildBody()
+		self.emitRO("HALT",0,0,0)
 		print(self.buffer)
 		self.writeBuffer()
 	def buildDefinitions(self):
@@ -48,6 +52,7 @@ class CodeGen:
 		self.emitLoc+=1
 
 	def buildBody(self):
+		
 		if len(self.semanticTree["sons"]) > 1:
 			self.tree = self.semanticTree["sons"][1]
 		elif self.semanticTree["sons"][0]["name"] not in ['int','real','boolean']:
@@ -55,10 +60,7 @@ class CodeGen:
 		else:
 			return		
 		
-		self.emitRM("LD",self.mp,0,self.ac)# * load maxaddress from location 0
-		self.emitRM("ST",self.ac,0,self.ac)# * clear location 0"
 		self.eval(self.tree)
-		self.emitRO("HALT",0,0,0)
 
 	def eval(self, r):
 		if r["name"] == 'cout':
