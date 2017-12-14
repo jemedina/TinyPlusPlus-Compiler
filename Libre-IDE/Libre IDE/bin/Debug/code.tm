@@ -1,5 +1,24 @@
-DEFINE:  n,int,0
-DEFINE:  resultado,int,1
+DEFINE:  n1,int,0
+DEFINE:  n2,int,1
 0: LD  6,0(0)
 1: ST  0,0(0)
-2: HALT  0,0,0
+2: IN  0,0,0
+3: ST  0,0(5)
+4: IN  0,0,0
+5: ST  0,1(5)
+6: LD  0,0(5)
+7: ST  0,0(6)
+8: LD  0,1(5)
+9: LD  1,0(6)
+10: SUB  0,1,0
+11: JGT  0,2(7)
+12: LDC  0,0(0)
+13: LDA  7,1(7)
+14: LDC  0,1(0)
+16: LD  0,0(5)
+17: OUT  0,0,0
+18: LD  0,1(5)
+19: OUT  0,0,0
+15:  JEQ  0,5(7)
+20:  LDA  7,0(7)
+21: HALT  0,0,0

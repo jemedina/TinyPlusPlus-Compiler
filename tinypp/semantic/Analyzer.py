@@ -286,49 +286,52 @@ class Analyzer:
     #Funcion de evaluaciones booleanas
     def evalBool(self, node1, node2, op, opline):
         #Verificamos que el operador sea un operador booleano y que los nodos sean de tipo booleano 
-        if op != '==' and op != '!=' and (node1['type'] == KIND_BOOL or node2['type'] == KIND_BOOL):
+        if op != '==' and op != '!=' and ('type' in node1 and 'type' in node2 and (node1['type'] == KIND_BOOL or node2['type'] == KIND_BOOL)):
             self.semanticError("The operator '"+op+"' can't be used with booleans",line=opline)
             return ERR
         #Si el operador es un "==" o "!=" se verifica que ninguno de los nodos sea error y si no es haci se hace la comparacion respectiva al operador
         elif op == '==':
-            if node1['val'] == ERR or node2['val'] == ERR:
+            if node1['val'] == ERR or ('val' in node2 and node2['val'] == ERR):
                 return ERR
             else:
-                return '1' if node1['val'] == node2['val'] else '0'
+                return '1' if 'val' in node1 and 'val' in node2 and node1['val'] == node2['val'] else '0'
         elif op == '!=':
-            if node1['val'] == ERR or node2['val'] == ERR:
+            if 'val' in node1 and 'val' in node2 and node1['val'] == ERR or node2['val'] == ERR:
                 return ERR
             else:
-                return '1' if node1['val'] != node2['val'] else '0'
+                return '1' if 'val' in node1 and 'val' in node2 and node1['val'] != node2['val'] else '0'
         else: #<, >, <=, >= para numeros:
             #Para los operadores <,>,<=,>= primero se guardan los valores de los nodos asi como su tipo rela o int
-            strA = str(node1['val'])
-            strB = str(node2['val'])
+            strA = str(node1['val'] if 'val' in node1  else 0)
+            strB = str(node2['val'] if 'val' in node2  else 0)
             if strA==ERR or strB ==ERR:
                 return ERR
             a = float(self.getReal(strA)) if self.isFloat(strA) else int(self.getInt(strA))
             b = float(self.getReal(strB)) if self.isFloat(strB) else int(self.getInt(strB))
             #Se verifica que ninguno de los nodos tenga el valor de error y si no es asi se realiza la comparacion dependiendo del operador 
-            if op == '>':
-                if node1['val'] == ERR or node2['val'] == ERR:
-                    return ERR
-                else:
-                    return '1' if a > b else '0'
-            elif op == '<':
-                if node1['val'] == ERR or node2['val'] == ERR:
-                    return ERR
-                else:
-                    return '1' if a < b else '0'
-            elif op == '>=':
-                if node1['val'] == ERR or node2['val'] == ERR:
-                    return ERR
-                else:    
-                    return '1' if a >= b else '0'
-            elif op == '<=':
-                if node1['val'] == ERR or node2['val'] == ERR:
-                    return ERR
-                else: 
-                    return '1' if a <= b else '0'
+            if 'val' in node1 and 'val' in node2:
+                if op == '>':
+                    if node1['val'] == ERR or node2['val'] == ERR:
+                        return ERR
+                    else:
+                        return '1' if a > b else '0'
+                elif op == '<':
+                    if node1['val'] == ERR or node2['val'] == ERR:
+                        return ERR
+                    else:
+                        return '1' if a < b else '0'
+                elif op == '>=':
+                    if node1['val'] == ERR or node2['val'] == ERR:
+                        return ERR
+                    else:    
+                        return '1' if a >= b else '0'
+                elif op == '<=':
+                    if node1['val'] == ERR or node2['val'] == ERR:
+                        return ERR
+                    else: 
+                        return '1' if a <= b else '0'
+            else:
+                return '0'
     #Funcion que regresa el valor int de un string
     def getInt(self, value):
         strVal = str(value)
