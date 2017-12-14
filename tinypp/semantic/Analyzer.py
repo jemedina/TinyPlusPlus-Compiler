@@ -156,8 +156,8 @@ class Analyzer:
             node['type'] = 'syntax error'
             node['val'] = 'syntax error'
         #Si fue una letra 
-        elif node['name'].isalpha():
-            #Si ya se encuentra en la tabla hash 
+        elif node['name'][0].isalpha():
+            #Si ya se encuentra en la tabla hash
             if self.tabla.hasKey(node['name']):
                 #Agregamos la linea solamente
                 self.tabla.addLine(node['name'], node['line'])
