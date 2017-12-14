@@ -88,6 +88,7 @@
             this.toolStripSpacement1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -753,12 +754,22 @@
             this.contextMenuStrip1.ShowImageMargin = false;
             this.contextMenuStrip1.Size = new System.Drawing.Size(36, 4);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1013, 541);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "label1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(989, 576);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.mainSplitContainer);
             this.Controls.Add(this.panel1);
@@ -867,6 +878,7 @@
         private System.Windows.Forms.TabPage consolapage;
         private ConsoleControl.ConsoleControl Consola;
         private System.Windows.Forms.RichTextBox codigoIntermedioTextBox;
+        private System.Windows.Forms.Label label1;
     }
 }
 

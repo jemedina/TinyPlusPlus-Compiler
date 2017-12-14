@@ -21,6 +21,9 @@ namespace Libre_IDE
         private const string BASE_PATH = "C:\\Users\\";
         private String sintaxJsonText;
         private String semanticJsonText;
+        private bool erroresLexicos = false;
+        private bool erroresSintacticos = false;
+        private bool erroresSemanticos = false;
         public MainForm()
         {
             InitializeComponent();
@@ -457,12 +460,22 @@ namespace Libre_IDE
             String okPath = path.Substring(0, path.Length - fullName.Length);
             String filePath = okPath + "/target_" + fName + "/sem/tabla.sem";
             cargarTabla(filePath);
+            lexerErrTextBox.Text.Contains('E');
 
-            runCodeGen();
-            tabContenedor.SelectedIndex = 4;
-            Consola.ClearOutput();
-            Consola.StopProcess();
-            Consola.StartProcess(@"cmd", "/c tinym code.tm");
+            MessageBox.Show("Resultados de errores: " + lexerErrTextBox.Text.Contains('E') + " " + semanticErrorTextBox.Text.Contains('S') + " " + sintaxErrorTextBox.Text.Contains('S'));
+            if (!lexerErrTextBox.Text.Contains('E') && !sintaxErrorTextBox.Text.Contains('S') && !semanticErrorTextBox.Text.Contains('S'))
+            { 
+
+                runCodeGen();
+                tabContenedor.SelectedIndex = 4;
+                Consola.ClearOutput();
+                Consola.StopProcess();
+                Consola.StartProcess(@"cmd", "/c tinym code.tm");
+            }
+            else
+            {
+                MessageBox.Show("No se puede ejecutar ya que hay errores.");
+            }
             
         }
 
@@ -582,6 +595,7 @@ namespace Libre_IDE
             // Read the file and display it line by line.  
             System.IO.StreamReader file =
                 new System.IO.StreamReader(@"code.tm");
+            codigoIntermedioTextBox.Text = "";
             while ((line = file.ReadLine()) != null)
             {
                 codigoIntermedioTextBox.Text += line + "\n";
@@ -604,6 +618,10 @@ namespace Libre_IDE
             string line = outLine.Data;
             this.BeginInvoke(new MethodInvoker(() =>
             {
+                if (outLine.Data != "")
+                {
+                    erroresSintacticos = true;
+                }
                 sintaxErrorTextBox.AppendText(outLine.Data + "\n" ?? string.Empty);
             }));
 
@@ -614,6 +632,10 @@ namespace Libre_IDE
             string line = outLine.Data;
             this.BeginInvoke(new MethodInvoker(() =>
             {
+                if (outLine.Data != "")
+                {
+                    erroresSemanticos = true;
+                }
                 semanticErrorTextBox.AppendText(outLine.Data + "\n" ?? string.Empty);
             }));
 
