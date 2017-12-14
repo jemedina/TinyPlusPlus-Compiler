@@ -41,6 +41,7 @@ namespace Libre_IDE
         private void MainForm_Load(object sender, EventArgs e)
         {
             //Set up gui
+
             setDefaultLayouts();
             intEditor();
             calculateToolBarLabelsPosition();
@@ -431,7 +432,6 @@ namespace Libre_IDE
             runLexico();
             runSintactico();
             runSemantico();
-
             sintaxTreeView.Nodes.Clear();
             semanticTreeView.Nodes.Clear();
             //READ SINTAX TREE
@@ -457,6 +457,12 @@ namespace Libre_IDE
             String okPath = path.Substring(0, path.Length - fullName.Length);
             String filePath = okPath + "/target_" + fName + "/sem/tabla.sem";
             cargarTabla(filePath);
+
+            runCodeGen();
+            tabContenedor.SelectedIndex = 4;
+            Consola.ClearOutput();
+            Consola.StopProcess();
+            Consola.StartProcess(@"cmd", "/c tinym code.tm");
             
         }
 
@@ -544,6 +550,45 @@ namespace Libre_IDE
             //Console.Write(output);
             semanticJsonText += output;
             process.Close();
+        }
+
+        private void runCodeGen()
+        {
+
+            CodeTabPage tabPage = (CodeTabPage)codeTabControl.SelectedTab;
+            Process process = new Process();
+            semanticErrorTextBox.Text = "";
+            CheckForIllegalCrossThreadCalls = false;
+            process.StartInfo.FileName = @"cmd";
+            process.StartInfo.Arguments = "/c tiny -g \"" + tabPage.getCodeEditor().getPath() + "\"";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = false;
+            process.Start();
+            //* Read one element asynchronously
+            //* Read the other one synchronously
+            string output = process.StandardOutput.ReadToEnd();
+            //Console.Write(output);
+            process.Close();
+            cargarCodigoIntermedio();
+        }
+
+        void cargarCodigoIntermedio()
+        {
+            int counter = 0;
+            string line;
+
+            // Read the file and display it line by line.  
+            System.IO.StreamReader file =
+                new System.IO.StreamReader(@"code.tm");
+            while ((line = file.ReadLine()) != null)
+            {
+                codigoIntermedioTextBox.Text += line + "\n";
+                counter++;
+            }
+
+            file.Close();  
         }
         void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {

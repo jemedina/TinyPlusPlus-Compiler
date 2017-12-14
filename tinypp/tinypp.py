@@ -12,9 +12,7 @@ LEXIC_SECTION_LABEL = ("="*30)+" LEXIC "+("="*30)
 SINTAX_SECTION_LABEL =("="*30)+" SYNTAX "+("="*30)
 SEMANTIC_SECTION_LABEL =("="*30)+" SEMANTIC "+("="*30)
 CODEGEN_SECTION_LABEL =("="*30)+" CODE GEN "+("="*30)
-LEX_ERROR = False
-SIN_ERROR = False
-SEM_ERROR = False
+
 def error_cmd():
     print("Invalid tinypp command...")
 
@@ -22,24 +20,24 @@ def lexic(file):
     lex = Lexer(file)
     lex.eval()
     lex.close()
-    LEX_ERROR = lex.hasErrors
+    #LEX_ERROR = lex.hasErrors
 def sintactic(file,outputType):
     syntax= Syntax(file,outputType)
     global syntaxTree
     syntaxTree = syntax.go(file)
 
-    SIN_ERROR = syntax.hasErrors
+    #SIN_ERROR = syntax.hasErrors
     
-def semantic(file,isCli=False):
+def semantic(file,isCli=False,noOutputs=False):
     global hashTable
-    semantic = Semantic(file,isCli)
+    semantic = Semantic(file,isCli,noOutputs)
     global semanticTree
     hashTable = semantic.getHashTable()
     semanticTree = semantic.getSemanticTree()
 
-    SEM_ERROR = semantic.hasErrors
-    global SOME_ERROR
-    SOME_ERROR = SEM_ERROR or SIN_ERROR or LEX_ERROR
+    #SEM_ERROR = semantic.hasErrors
+    #global SOME_ERROR
+    #SOME_ERROR = SEM_ERROR or SIN_ERROR or LEX_ERROR
 def codegen(file):
     codegen = CodeGen(semanticTree,hashTable,file)
 
@@ -62,7 +60,8 @@ if __name__ == "__main__":
                 sintactic(sys.argv[2],Syntax.TYPE_JSON)
         elif runmode == SEMANTIC_RUNMODE and len(sys.argv) > 2:
             semantic(sys.argv[2])
-        elif runmode == CODEGEN_RUNMODE and len(sys.argv) > 2 and not SOME_ERROR:
+        elif runmode == CODEGEN_RUNMODE and len(sys.argv) > 2 :
+            semantic(sys.argv[2],noOutputs=True)
             codegen(sys.argv[2])
         else: # Run all
             filename = sys.argv[1]

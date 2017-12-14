@@ -70,7 +70,7 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.semanticTreeView = new System.Windows.Forms.TreeView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabContenedor = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.lexerErrTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage7 = new System.Windows.Forms.TabPage();
@@ -79,12 +79,15 @@
             this.semanticErrorTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.hashTableTextBox = new System.Windows.Forms.RichTextBox();
+            this.consolapage = new System.Windows.Forms.TabPage();
+            this.Consola = new ConsoleControl.ConsoleControl();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.statusLinesLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusColsLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSpacement1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.codigoIntermedioTextBox = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -107,11 +110,13 @@
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.tabControl2.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabContenedor.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.tabPage9.SuspendLayout();
+            this.consolapage.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -390,7 +395,7 @@
             // mainSplitContainer.Panel2
             // 
             this.mainSplitContainer.Panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.mainSplitContainer.Panel2.Controls.Add(this.tabControl2);
+            this.mainSplitContainer.Panel2.Controls.Add(this.tabContenedor);
             this.mainSplitContainer.Size = new System.Drawing.Size(989, 495);
             this.mainSplitContainer.SplitterDistance = 369;
             this.mainSplitContainer.TabIndex = 2;
@@ -540,6 +545,7 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.codigoIntermedioTextBox);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
@@ -548,20 +554,21 @@
             this.tabPage5.Text = "Codigo Intermedio";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // tabControl2
+            // tabContenedor
             // 
-            this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tabContenedor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl2.Controls.Add(this.tabPage6);
-            this.tabControl2.Controls.Add(this.tabPage7);
-            this.tabControl2.Controls.Add(this.tabPage8);
-            this.tabControl2.Controls.Add(this.tabPage9);
-            this.tabControl2.Location = new System.Drawing.Point(0, 2);
-            this.tabControl2.Name = "tabControl2";
-            this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(989, 119);
-            this.tabControl2.TabIndex = 0;
+            this.tabContenedor.Controls.Add(this.tabPage6);
+            this.tabContenedor.Controls.Add(this.tabPage7);
+            this.tabContenedor.Controls.Add(this.tabPage8);
+            this.tabContenedor.Controls.Add(this.tabPage9);
+            this.tabContenedor.Controls.Add(this.consolapage);
+            this.tabContenedor.Location = new System.Drawing.Point(0, 2);
+            this.tabContenedor.Name = "tabContenedor";
+            this.tabContenedor.SelectedIndex = 0;
+            this.tabContenedor.Size = new System.Drawing.Size(989, 119);
+            this.tabContenedor.TabIndex = 0;
             // 
             // tabPage6
             // 
@@ -667,6 +674,30 @@
             this.hashTableTextBox.Text = "";
             this.hashTableTextBox.WordWrap = false;
             // 
+            // consolapage
+            // 
+            this.consolapage.Controls.Add(this.Consola);
+            this.consolapage.Location = new System.Drawing.Point(4, 22);
+            this.consolapage.Name = "consolapage";
+            this.consolapage.Padding = new System.Windows.Forms.Padding(3);
+            this.consolapage.Size = new System.Drawing.Size(981, 93);
+            this.consolapage.TabIndex = 4;
+            this.consolapage.Text = "Turbo Consolador";
+            this.consolapage.UseVisualStyleBackColor = true;
+            // 
+            // Consola
+            // 
+            this.Consola.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Consola.IsInputEnabled = true;
+            this.Consola.Location = new System.Drawing.Point(-1, 6);
+            this.Consola.Name = "Consola";
+            this.Consola.SendKeyboardCommandsToProcess = false;
+            this.Consola.ShowDiagnostics = false;
+            this.Consola.Size = new System.Drawing.Size(979, 87);
+            this.Consola.TabIndex = 0;
+            // 
             // statusBar
             // 
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -710,6 +741,18 @@
             this.contextMenuStrip1.ShowImageMargin = false;
             this.contextMenuStrip1.Size = new System.Drawing.Size(36, 4);
             // 
+            // codigoIntermedioTextBox
+            // 
+            this.codigoIntermedioTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codigoIntermedioTextBox.Location = new System.Drawing.Point(0, 2);
+            this.codigoIntermedioTextBox.Name = "codigoIntermedioTextBox";
+            this.codigoIntermedioTextBox.ReadOnly = true;
+            this.codigoIntermedioTextBox.Size = new System.Drawing.Size(330, 335);
+            this.codigoIntermedioTextBox.TabIndex = 0;
+            this.codigoIntermedioTextBox.Text = "";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -749,11 +792,13 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
-            this.tabControl2.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
+            this.tabContenedor.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
             this.tabPage9.ResumeLayout(false);
+            this.consolapage.ResumeLayout(false);
             this.statusBar.ResumeLayout(false);
             this.statusBar.PerformLayout();
             this.ResumeLayout(false);
@@ -791,7 +836,7 @@
         private System.Windows.Forms.ToolStripStatusLabel statusLinesLabel;
         private System.Windows.Forms.ToolStripStatusLabel statusColsLabel;
         private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabControl tabContenedor;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.TabPage tabPage8;
@@ -819,6 +864,9 @@
         private System.Windows.Forms.TreeView semanticTreeView;
         private System.Windows.Forms.RichTextBox semanticErrorTextBox;
         private System.Windows.Forms.RichTextBox hashTableTextBox;
+        private System.Windows.Forms.TabPage consolapage;
+        private ConsoleControl.ConsoleControl Consola;
+        private System.Windows.Forms.RichTextBox codigoIntermedioTextBox;
     }
 }
 

@@ -8,17 +8,17 @@ import platform
 
 class Semantic:
 
-	def __init__(self, path, isCli):
+	def __init__(self, path, isCli, noOutputs=True):
 		#LOAD TREE
 		jsonFile = self.openSyntaxTree(path)
 		#self.tree = DictionaryUtility.to_object(json.load(jsonFile))
 		self.tree = json.load(jsonFile)
 		self.analyzer = Analyzer(self.tree)
-		if isCli:
+		if isCli and noOutputs == False:
 			TreeUtils.cliDisplay(self.analyzer.tree)
 		
 		self.analyzer.mockTree()
-		if not isCli:
+		if not isCli and noOutputs == False:
 			print(json.dumps(self.analyzer.tree, indent=2, sort_keys=False))
 
 		#self.analyzer.tabla.cliDisplayTable()
