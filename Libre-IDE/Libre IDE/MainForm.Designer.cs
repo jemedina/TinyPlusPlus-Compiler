@@ -70,6 +70,7 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.semanticTreeView = new System.Windows.Forms.TreeView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.codigoIntermedioTextBox = new System.Windows.Forms.RichTextBox();
             this.tabContenedor = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.lexerErrTextBox = new System.Windows.Forms.RichTextBox();
@@ -87,7 +88,6 @@
             this.toolStripSpacement1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.codigoIntermedioTextBox = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -554,6 +554,18 @@
             this.tabPage5.Text = "Codigo Intermedio";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
+            // codigoIntermedioTextBox
+            // 
+            this.codigoIntermedioTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codigoIntermedioTextBox.Location = new System.Drawing.Point(0, 2);
+            this.codigoIntermedioTextBox.Name = "codigoIntermedioTextBox";
+            this.codigoIntermedioTextBox.ReadOnly = true;
+            this.codigoIntermedioTextBox.Size = new System.Drawing.Size(330, 335);
+            this.codigoIntermedioTextBox.TabIndex = 0;
+            this.codigoIntermedioTextBox.Text = "";
+            // 
             // tabContenedor
             // 
             this.tabContenedor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -682,7 +694,7 @@
             this.consolapage.Padding = new System.Windows.Forms.Padding(3);
             this.consolapage.Size = new System.Drawing.Size(981, 93);
             this.consolapage.TabIndex = 4;
-            this.consolapage.Text = "Turbo Consolador";
+            this.consolapage.Text = "Consola";
             this.consolapage.UseVisualStyleBackColor = true;
             // 
             // Consola
@@ -691,7 +703,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Consola.IsInputEnabled = true;
-            this.Consola.Location = new System.Drawing.Point(-1, 6);
+            this.Consola.Location = new System.Drawing.Point(3, 3);
             this.Consola.Name = "Consola";
             this.Consola.SendKeyboardCommandsToProcess = false;
             this.Consola.ShowDiagnostics = false;
@@ -740,18 +752,6 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.ShowImageMargin = false;
             this.contextMenuStrip1.Size = new System.Drawing.Size(36, 4);
-            // 
-            // codigoIntermedioTextBox
-            // 
-            this.codigoIntermedioTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.codigoIntermedioTextBox.Location = new System.Drawing.Point(0, 2);
-            this.codigoIntermedioTextBox.Name = "codigoIntermedioTextBox";
-            this.codigoIntermedioTextBox.ReadOnly = true;
-            this.codigoIntermedioTextBox.Size = new System.Drawing.Size(330, 335);
-            this.codigoIntermedioTextBox.TabIndex = 0;
-            this.codigoIntermedioTextBox.Text = "";
             // 
             // MainForm
             // 
