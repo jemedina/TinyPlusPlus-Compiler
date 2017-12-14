@@ -244,7 +244,7 @@ class Analyzer:
     #Funcion de evaluaciones matematicas
     def evalMath(self, node1, node2, op, opline):
         #Verificamos que los nodos sean diferentes de un booleano y diferentes de un error
-        if node1['type'] != KIND_BOOL and node2['type'] != KIND_BOOL:
+        if 'type' in node1 and 'type' in node2 and node1['type'] != KIND_BOOL and node2['type'] != KIND_BOOL:
             if node1['val'] != ERR and node2['val'] != ERR:
                 #Guardamos el string del valor
                 strA = str(node1['val'])
