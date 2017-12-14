@@ -71,12 +71,10 @@ if __name__ == "__main__":
             sintactic(filename, Syntax.TYPE_TREE)
             print(SEMANTIC_SECTION_LABEL)
             semantic(filename,True)
-            if not SOME_ERROR:
-                print(CODEGEN_SECTION_LABEL)
-                codegen(filename)
-                print("Ejecucion==============:")
-                os.system("tinym.bat code.tm")            
-            else:
-                print("No puede generarse el codigo si existen errores en alguna etapa")
+            
+            print(CODEGEN_SECTION_LABEL)
+            codegen(filename)
+            print("Ejecucion==============:")
+            os.system("tinym.bat code.tm")            
     else:
         error_cmd()

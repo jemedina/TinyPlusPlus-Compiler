@@ -1,3 +1,3 @@
 @echo off
-py "%TINY_HOME%/tinypp.py" %1 %2 %3
+python3 "%TINY_HOME%/tinypp.py" %1 %2 %3
 

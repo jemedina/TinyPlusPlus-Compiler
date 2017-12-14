@@ -190,7 +190,7 @@ class Syntax:
 					tmp.appendBro( new )
 			if tmp != None and len(tmp.sons) > 0:
 				return tmp
-			elif tmp.name == TokenConstants.BREAK:
+			elif tmp != None and tmp.name == TokenConstants.BREAK:
 				return tmp
 			else:
 				return None
