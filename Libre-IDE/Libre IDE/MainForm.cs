@@ -57,6 +57,7 @@ namespace Libre_IDE
             showCompilationStatusWindow();
             hideFilesWindow();
             disableCompilationButtons();
+            label1.Visible = false;
         }
         private void intEditor()
         {
@@ -463,7 +464,7 @@ namespace Libre_IDE
             lexerErrTextBox.Text.Contains('E');
 
             MessageBox.Show("Resultados de errores: " + lexerErrTextBox.Text.Contains('E') + " " + semanticErrorTextBox.Text.Contains('S') + " " + sintaxErrorTextBox.Text.Contains('S'));
-            if (!lexerErrTextBox.Text.Contains('E') && !sintaxErrorTextBox.Text.Contains('S') && !semanticErrorTextBox.Text.Contains('S'))
+            if (!lexerErrTextBox.Text.Contains('E') && !sintaxErrorTextBox.Text.Contains('S'))
             { 
 
                 runCodeGen();

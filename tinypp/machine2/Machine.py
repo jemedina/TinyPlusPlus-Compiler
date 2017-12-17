@@ -157,9 +157,6 @@ class Machine:
 				if dataType == 'real' and Utils.isInt(self.reg[r]):
 					self.dMem[m] = Utils.intToFloat(self.reg[r])
 				elif dataType == 'int' and Utils.isFloat(self.reg[r]):
-					print("Entro de float a int")
-					print(self.reg[r])
-					print(Utils.floatToInt(self.reg[r]))
 					self.dMem[m] = Utils.floatToInt(self.reg[r])
 				elif dataType == 'boolean' and Utils.isFloat(self.reg[r]):
 					print("TM Error: Asignacion ilegal a un boolean",file=sys.stderr)

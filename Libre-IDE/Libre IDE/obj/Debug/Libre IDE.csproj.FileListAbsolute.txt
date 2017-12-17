@@ -113,3 +113,9 @@ C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\Console
 C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ConsoleControl.xml
 C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ConsoleControlAPI.pdb
 C:\Users\Eduardo\Dev\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ConsoleControlAPI.xml
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ConsoleControl.dll
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ConsoleControlAPI.dll
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ConsoleControl.pdb
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ConsoleControl.xml
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ConsoleControlAPI.pdb
+C:\Users\Cesar\Documents\CompiII\TinyPlusPlus-Compiler\Libre-IDE\Libre IDE\bin\Debug\ConsoleControlAPI.xml
