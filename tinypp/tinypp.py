@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 import sys
 from lexer.Lexer import *
 from syntax.Syntax import *

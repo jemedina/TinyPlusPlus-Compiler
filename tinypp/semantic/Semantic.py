@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 from semantic.HashTable import *
 from semantic.Analyzer import * 
 from semantic.DictionaryUtility import *

@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 import ntpath
 
 STATEMENTS = [':=', 'if', 'repeat', 'while','cout','cin','break']

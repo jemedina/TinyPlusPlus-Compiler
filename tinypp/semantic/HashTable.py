@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 class HashTableRow:
 	def __init__(self, line=-1, value=None, memory=None, type=None):
 		self.lines = [line]

@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 from lexer.LexerFileHandler import LexerFileHandler
 from lexer.StateManager import StateManager
 from lexer.Token import Token

@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 from lexer.LexerSourceNotFoundException import LexerSourceNotFoundException
 
 class LexerFileHandler:

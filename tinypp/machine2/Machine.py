@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 from os import sys
 from enum import Enum
 from Instruction import Instruction 

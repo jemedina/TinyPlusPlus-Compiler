@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 class Mnemonics:
 	HALT = "HALT"
 	IN = "IN"

@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 from os import sys
 class Token:
 	def __init__(self,type,content,row=0,col=0):

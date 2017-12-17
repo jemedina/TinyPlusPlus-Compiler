@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 from syntax.Tree import *
 from syntax.TokensHelper import *
 import json

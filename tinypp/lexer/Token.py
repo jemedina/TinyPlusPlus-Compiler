@@ -1,3 +1,6 @@
+'''
+Author: Eduardo Medina <jemedina.96@gmail.com>
+'''
 class Token:
 	"""docstring for Token"""
 	def __init__(self, tipo, lexema,row=0,col=0):
